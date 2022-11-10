@@ -13,8 +13,8 @@ def _get_default_profile_image():
 
 class User(AbstractBaseUser):
     email = models.EmailField(_("email address"), max_length=260, unique=True)
-    first_name = models.CharField(_("first name"), max_length=150, blank=True)
-    last_name = models.CharField(_("last name"), max_length=150, blank=True)
+    first_name = models.CharField(_("first name"), max_length=150)
+    last_name = models.CharField(_("last name"), max_length=150)
     profile_image = models.ImageField(_("profile image"), upload_to=_get_profile_image_filepath, null=True, blank=True, default=_get_default_profile_image)
     date_joined = models.DateTimeField(_("date joined"), auto_now_add=True)
     last_login = models.DateTimeField(_("last login"), auto_now=True)
