@@ -1,0 +1,13 @@
+.centered-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.centered-form {
+    position: relative;
+    max-width: 415px;
+    width: 100%;
+}

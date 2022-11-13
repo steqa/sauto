@@ -1,0 +1,21 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %} Registration {% endblock %}
+
+{% block content %}
+
+<h4 class="mb-4">Регистрация</h4>
+<form method="post" id="registration_form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="mb-3">
+        {{ field }}
+    </div>
+    {% endfor %}
+    <div class="d-grid">
+        <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
+        <div class="py-2 text-center">или</div>
+        <a href="#" class="btn btn-outline-primary">Войти</a>
+    </div>
+</form>
+{% endblock %}
