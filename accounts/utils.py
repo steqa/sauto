@@ -1,12 +1,21 @@
-def validate_form_data(data, form):
+from .forms import UserCreationForm
+from typing import NamedTuple, Literal
+
+
+class Response(NamedTuple):
+    body: dict
+    type: Literal['OK'] | Literal['ValidationError'] | Literal['BadRequest']
+    status: int
+
+
+def validate_form_data(form_data: UserCreationForm) -> Response:
     try:
-        form_data = form(data['formData'])
         if form_data.is_valid():
-            return {'error': '', 'type': 'OK', 'status': 200}
+            return Response(body={}, type='OK', status=200)
         else:
             error = {}
             for field in form_data.errors:
                 error[field] = [field_errors for field_errors in form_data.errors[field]]
-            return {'error': error, 'type': 'ValidationError', 'status': 400}
+            return Response(body=error, type='ValidationError', status=400)
     except:
-        return {'error': 'Введите корректные данные.', 'type': 'BadRequest', 'status': 400}
+        return Response(body={'error': 'Некорректные данные.'}, type='BadRequest', status=400)

@@ -1,7 +1,6 @@
 import json
 from django.http.response import JsonResponse
 from django.shortcuts import render
-from django.urls import reverse
 from .forms import UserCreationForm
 from .utils import validate_form_data
 
@@ -11,13 +10,13 @@ def registration(request):
 
     if request.method == 'POST':
         data = json.loads(request.body)
-        validation_data = validate_form_data(data, form)
-        if data['reload'] and validation_data:
+        form_data = UserCreationForm(data['formData'])
+        validated_data = validate_form_data(form_data=form_data)
+        if data['reload'] and validated_data.status == 200:
             pass
-            validation_data['redirect'] = reverse('registration')
-            return JsonResponse(validation_data)
-        else:
-            return JsonResponse(validation_data)
+            validated_data.body['action'] = 'confirm_email'
+
+        return JsonResponse(validated_data._asdict())
             
     
     context = {

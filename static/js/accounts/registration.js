@@ -51,20 +51,19 @@ function sendFormData(e, reload) {
         .then((data) => {
             if (data['status'] == 400) {
                 if (data['type'] == 'BadRequest') {
-                    return showError(data['error'])
+                    return showError(data['body']['error'])
                 } else if (data['type'] == 'ValidationError') {
                     if (inputType == 'submit') {
                         formFields.forEach((field) => {
                             changeValidationStatusField(data, field)
                         })
-                    } else {
-                        const field = inputField
-                        changeValidationStatusField(data, field)
+                    } else if (inputType == 'input') {
+                        changeValidationStatusField(data, field = inputField)
                     }
                 }
             } else if (data['status'] == 200) {
-                if (data['redirect']) {
-                    window.location.replace(data['redirect'])
+                if (data['body']['action'] == 'confirm_email') {
+                    // window.location.replace(data['redirect'])
                 } else {
                     formFields.forEach((field) => {
                         changeValidationStatusField(data, field)
@@ -78,23 +77,11 @@ function sendFormData(e, reload) {
 function changeValidationStatusField(data, field) {
     const invalidFeedbackBlock = field.closest('.field-block').querySelector('.invalid-feedback')
     const fieldName = field.getAttribute('name')
-    if (data['error']) {
-        if (fieldName in data['error']) {
-            fieldInvalid(field)
-        } else {
-            fieldValid(field)
-        }
-    } else {
-        fieldValid(field)
-    }
-
-    function fieldInvalid(field) {
+    if (fieldName in data['body']) {
         field.classList.remove('is-valid')
         field.classList.add('is-invalid')
-        invalidFeedbackBlock.innerHTML = data['error'][fieldName].join("<br>")
-    }
-
-    function fieldValid(field) {
+        invalidFeedbackBlock.innerHTML = data['body'][fieldName].join("<br>")
+    } else {
         field.classList.remove('is-invalid')
         field.classList.add('is-valid')
         invalidFeedbackBlock.innerHTML = ''
