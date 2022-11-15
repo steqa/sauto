@@ -30,6 +30,7 @@ class UserAdmin(UserAdmin):
                 'is_staff',
                 'is_admin',
                 'is_superuser',
+                'is_email_verified',
         )}),
         (_('Important dates'),
             {'fields': (

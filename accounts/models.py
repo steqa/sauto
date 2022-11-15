@@ -22,6 +22,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_admin = models.BooleanField(_("admin status"), default=False)
     is_superuser = models.BooleanField(_("superuser status"), default=False)
+    is_email_verified = models.BooleanField(_("email verification status"), default=False)
         
     objects = UserManager()
         
