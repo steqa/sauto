@@ -1,23 +1,11 @@
 {% extends 'accounts/base.html' %}
 {% load static %}
 
-{% block title %} Registration {% endblock %}
+{% block title %}Регистрация{% endblock %}
 
 {% block content %}
-<div class="toast-container position-fixed top-0 p-3">
-    <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive"
-        aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body">
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                aria-label="Close"></button>
-        </div>
-    </div>
-</div>
-
 <h4 class="mb-4">Регистрация</h4>
-<form action="{% url 'registration' %}" method="post" id="registration_form">
+<form action="{% url 'registration-user' %}" method="post" id="registration_form">
     {% csrf_token %}
     {% for field in form %}
     <div class="mb-3 field-block">

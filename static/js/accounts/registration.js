@@ -60,10 +60,12 @@ function sendFormData(e, reload) {
                     } else if (inputType == 'input') {
                         changeValidationStatusField(data, field = inputField)
                     }
+                } else if (data['type'] == 'EmailSendingError') {
+                    return showError(data['body']['error'])
                 }
             } else if (data['status'] == 200) {
                 if (data['body']['action'] == 'confirm_email') {
-                    // window.location.replace(data['redirect'])
+                    document.querySelector('.content-block').innerHTML = data['body']['template']
                 } else {
                     formFields.forEach((field) => {
                         changeValidationStatusField(data, field)
