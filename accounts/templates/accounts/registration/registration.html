@@ -16,9 +16,10 @@
     <div class="d-grid">
         <button class="btn btn-primary" type="submit">Зарегистрироваться</button>
         <div class="py-2 text-center">или</div>
-        <a href="#" class="btn btn-outline-primary">Войти</a>
+        <a href="{% url 'login-user' %}" class="btn btn-outline-primary">Войти</a>
     </div>
 </form>
 
 <script src="{% static 'js/accounts/registration.js' %}"></script>
+<script src="{% static 'js/accounts/base.js' %}"></script>
 {% endblock %}

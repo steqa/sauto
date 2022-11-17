@@ -6,17 +6,17 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
-from .forms import UserCreationForm
+from .forms import UserCreationForm, AuthenticationForm
 from .models import User
 
 
 class Response(NamedTuple):
     body: dict
-    type: Literal['OK'] | Literal['ValidationError'] | Literal['BadRequest'] | Literal['EmailSendingError']
+    type: Literal['OK'] | Literal['redirect'] | Literal['ValidationError'] | Literal['BadRequest'] | Literal['EmailSendingError'] | Literal['AuthenticationError']
     status: Literal[200] | Literal[400]
 
 
-def validate_form_data(form_data: UserCreationForm) -> Response:
+def validate_form_data(form_data: UserCreationForm | AuthenticationForm) -> Response:
     try:
         if form_data.is_valid():
             return Response(body={}, type='OK', status=200)

@@ -2,8 +2,10 @@ import json
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login
+from django.urls import reverse
 from .tokens import account_activation_token
-from .forms import UserCreationForm
+from .forms import UserCreationForm, AuthenticationForm
 from .utils import validate_form_data, send_verification_email, get_user_by_uidb64, Response
 
 
@@ -50,5 +52,31 @@ def activate_user(request, uidb64, token):
 
 
 def login_user(request):
-    context = {}
+    form = AuthenticationForm
+    
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        form_data = AuthenticationForm(data['formData'])
+        validated_data = validate_form_data(form_data=form_data)
+        if data['reload'] and validated_data.status == 200:
+            email = form_data.cleaned_data.get('email')
+            password = form_data.cleaned_data.get('password')
+            user = authenticate(email=email, password=password)
+            if user is not None:
+                login(request, user)
+                response = Response(
+                    body={'url': request.build_absolute_uri(reverse('home'))},
+                    type='redirect', status=200)
+            else:
+                response = Response(
+                    body={'error': f'Неверный пароль или адрес электронной почты'},
+                    type='AuthenticationError', status=400)
+        else:
+            response = validated_data
+
+        return JsonResponse(response._asdict())
+    
+    context = {
+        'form': form
+    }
     return render(request, 'accounts/login/login.html', context)

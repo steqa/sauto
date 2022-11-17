@@ -45,3 +45,22 @@ class UserCreationForm(UserCreationForm):
         model = User
         fields = ('email', 'first_name', 'last_name', 'password1', 'password2')
         field_classes = {}
+
+
+class AuthenticationForm(forms.Form):
+    email = forms.EmailField(
+        label=_("Email address"),
+        max_length=260,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email',
+    }))
+    password = forms.CharField(
+        label=_("Password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Пароль',
+            "autocomplete": "current-password"
+    }))
+    

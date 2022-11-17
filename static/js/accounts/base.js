@@ -1,0 +1,93 @@
+const formFields = document.querySelectorAll('.form-control')
+
+let inputType = null
+let inputField = null
+
+form.addEventListener('submit', function (e) {
+    e.preventDefault()
+    inputType = 'submit'
+    sendFormData(this, reload = true)
+})
+
+formFields.forEach((element) => {
+    element.addEventListener('input', function (e) {
+        inputType = 'input'
+        inputField = element
+        sendFormData(form, reload = false)
+    })
+})
+
+
+function getFormData(e) {
+    const elems = e.elements,
+        dataArr = new Object;
+    for (let i = 0; i < elems.length - 1; i++) {
+        dataArr[elems[i].name] = elems[i].value
+    }
+    return dataArr
+}
+
+
+function sendFormData(e, reload) {
+    const formData = getFormData(e)
+    const url = e.action
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({
+            'formData': formData,
+            'reload': reload
+        }),
+    })
+
+        .then((response) => {
+            return response.json()
+        })
+
+        .then((data) => {
+            renderReturnedData(data)
+        })
+}
+
+
+function changeValidationStatusField(data, field) {
+    const invalidFeedbackBlock = field.closest('.field-block').querySelector('.invalid-feedback')
+    const fieldName = field.getAttribute('name')
+    if (fieldName in data['body']) {
+        field.classList.remove('is-valid')
+        field.classList.add('is-invalid')
+        invalidFeedbackBlock.innerHTML = data['body'][fieldName].join("<br>")
+    } else {
+        field.classList.remove('is-invalid')
+        field.classList.add('is-valid')
+        invalidFeedbackBlock.innerHTML = ''
+    }
+}
+
+
+function showError(error) {
+    const errorToast = document.getElementById('errorToast')
+    const errorMessage = errorToast.querySelector('.toast-body')
+    errorMessage.innerHTML = error
+    const toast = new bootstrap.Toast(errorToast)
+    toast.show()
+}
+
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

@@ -1,4 +1,4 @@
-const form = document.querySelector('#registration_form')
+const form = document.querySelector('#login_form')
 
 function renderReturnedData(data) {
     if (data['status'] == 400) {
@@ -12,12 +12,12 @@ function renderReturnedData(data) {
             } else if (inputType == 'input') {
                 changeValidationStatusField(data, field = inputField)
             }
-        } else if (data['type'] == 'EmailSendingError') {
+        } else if (data['type'] == 'AuthenticationError') {
             return showError(data['body']['error'])
         }
     } else if (data['status'] == 200) {
-        if (data['body']['action'] == 'confirm_email') {
-            document.querySelector('.content-block').innerHTML = data['body']['template']
+        if (data['type'] == 'redirect') {
+            window.location.replace(data['body']['url'])
         } else {
             formFields.forEach((field) => {
                 changeValidationStatusField(data, field)
