@@ -68,12 +68,19 @@ function changeValidationStatusField(data, field) {
 }
 
 
-function showError(error) {
-    const errorToast = document.getElementById('errorToast')
-    const errorMessage = errorToast.querySelector('.toast-body')
-    errorMessage.innerHTML = error
-    const toast = new bootstrap.Toast(errorToast)
-    toast.show()
+function showToast(msg, type) {
+    const toast = document.getElementById('toast')
+    const message = toast.querySelector('.toast-body')
+    if (type == 'error') {
+        toast.classList.remove('text-bg-success')
+        toast.classList.add('text-bg-danger')
+    } else if (type == 'success') {
+        toast.classList.remove('text-bg-danger')
+        toast.classList.add('text-bg-success')
+    }
+    message.innerHTML = msg
+    const toastShow = new bootstrap.Toast(toast)
+    toastShow.show()
 }
 
 

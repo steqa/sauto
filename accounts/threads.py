@@ -23,5 +23,4 @@ class DeleteUserByTimerThread(threading.Thread):
         event.wait(self.lifetime)
         user = User.objects.get(pk=self.user.pk)
         if user.is_email_verified is False:
-            print(user.is_email_verified)
             user.delete()

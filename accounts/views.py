@@ -7,6 +7,8 @@ from django.urls import reverse
 from .tokens import account_activation_token
 from .forms import UserCreationForm, AuthenticationForm
 from .utils import validate_form_data, send_verification_email, get_user_by_uidb64, Response
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 from .threads import DeleteUserByTimerThread
 from . import constants
 
@@ -22,10 +24,11 @@ def registration_user(request):
             user = form_data.save()
             send_verification_email(user, request)
             DeleteUserByTimerThread(user, constants.LIFETIME_OF_THE_EMAIL_FOR_USER_ACTIVATION).start()
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
             template = render_to_string(
                 'accounts/registration/confirm-email.html',{'user': user}, request),
             response = Response(
-                body={'action': 'confirm_email', 'template': template},
+                body={'action': 'ConfirmEmail', 'template': template, 'uidb64': uidb64},
                 type='OK', status=200)
         else:
             response = validated_data
@@ -41,13 +44,31 @@ def registration_user(request):
 
 def activate_user(request, uidb64, token):
     user = get_user_by_uidb64(uidb64)
-    if user is not None and account_activation_token.check_token(user, token, constants.LIFETIME_OF_THE_EMAIL_FOR_USER_ACTIVATION):
+    if (user is not None and
+        account_activation_token.check_token(user, token, constants.LIFETIME_OF_THE_EMAIL_FOR_USER_ACTIVATION) and
+        not user.is_email_verified):
         user.is_email_verified = True
         user.save()
         return redirect('login-user')
     else:
         return render(request, 'accounts/registration/user-activation-failed.html', {'user': user})
 
+
+def resend_activation_email(request):
+    data = json.loads(request.body)
+    user = get_user_by_uidb64(data['uidb64'])
+    if user is not None and not user.is_email_verified:
+        send_verification_email(user, request)
+        response = Response(
+            body={'action': 'SuccessAlert', 'message': 'Письмо отправленно.'},
+            type='OK', status=200)
+    else:
+        response = Response(
+            body={'error': f'Не удалось отправить письмо.'},
+            type='EmailSendingError', status=400)
+        
+    return JsonResponse(response._asdict())
+    
 
 def login_user(request):
     form = AuthenticationForm

@@ -1,3 +1,21 @@
 <h4 class="mb-4">Подтвердите адрес электронной почты!</h4>
-<p class="mb-2" style="text-align: justify">Почти всё готово. Проверьте свой адрес электронной почты
-    <br><span class="text-primary">{{ user.email }}</span>.</p>
+<p class="mb-2" style="text-align: justify">
+    Электронное письмо отправлено на адрес
+    <br><span class="text-primary">{{ user.email }}</span>.
+</p>
+<p class="mb-2" style="text-align: justify">
+    Если вы не получили письмо, проверьте папку спам и попробуйте отправить письмо ещё раз.
+</p>
+
+<div class="d-grid gap-2">
+    <button class="btn btn-primary" type="button" id="resendBtn" disabled></button>
+</div>
+
+<p class="mt-2 mb-0 text-muted text-center visually-hidden" id="resendSuccessHint">
+    Если вы не получили письмо,<br>
+    попробуйте зарегистрироваться позже.
+</p>
+
+<p class="mt-2 mb-0 text-muted text-center visually-hidden" id="resendErrorHint">
+    Попробуйте зарегистрироваться повторно.
+</p>
