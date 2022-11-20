@@ -7,6 +7,8 @@ from django.urls import reverse
 from .tokens import account_activation_token
 from .forms import UserCreationForm, AuthenticationForm
 from .utils import validate_form_data, send_verification_email, get_user_by_uidb64, Response
+from .threads import DeleteUserByTimerThread
+from . import constants
 
 
 def registration_user(request):
@@ -18,17 +20,13 @@ def registration_user(request):
         validated_data = validate_form_data(form_data=form_data)
         if data['reload'] and validated_data.status == 200:
             user = form_data.save()
-            if send_verification_email(user, request):
-                template = render_to_string(
-                    'accounts/registration/confirm-email.html',{'user': user}, request),
-                response = Response(
-                    body={'action': 'confirm_email', 'template': template},
-                    type='OK', status=200)
-            else:
-                user.delete()
-                response = Response(
-                    body={'error': f'Не удалось отправить письмо с подтверждением на почту: {user.email}'},
-                    type='EmailSendingError', status=400)
+            send_verification_email(user, request)
+            DeleteUserByTimerThread(user, constants.LIFETIME_OF_THE_EMAIL_FOR_USER_ACTIVATION).start()
+            template = render_to_string(
+                'accounts/registration/confirm-email.html',{'user': user}, request),
+            response = Response(
+                body={'action': 'confirm_email', 'template': template},
+                type='OK', status=200)
         else:
             response = validated_data
 
@@ -43,7 +41,7 @@ def registration_user(request):
 
 def activate_user(request, uidb64, token):
     user = get_user_by_uidb64(uidb64)
-    if user is not None and account_activation_token.check_token(user, token):
+    if user is not None and account_activation_token.check_token(user, token, constants.LIFETIME_OF_THE_EMAIL_FOR_USER_ACTIVATION):
         user.is_email_verified = True
         user.save()
         return redirect('login-user')

@@ -8,6 +8,7 @@ from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 from .forms import UserCreationForm, AuthenticationForm
 from .models import User
+from .threads import SendEmailThread
 
 
 class Response(NamedTuple):
@@ -29,7 +30,7 @@ def validate_form_data(form_data: UserCreationForm | AuthenticationForm) -> Resp
         return Response(body={'error': 'Некорректные данные.'}, type='BadRequest', status=400)
 
 
-def send_verification_email(user: User, request) -> bool:
+def send_verification_email(user: User, request):
     email_subject = 'sauto: подтверждение адреса электронной почты'
     email_body = render_to_string('accounts/registration/verification-email.html', {
         'user': user,
@@ -41,10 +42,8 @@ def send_verification_email(user: User, request) -> bool:
     
     email = EmailMessage(subject=email_subject, body=email_body,
                  from_email=settings.EMAIL_FROM_USER, to=[user.email])
-    if email.send():
-        return True
-    else:
-        return False
+    
+    SendEmailThread(email).start()
     
 
 def get_user_by_uidb64(uidb64: str) -> User | None:
