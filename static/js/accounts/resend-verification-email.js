@@ -42,7 +42,7 @@ function activateResendBtn(dataOutside) {
 }
 
 function sendEmail(dataOutside) {
-    const url = '/account/resend-verification-email/'
+    const url = `/account/resend-verification-email/${dataOutside['body']['uidb64']}`
     fetch(url, {
         method: 'POST',
         headers: {
@@ -50,7 +50,6 @@ function sendEmail(dataOutside) {
             'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({
-            'uidb64': dataOutside['body']['uidb64'],
         }),
     })
 

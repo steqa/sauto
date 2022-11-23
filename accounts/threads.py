@@ -7,17 +7,17 @@ class SendEmailThread(threading.Thread):
     def __init__(self, email: EmailMessage):
         self.email = email
         threading.Thread.__init__(self)
-        
+    
     def run(self):
         self.email.send()
 
 
-class DeleteUserByTimerThread(threading.Thread):
+class DeleteUserAfterTimeElapsed(threading.Thread):
     def __init__(self, user: User, lifetime: int):
         self.user = user
         self.lifetime = lifetime
         threading.Thread.__init__(self)
-    
+
     def run(self):
         event = threading.Event()
         event.wait(self.lifetime)

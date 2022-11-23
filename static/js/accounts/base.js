@@ -30,7 +30,10 @@ function getFormData(e) {
 
 function sendFormData(e, reload) {
     const formData = getFormData(e)
-    const url = e.action
+    let url = e.action
+    if (reload) { 
+        url += '?reload=true'
+    }
     fetch(url, {
         method: 'POST',
         headers: {
@@ -38,8 +41,7 @@ function sendFormData(e, reload) {
             'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({
-            'formData': formData,
-            'reload': reload
+            'form_data': formData,
         }),
     })
 
