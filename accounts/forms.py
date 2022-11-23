@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
 from .models import User
 
 
@@ -28,6 +28,7 @@ class UserCreationForm(UserCreationForm):
     }))
     password1 = forms.CharField(
         label=_("Password"),
+        strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Пароль',
@@ -35,6 +36,7 @@ class UserCreationForm(UserCreationForm):
     }))
     password2 = forms.CharField(
         label=_("Password confirmation"),
+        strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Подтверждение пароля',
@@ -54,6 +56,7 @@ class AuthenticationForm(forms.Form):
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Email',
+            'autofocus': 'true',
     }))
     password = forms.CharField(
         label=_("Password"),
@@ -63,4 +66,32 @@ class AuthenticationForm(forms.Form):
             'placeholder': 'Пароль',
             "autocomplete": "current-password"
     }))
-    
+
+
+class PasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        label=_("Email address"),
+        max_length=260,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email',
+    }))
+
+
+class SetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label=_("New password"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Новый пароль',
+            "autocomplete": "new-password"
+    }))
+    new_password2 = forms.CharField(
+        label=_("New password confirmation"),
+        strip=False,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Подтверждение нового пароля',
+            "autocomplete": "new-password"
+    }))

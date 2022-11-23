@@ -1,4 +1,4 @@
-const form = document.querySelector('#registration_form')
+const form = document.querySelector('#reset_password_form')
 
 function renderReturnedData(data) {
     if (data['status'] == 400) {
@@ -12,7 +12,7 @@ function renderReturnedData(data) {
             } else if (inputType == 'input') {
                 changeValidationStatusField(data, field = inputField)
             }
-        } else if (data['type'] == 'EmailSendingError') {
+        } else if (data['type'] == 'NotFound') {
             return showToast(data['body']['error'], type='error')
         }
     } else if (data['status'] == 200) {

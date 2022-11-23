@@ -6,7 +6,7 @@
 <h4 class="mb-4">Произошла ошибка...</h4>
 <p class="mb-2 text-primary" style="text-align: justify">{{ user.email }}</p>
 <p class="mb-2" style="text-align: justify">Возможно вы уже активировали свой аккаунт,
-    <br>попробуйте <a href="#">войти в систему</a>.</p>
+    <br>попробуйте <a href="{% url 'login-user' %}" class="text-decoration-none">войти в систему</a>.</p>
 <p class="mb-0" style="text-align: justify">Если если вам не удаётся войти,
-    <br>попробуйте <a href="{% url 'registration-user' %}">зарегистрироваться повторно</a>.</p>
+    <br>попробуйте <a href="{% url 'registration-user' %}" class="text-decoration-none">зарегистрироваться повторно</a>.</p>
 {% endblock %}

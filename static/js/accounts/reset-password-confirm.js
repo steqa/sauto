@@ -1,9 +1,10 @@
-const form = document.querySelector('#registration_form')
+const form = document.querySelector('#reset_password_confirm_form')
 
 function renderReturnedData(data) {
+    console.log(data)
     if (data['status'] == 400) {
         if (data['type'] == 'BadRequest') {
-            return showToast(data['body']['error'], type='error')
+            return showToast(data['body']['error'], type = 'error')
         } else if (data['type'] == 'ValidationError') {
             if (inputType == 'submit') {
                 formFields.forEach((field) => {
@@ -12,13 +13,12 @@ function renderReturnedData(data) {
             } else if (inputType == 'input') {
                 changeValidationStatusField(data, field = inputField)
             }
-        } else if (data['type'] == 'EmailSendingError') {
-            return showToast(data['body']['error'], type='error')
+        } else if (data['type'] == 'NotFound') {
+            return showToast(data['body']['error'], type = 'error')
         }
     } else if (data['status'] == 200) {
-        if (data['body']['success'] == 'ConfirmEmail') {
-            document.querySelector('.content-block').innerHTML = data['body']['template']
-            timerBtn(dataOutside=data)
+        if (data['type'] == 'redirect') {
+            window.location.replace(data['body']['url'])
         } else {
             formFields.forEach((field) => {
                 changeValidationStatusField(data, field)

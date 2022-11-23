@@ -63,15 +63,11 @@ function sendEmail(dataOutside) {
             if (data['status'] == 200) {
                 resendBtn.innerHTML = 'Отправленно'
                 document.getElementById('resendSuccessHint').classList.remove('visually-hidden')
-                if (data['body']['action'] == 'SuccessAlert') {
-                    showToast(data['body']['message'], type = 'success')
-                }
+                showToast(data['body']['success'], type = 'success')
             } else if (data['status'] == 400) {
                 resendBtn.innerHTML = 'Не отправленно'
                 document.getElementById('resendErrorHint').classList.remove('visually-hidden')
-                if (data['type'] == 'EmailSendingError') {
-                    showToast(data['body']['error'], type = 'error')
-                }
+                showToast(data['body']['error'], type = 'error')
             }
         })
 }

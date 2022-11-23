@@ -5,3 +5,7 @@
 .bg {
     background: #F1F5FE;
 }
+
+.pointer {
+    cursor: pointer;
+}

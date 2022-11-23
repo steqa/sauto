@@ -6,18 +6,24 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
-from .forms import UserCreationForm, AuthenticationForm
+from .forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
 from .models import User
 from .threads import SendEmailThread
 
 
 class Response(NamedTuple):
     body: dict
-    type: Literal['OK'] | Literal['redirect'] | Literal['ValidationError'] | Literal['BadRequest'] | Literal['EmailSendingError'] | Literal['AuthenticationError']
+    type: Literal['OK'] | \
+        Literal['redirect'] | \
+        Literal['ValidationError'] | \
+        Literal['BadRequest'] | \
+        Literal['EmailSendingError'] | \
+        Literal['AuthenticationError'] | \
+        Literal['NotFound']
     status: Literal[200] | Literal[400]
 
 
-def validate_form_data(form_data: UserCreationForm | AuthenticationForm) -> Response:
+def validate_form_data(form_data: UserCreationForm | AuthenticationForm | PasswordResetForm | SetPasswordForm) -> Response:
     try:
         if form_data.is_valid():
             return Response(body={}, type='OK', status=200)
@@ -30,9 +36,9 @@ def validate_form_data(form_data: UserCreationForm | AuthenticationForm) -> Resp
         return Response(body={'error': 'Некорректные данные.'}, type='BadRequest', status=400)
 
 
-def send_verification_email(user: User, request):
-    email_subject = 'sauto: подтверждение адреса электронной почты'
-    email_body = render_to_string('accounts/registration/verification-email.html', {
+def send_email(request, user: User, email_subject: str, email_template: str):
+    email_subject = email_subject
+    email_body = render_to_string(email_template, {
         'user': user,
         'domain': get_current_site(request),
         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
