@@ -1,7 +1,20 @@
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import password_validation
+from django.utils.functional import lazy
+from django.utils.html import format_html, format_html_join
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
 from .models import User
+
+
+def _password_validators_help_text_html():
+    help_texts = password_validation.password_validators_help_texts()
+    help_items = format_html_join(
+        "", "<li>{}</li>", ((help_text,) for help_text in help_texts)
+    )
+    return format_html("<ol>{}</ol>", help_items) if help_items else ""
+
+password_validators_help_text_html = lazy(_password_validators_help_text_html, str)
 
 
 class UserCreationForm(UserCreationForm):
@@ -29,6 +42,7 @@ class UserCreationForm(UserCreationForm):
     password1 = forms.CharField(
         label=_("Password"),
         strip=False,
+        help_text=password_validators_help_text_html(),
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Пароль',
@@ -82,6 +96,7 @@ class SetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(
         label=_("New password"),
         strip=False,
+        help_text=password_validators_help_text_html(),
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Новый пароль',
