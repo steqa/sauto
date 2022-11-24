@@ -70,22 +70,6 @@ function changeValidationStatusField(data, field) {
 }
 
 
-function showToast(msg, type) {
-    const toast = document.getElementById('toast')
-    const message = toast.querySelector('.toast-body')
-    if (type == 'error') {
-        toast.classList.remove('text-bg-success')
-        toast.classList.add('text-bg-danger')
-    } else if (type == 'success') {
-        toast.classList.remove('text-bg-danger')
-        toast.classList.add('text-bg-success')
-    }
-    message.innerHTML = msg
-    const toastShow = new bootstrap.Toast(toast)
-    toastShow.show()
-}
-
-
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

@@ -80,7 +80,7 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 response = Response(
-                    body={'url': request.build_absolute_uri(reverse('home'))},
+                    body={'success': f'Добро пожаловать, {user.first_name}.', 'url': request.build_absolute_uri(reverse('registration-user'))},
                     type='redirect', status=200)
             else:
                 response = Response(
@@ -140,7 +140,7 @@ def reset_password_confirm(request, uidb64, token):
             if request.GET.get('reload') and form_data.is_valid():
                 form_data.save()
                 response = Response(
-                    body={'url': request.build_absolute_uri(reverse('login-user'))},
+                    body={'success': f'Вы успешно сменили пароль.', 'url': request.build_absolute_uri(reverse('login-user'))},
                     type='redirect', status=200)
             else:
                 response = validate_form_data(form_data=form_data)

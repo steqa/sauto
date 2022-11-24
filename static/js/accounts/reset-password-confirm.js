@@ -18,6 +18,8 @@ function renderReturnedData(data) {
         }
     } else if (data['status'] == 200) {
         if (data['type'] == 'redirect') {
+            localStorage.setItem('status', data['status'])
+            localStorage.setItem('message', data['body']['success'])
             window.location.replace(data['body']['url'])
         } else {
             formFields.forEach((field) => {

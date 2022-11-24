@@ -13,10 +13,12 @@ function renderReturnedData(data) {
                 changeValidationStatusField(data, field = inputField)
             }
         } else if (data['type'] == 'AuthenticationError') {
-            return showToast(data['body']['error'], type='error')
+            showToast(data['body']['error'], type='error')
         }
     } else if (data['status'] == 200) {
         if (data['type'] == 'redirect') {
+            localStorage.setItem('status', data['status'])
+            localStorage.setItem('message', data['body']['success'])
             window.location.replace(data['body']['url'])
         } else {
             formFields.forEach((field) => {
