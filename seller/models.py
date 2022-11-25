@@ -5,9 +5,13 @@ from accounts.models import User
 
 
 class Seller(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    telegram_username = models.CharField(_("telegram username"), max_length=32, unique=True, blank=True, null=True)
-    phone_number = PhoneNumberField(_("phone number"), unique=True, blank=True, null=True)
+    user = models.OneToOneField(User, verbose_name="пользователь", on_delete=models.CASCADE)
+    telegram_username = models.CharField(verbose_name="имя пользователя телеграм", max_length=32, unique=True, blank=True, null=True)
+    phone_number = PhoneNumberField(verbose_name="номер телефона", unique=True, blank=True, null=True)
+    
+    class Meta:
+        verbose_name = 'продавец'
+        verbose_name_plural = 'продавцы'
     
     def __str__(self):
         return self.user.email
@@ -44,20 +48,20 @@ class AnnouncementSale(models.Model):
         (2, 'Магазин'),
     )
     
-    seller = models.ForeignKey(Seller, verbose_name="Продавец", on_delete=models.CASCADE,)
-    category = models.IntegerField(verbose_name="Категория", choices=CATEGORIES)
-    condition = models.IntegerField(verbose_name="Состояние", choices=CONDITION)
-    type_announcement = models.IntegerField(verbose_name="Тип объявления", choices=TYPE_ANNOUNCEMENT)
-    name = models.CharField(verbose_name="Название", max_length=50)
-    price = models.DecimalField(verbose_name="Цена", max_digits=13, decimal_places=2)
-    description = models.CharField(verbose_name="Описание", max_length=3000)
-    sold = models.BooleanField(verbose_name="Продано", default=False)
-    date_created = models.DateTimeField(verbose_name="Дата создания", auto_now_add=True)
-    date_updated = models.DateTimeField(verbose_name="Дата изменения", auto_now_add=True)
+    seller = models.ForeignKey(Seller, verbose_name="продавец", on_delete=models.CASCADE,)
+    category = models.IntegerField(verbose_name="категория", choices=CATEGORIES)
+    condition = models.IntegerField(verbose_name="состояние", choices=CONDITION)
+    type_announcement = models.IntegerField(verbose_name="тип объявления", choices=TYPE_ANNOUNCEMENT)
+    name = models.CharField(verbose_name="название", max_length=50)
+    price = models.DecimalField(verbose_name="цена", max_digits=13, decimal_places=2)
+    description = models.CharField(verbose_name="описание", max_length=3000)
+    sold = models.BooleanField(verbose_name="продано", default=False)
+    date_created = models.DateTimeField(verbose_name="дата создания", auto_now_add=True)
+    date_updated = models.DateTimeField(verbose_name="дата изменения", auto_now_add=True)
     
     class Meta:
-        verbose_name = 'Объявление'
-        verbose_name_plural = 'Объявления'
+        verbose_name = 'объявление'
+        verbose_name_plural = 'объявления'
     
     def __str__(self):
         return self.name if len(self.name) <= 25 else f'{self.name[0:25]}...'
@@ -68,12 +72,12 @@ def _get_announcement_sale_image_filepath(self, image_name):
 
 
 class AnnouncementSaleImage(models.Model):
-    announcement_sale = models.ForeignKey(AnnouncementSale, verbose_name="Объявление",  on_delete=models.CASCADE)
-    image = models.ImageField(verbose_name="Изображение", upload_to=_get_announcement_sale_image_filepath)
+    announcement_sale = models.ForeignKey(AnnouncementSale, verbose_name="объявление",  on_delete=models.CASCADE)
+    image = models.ImageField(verbose_name="изображение", upload_to=_get_announcement_sale_image_filepath)
     
     class Meta:
-        verbose_name = 'Изображение объявления'
-        verbose_name_plural = 'Изображения объявлений'
+        verbose_name = 'изображение объявления'
+        verbose_name_plural = 'изображения объявлений'
     
     def __str__(self):
         return self.image.name.split('/')[-1]
