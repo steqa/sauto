@@ -19,6 +19,7 @@ class Seller(models.Model):
 
 class AnnouncementSale(models.Model):
     CATEGORIES = (
+        (None, 'Не выбрано'),
         (0, 'Прочее'),
         (1, 'Женский гардероб'),
         (2, 'Мужской гардероб'),
@@ -38,11 +39,13 @@ class AnnouncementSale(models.Model):
     )
     
     CONDITION = (
+        (None, 'Не выбрано'),
         (0, 'БУ'),
         (1, 'Новое')
     )
     
     TYPE_ANNOUNCEMENT = (
+        (None, 'Не выбрано'),
         (0, 'Продаю свое'),
         (1, 'Приобрел на продажу'),
         (2, 'Магазин'),

@@ -1,7 +1,7 @@
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django import forms
-from .models import Seller
+from .models import Seller, AnnouncementSale
 
 
 class CustomPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
@@ -32,3 +32,18 @@ class SellerCreationForm(forms.ModelForm):
         widgets = {
             'phone_number': CustomPhoneNumberPrefixWidget(initial='RU'),
         }
+
+
+class AnnouncementSaleCreationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].widget.attrs.update({'class': 'form-select'})
+        self.fields['condition'].widget.attrs.update({'class': 'form-select'})
+        self.fields['type_announcement'].widget.attrs.update({'class': 'form-select'})
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['price'].widget.attrs.update({'class': 'form-control', 'max': 99999999999.99})
+        self.fields['description'] = forms.CharField(label='Описание', max_length=3000, widget=forms.Textarea({'class': 'form-control', 'rows': 5}))
+    
+    class Meta:
+        model = AnnouncementSale
+        fields = ('category', 'condition', 'type_announcement', 'name', 'price', 'description')
