@@ -11,19 +11,20 @@ class SellerAdmin(admin.ModelAdmin):
 
 @admin.register(AnnouncementSale)
 class AnnouncementSaleAdmin(admin.ModelAdmin):
-    # add_form = 
     list_display = ('name', 'seller', 'category', 'condition', 'type_announcement', 'price', 'sold')
     search_fields = ('name', 'category', 'condition', 'type_announcement', 'price')
+    list_filter = ('category', 'condition', 'type_announcement', 'sold')
     readonly_fields = ('id', 'date_created', 'date_updated')
     fieldsets = (
         (None,
             {'fields': (
                 readonly_fields[0],
-                'name',
-                'description',
+                'seller',
         )}),
         ('Информация',
             {'fields': (
+                'name',
+                'description',
                 'price',
                 'category',
                 'condition',
@@ -43,12 +44,15 @@ class AnnouncementSaleAdmin(admin.ModelAdmin):
 
 @admin.register(AnnouncementSaleImage)
 class AnnouncementSaleImageAdmin(admin.ModelAdmin):
-    # add_form = 
     list_display = ('announcement_sale', 'image', 'preview',)
     readonly_fields = ('preview_inside',)
     
     def preview(self, img):
         return mark_safe(f'<img src="{img.image.url}" style="max-height: 25px;">')
     
+    preview.short_description = 'предпросмотр изображения'
+    
     def preview_inside(self, img):
         return mark_safe(f'<img src="{img.image.url}" style="max-height: 200px;">')
+    
+    preview_inside.short_description = 'просмотр изображения'
