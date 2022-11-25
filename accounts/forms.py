@@ -1,4 +1,3 @@
-from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import password_validation
 from django.utils.functional import lazy
 from django.utils.html import format_html, format_html_join
@@ -19,28 +18,28 @@ password_validators_help_text_html = lazy(_password_validators_help_text_html, s
 
 class UserCreationForm(UserCreationForm):
     email = forms.EmailField(
-        label=_("Email address"),
+        label='Адрес электронной почты',
         max_length=260,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'placeholder': 'Email',
         }))
     first_name = forms.CharField(
-        label=_("First name"),
+        label='Имя',
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Имя',
         }))
     last_name = forms.CharField(
-        label=_("Last name"),
+        label='Фамилия',
         max_length=150,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Фамилия',
         }))
     password1 = forms.CharField(
-        label=_("Password"),
+        label='Пароль',
         strip=False,
         help_text=password_validators_help_text_html(),
         widget=forms.PasswordInput(attrs={
@@ -49,7 +48,7 @@ class UserCreationForm(UserCreationForm):
             'autocomplete': 'new-password',
         }))
     password2 = forms.CharField(
-        label=_("Password confirmation"),
+        label='Подтверждение пароля',
         strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
@@ -65,7 +64,7 @@ class UserCreationForm(UserCreationForm):
 
 class AuthenticationForm(forms.Form):
     email = forms.EmailField(
-        label=_("Email address"),
+        label='Адрес электронной почты',
         max_length=260,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
@@ -73,7 +72,7 @@ class AuthenticationForm(forms.Form):
             'autofocus': 'true',
         }))
     password = forms.CharField(
-        label=_("Password"),
+        label='Пароль',
         strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
@@ -84,7 +83,7 @@ class AuthenticationForm(forms.Form):
 
 class PasswordResetForm(PasswordResetForm):
     email = forms.EmailField(
-        label=_("Email address"),
+        label='Адрес электронной почты',
         max_length=260,
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
@@ -94,7 +93,7 @@ class PasswordResetForm(PasswordResetForm):
 
 class SetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(
-        label=_("New password"),
+        label='Новый пароль',
         strip=False,
         help_text=password_validators_help_text_html(),
         widget=forms.PasswordInput(attrs={
@@ -103,7 +102,7 @@ class SetPasswordForm(SetPasswordForm):
             "autocomplete": "new-password"
         }))
     new_password2 = forms.CharField(
-        label=_("New password confirmation"),
+        label='Подтверждение нового пароля',
         strip=False,
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',

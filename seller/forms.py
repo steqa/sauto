@@ -1,4 +1,3 @@
-from django.utils.translation import gettext_lazy as _
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django import forms
 from .models import Seller, AnnouncementSale
@@ -18,11 +17,11 @@ class SellerCreationForm(forms.ModelForm):
         phone_number_widgets[1].attrs.update({'class': 'form-control', 'placeholder': 'Номер телефона',})
     
     telegram_username = forms.EmailField(
-        label=_("Telegram username"),
+        label='Имя пользователя телеграм',
         max_length=32,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Имя пользователя Telegram',
+            'placeholder': 'Имя пользователя телеграм',
             'autofocus': 'true',
         }))
     
