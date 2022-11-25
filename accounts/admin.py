@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 from .models import User
 from .forms import UserCreationForm
@@ -10,7 +11,7 @@ class UserAdmin(UserAdmin):
     add_form = UserCreationForm
     list_display = ('email', 'first_name', 'last_name', 'date_joined', 'is_staff')
     search_fields = ('email', 'first_name', 'last_name', 'date_joined')
-    readonly_fields = ('id', 'date_joined', 'last_login')
+    readonly_fields = ('id', 'preview_inside', 'date_joined', 'last_login')
     fieldsets = (
         (None,
             {'fields': (
@@ -22,7 +23,8 @@ class UserAdmin(UserAdmin):
             {'fields': (
                 'first_name',
                 'last_name',
-                'profile_image'
+                'profile_image',
+                readonly_fields[1],
         )}),
         (_('Permissions'),
             {'fields': (
@@ -34,7 +36,7 @@ class UserAdmin(UserAdmin):
         )}),
         (_('Important dates'),
             {'fields': (
-                readonly_fields[1:]
+                readonly_fields[2:]
         )}),
     )
     add_fieldsets = (
@@ -46,3 +48,7 @@ class UserAdmin(UserAdmin):
     ordering = ()
     filter_horizontal = ()
     list_filter = ()
+    
+    def preview_inside(self, img):
+        print(img.profile_image)
+        return mark_safe(f'<img src="{img.profile_image.url}" style="max-height: 200px;">')
