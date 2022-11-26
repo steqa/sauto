@@ -36,9 +36,9 @@ class SellerCreationForm(forms.ModelForm):
 class AnnouncementCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['category'].widget.attrs.update({'class': 'form-select'})
-        self.fields['condition'].widget.attrs.update({'class': 'form-select'})
-        self.fields['type_announcement'].widget.attrs.update({'class': 'form-select'})
+        self.fields['category'].widget.attrs.update({'class': 'form-select form-control'})
+        self.fields['condition'].widget.attrs.update({'class': 'form-select form-control'})
+        self.fields['type_announcement'].widget.attrs.update({'class': 'form-select form-control'})
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
         self.fields['price'].widget.attrs.update({'class': 'form-control', 'max': 99999999999.99})
         self.fields['description'] = forms.CharField(label='Описание', max_length=3000, widget=forms.Textarea({'class': 'form-control', 'rows': 5}))

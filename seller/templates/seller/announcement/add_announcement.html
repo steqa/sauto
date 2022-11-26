@@ -1,0 +1,46 @@
+{% extends 'seller/announcement/base.html' %}
+{% load static %}
+
+{% block title %}Разместить объявление{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/dnd-area.css' %}">
+<div class="container my-5">
+    <h4 class="mb-4">Создания объявления</h4>
+    <form action="{% url 'add-announcement' %}" method="post" id="add_announcement_form">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="row">
+            <div class="col-12 col-md-3 col-lg-2 mb-2">{{ field.label }}</div>
+            <div class="col-12 col-md-9 col-lg-10 mb-3 field-block">
+                {{ field }}
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+        {% endfor %}
+        <div class="row mb-3">
+            <div class="col-12 col-md-3 col-lg-2 mb-2">Изображения</div>
+            <div class="col-12 col-md-9 col-lg-10">
+                <div id="upload-container" for="file-input">
+                    <div class="upload-container-content">
+                        <button type="button" style="display: none;">Удалить</button>
+                        <input id="file-input" type="file" name="file1" accept=".jpg, .png">
+                        <label for="file-input">
+                            <a class="fw-bolder pointer text-decoration-none text-center">Выберите файл</a>
+                        </label>
+                        <span class="px-3 text-center">или перетащите<br>его сюда</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-grid">
+            <button class="btn btn-primary" type="submit">Разместить объявление</button>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/seller/announcement/add-announcement.js' %}"></script>
+<script src="{% static 'js/send-form-data.js' %}"></script>
+<script src="{% static 'js/get-cookie.js' %}"></script>
+<script src="{% static 'js/seller/announcement/image-upload.js' %}"></script>
+{% endblock %}
