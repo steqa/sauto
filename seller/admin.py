@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
-from .models import Seller, AnnouncementSale, AnnouncementSaleImage
+from .models import Seller, Announcement, AnnouncementImage
 
 
 @admin.register(Seller)
@@ -9,8 +9,8 @@ class SellerAdmin(admin.ModelAdmin):
     search_fields = ('user', 'telegram_username', 'phone_number')
 
 
-@admin.register(AnnouncementSale)
-class AnnouncementSaleAdmin(admin.ModelAdmin):
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('name', 'seller', 'category', 'condition', 'type_announcement', 'price', 'sold')
     search_fields = ('name', 'category', 'condition', 'type_announcement', 'price')
     list_filter = ('category', 'condition', 'type_announcement', 'sold')
@@ -42,8 +42,8 @@ class AnnouncementSaleAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(AnnouncementSaleImage)
-class AnnouncementSaleImageAdmin(admin.ModelAdmin):
+@admin.register(AnnouncementImage)
+class AnnouncementImageAdmin(admin.ModelAdmin):
     list_display = ('announcement_sale', 'image', 'preview',)
     readonly_fields = ('preview_inside',)
     

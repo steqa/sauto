@@ -17,7 +17,7 @@ class Seller(models.Model):
         return self.user.email
 
 
-class AnnouncementSale(models.Model):
+class Announcement(models.Model):
     CATEGORIES = (
         (None, 'Не выбрано'),
         (0, 'Прочее'),
@@ -74,8 +74,8 @@ def _get_announcement_sale_image_filepath(self, image_name):
     return f'user_images/{self.announcement_sale.seller.user.pk}/{self.announcement_sale.pk}/{image_name}'
 
 
-class AnnouncementSaleImage(models.Model):
-    announcement_sale = models.ForeignKey(AnnouncementSale, verbose_name="объявление",  on_delete=models.CASCADE)
+class AnnouncementImage(models.Model):
+    announcement_sale = models.ForeignKey(Announcement, verbose_name="объявление",  on_delete=models.CASCADE)
     image = models.ImageField(verbose_name="изображение", upload_to=_get_announcement_sale_image_filepath)
     
     class Meta:

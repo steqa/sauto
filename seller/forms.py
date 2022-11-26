@@ -1,6 +1,6 @@
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 from django import forms
-from .models import Seller, AnnouncementSale
+from .models import Seller, Announcement
 
 
 class CustomPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
@@ -33,7 +33,7 @@ class SellerCreationForm(forms.ModelForm):
         }
 
 
-class AnnouncementSaleCreationForm(forms.ModelForm):
+class AnnouncementCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['category'].widget.attrs.update({'class': 'form-select'})
@@ -44,5 +44,5 @@ class AnnouncementSaleCreationForm(forms.ModelForm):
         self.fields['description'] = forms.CharField(label='Описание', max_length=3000, widget=forms.Textarea({'class': 'form-control', 'rows': 5}))
     
     class Meta:
-        model = AnnouncementSale
+        model = Announcement
         fields = ('category', 'condition', 'type_announcement', 'name', 'price', 'description')
