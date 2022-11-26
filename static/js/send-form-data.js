@@ -54,7 +54,6 @@ function sendFormData(e, reload) {
         })
 }
 
-
 function changeValidationStatusField(data, field) {
     const invalidFeedbackBlock = field.closest('.field-block').querySelector('.invalid-feedback')
     const fieldName = field.getAttribute('name')
@@ -67,20 +66,4 @@ function changeValidationStatusField(data, field) {
         field.classList.add('is-valid')
         invalidFeedbackBlock.innerHTML = ''
     }
-}
-
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }
