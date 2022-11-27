@@ -6,7 +6,7 @@
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/dnd-area.css' %}">
 <div class="container my-5">
-    <h4 class="mb-4">Создания объявления</h4>
+    <h4 class="mb-4">Создание объявления</h4>
     <form action="{% url 'add-announcement' %}" method="post" id="add_announcement_form">
         {% csrf_token %}
         {% for field in form %}
@@ -20,17 +20,21 @@
         {% endfor %}
         <div class="row mb-3">
             <div class="col-12 col-md-3 col-lg-2 mb-2">Изображения</div>
-            <div class="col-12 col-md-9 col-lg-10">
-                <div id="upload-container" for="file-input">
-                    <div class="upload-container-content">
-                        <button type="button" style="display: none;">Удалить</button>
-                        <input id="file-input" type="file" name="file1" accept=".jpg, .png">
-                        <label for="file-input">
-                            <a class="fw-bolder pointer text-decoration-none text-center">Выберите файл</a>
-                        </label>
-                        <span class="px-3 text-center">или перетащите<br>его сюда</span>
+            <div class="col-12 col-md-9 col-lg-10 row pe-0">
+                <p class="mb-2 text-secondary">Перетащите изображения сюда или выберите их на своем компьютере.</p>
+                {% for r in '012345' %}
+                <div class="col-6 col-sm-4 col-lg-2 mb-3 pe-0">
+                    <div id="upload-container">
+                        <div class="upload-container-content">
+                            <button type="button" style="display: none;" class="fw-bolder">Удалить</button>
+                            <input id="file-input{{ r }}" type="file" name="file{{ r }}" accept=".jpg, .png" data-image-upload-input data-exclude-getFormData>
+                            <label for="file-input{{ r }}" class="visually-hidden=md">
+                                <a class="fw-bolder pointer text-decoration-none text-center">Добавить</a>
+                            </label>
+                        </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
         <div class="d-grid">

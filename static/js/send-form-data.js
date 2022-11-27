@@ -21,8 +21,10 @@ formFields.forEach((element) => {
 function getFormData(e) {
     const elems = e.elements,
         dataArr = new Object;
-    for (let i = 0; i < elems.length - 1; i++) {
-        dataArr[elems[i].name] = elems[i].value
+    for (let i = 0; i < elems.length; i++) {
+        if ((elems[i].nodeName != 'BUTTON') & (elems[i].hasAttribute('data-exclude-getFormData') === false)) {
+            dataArr[elems[i].name] = elems[i].value
+        }
     }
     return dataArr
 }
@@ -31,7 +33,7 @@ function getFormData(e) {
 function sendFormData(e, reload) {
     const formData = getFormData(e)
     let url = e.action
-    if (reload) { 
+    if (reload) {
         url += '?reload=true'
     }
     fetch(url, {

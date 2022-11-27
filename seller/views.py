@@ -6,6 +6,17 @@ from .forms import AnnouncementCreationForm
 
 def add_announcement(request):
     form = AnnouncementCreationForm
+    if request.method == 'POST':
+        if request.FILES:
+            print('files')
+            print(request.FILES)
+        else:
+            data = json.loads(request.body)
+            print('data')
+            print(data)
+
+        return JsonResponse({'response': 'response'})
+        
     
     context = {
         'form': form,
