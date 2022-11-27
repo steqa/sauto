@@ -13,6 +13,7 @@ dropArea.forEach((elem) => {
         form.querySelector(`[name="${inputName}"]`).files = e.dataTransfer.files
         file = e.dataTransfer.files[0]
         previewFile(file, elem)
+        appendFile(file)
         sendImage(form)
     })
 })
@@ -31,7 +32,22 @@ function appendFile(file) {
 }
 
 function deleteFile(file) {
-    formData.delete(file.name)
+    let quantity = 0
+    for (const f of formData.keys()) {
+        if (file.name == f) {
+            quantity += 1
+        }
+    }
+    console.log(quantity)
+    if (quantity > 1) {
+        formData.delete(file.name)
+        while (quantity > 1) {
+            formData.append(file.name, file)
+            quantity -= 1
+        }
+    } else {
+        formData.delete(file.name)
+    }
 }
 
 function formFile() {
