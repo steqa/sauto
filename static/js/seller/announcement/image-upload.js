@@ -51,21 +51,14 @@ function deleteFile(file) {
 }
 
 function formFile() {
-    let length = 0
-    let files = {}
-    for (const file of formData.values()) {
-        files[length] = null
-        length += 1
-    }
-    length = 0
-    for (const file of formData.entries()) {
-        files[length] = file[1]
-        length += 1
-    }
     returnedFormData = new FormData()
-    for (const file in files) {
-        returnedFormData.append(file, files[file])
-    }
+    let number = 0
+    fileInputs.forEach((elem) => {
+        if ([...formData.keys()].includes(elem.value.split('\\').pop())) {
+            returnedFormData.append(number, formData.get(elem.value.split('\\').pop()))
+            number += 1
+        }
+    })
 }
 
 function sendImage(form) {
