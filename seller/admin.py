@@ -18,7 +18,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     fieldsets = (
         (None,
             {'fields': (
-                readonly_fields[0],
+                'id',
                 'seller',
         )}),
         ('Информация',
@@ -29,6 +29,8 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 'category',
                 'condition',
                 'type_announcement',
+                'latitude',
+                'longitude',
         )}),
         ('Состояние',
             {'fields': (

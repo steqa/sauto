@@ -59,6 +59,8 @@ class Announcement(models.Model):
     price = models.DecimalField(verbose_name="цена", max_digits=13, decimal_places=2)
     description = models.CharField(verbose_name="описание", max_length=3000)
     sold = models.BooleanField(verbose_name="продано", default=False)
+    latitude = models.FloatField(verbose_name="широта")
+    longitude = models.FloatField(verbose_name="долгота")
     date_created = models.DateTimeField(verbose_name="дата создания", auto_now_add=True)
     date_updated = models.DateTimeField(verbose_name="дата изменения", auto_now_add=True)
     
