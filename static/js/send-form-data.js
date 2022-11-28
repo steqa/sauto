@@ -22,7 +22,7 @@ function getFormData(e) {
     const elems = e.elements,
         dataArr = new Object;
     for (let i = 0; i < elems.length; i++) {
-        if ((elems[i].nodeName != 'BUTTON') & (elems[i].hasAttribute('data-exclude-getFormData') === false)) {
+        if ((elems[i].nodeName != 'BUTTON') & (elems[i].hasAttribute('data-exclude-getFormData') === false) & (elems[i].name != '')) {
             dataArr[elems[i].name] = elems[i].value
         }
     }

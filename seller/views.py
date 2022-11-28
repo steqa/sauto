@@ -1,3 +1,4 @@
+from sauto import settings
 import json
 from django.http.response import JsonResponse
 from django.shortcuts import render
@@ -20,5 +21,6 @@ def add_announcement(request):
     
     context = {
         'form': form,
+        'yandex_map_api_key': settings.YANDEX_MAP_API_KEY,
     }
     return render(request, 'seller/announcement/add_announcement.html', context)
