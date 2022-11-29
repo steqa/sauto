@@ -6,13 +6,13 @@ let inputField = null
 form.addEventListener('submit', function (e) {
     e.preventDefault()
     inputType = 'submit'
-    sendJsonFormData(this, reload = true)
+    sendJsonFormData(this.elements, reload = true)
 })
 
 formFields.forEach((element) => {
     element.addEventListener('input', function (e) {
         inputType = 'input'
         inputField = element
-        sendJsonFormData(form, reload = false)
+        sendJsonFormData(form.elements, reload = false)
     })
 })

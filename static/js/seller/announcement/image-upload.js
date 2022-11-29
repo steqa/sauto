@@ -1,31 +1,5 @@
-const dropArea = document.querySelectorAll('#upload-container')
-const fileInputs = document.querySelectorAll('[data-image-upload-input]')
 const innerFormData = new FormData()
 let formData = new FormData()
-
-dropArea.forEach((elem) => {
-    elem.addEventListener('dragover', function (e) {
-        e.preventDefault();
-    })
-    elem.addEventListener('drop', function (e) {
-        e.preventDefault();
-        const inputName = elem.querySelector('[data-image-upload-input]').getAttribute('name')
-        form.querySelector(`[name="${inputName}"]`).files = e.dataTransfer.files
-        file = e.dataTransfer.files[0]
-        previewFile(file, elem)
-        appendFile(file)
-        sendImage(form)
-    })
-})
-
-fileInputs.forEach((elem) => {
-    elem.addEventListener('input', function (e) {
-        file = elem.files[0]
-        previewFile(file, elem.parentNode.parentNode)
-        appendFile(file)
-        sendImage(form)
-    })
-})
 
 function appendFile(file) {
     innerFormData.append(file.name, file)
@@ -94,7 +68,6 @@ function previewFile(file, elem) {
         uploadContentDeleteButton.style.display = 'block'
     }
     uploadContentDeleteButton.addEventListener('click', () => {
-        uploadContentInput.setAttribute('data-exclude-getFormData', true)
         uploadContentInput.value = ''
         uploadContent.style.backgroundImage = ''
         uploadContentLabel.style.display = 'block'

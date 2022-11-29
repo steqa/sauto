@@ -69,7 +69,7 @@ function init() {
 
         latitude.value = coords[0]
         longitude.value = coords[1]
-        sendJsonFormData(form, reload = false)
+        mapListener()
     }
 
     // Убираем элементы управления с карты

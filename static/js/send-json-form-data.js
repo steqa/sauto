@@ -1,16 +1,15 @@
-function getJsonFormData(form) {
-    const elems = form.elements,
-        dataArr = new Object;
-    for (let i = 0; i < elems.length; i++) {
-        if ((elems[i].nodeName != 'BUTTON') & (elems[i].hasAttribute('data-exclude-getFormData') === false) & (elems[i].name != '')) {
-            dataArr[elems[i].name] = elems[i].value
+function getJsonFormData(inputs) {
+    const dataArr = new Object;
+    for (let i = 0; i < inputs.length; i++) {
+        if ((inputs[i].nodeName != 'BUTTON') & (inputs[i].name != '')) {
+            dataArr[inputs[i].name] = inputs[i].value
         }
     }
     return dataArr
 }
 
-function sendJsonFormData(form, reload) {
-    const formData = getJsonFormData(form)
+function sendJsonFormData(inputs, reload, action = null) {
+    const formData = getJsonFormData(inputs)
     let url = form.action
     if (reload) {
         url += '?reload=true'
@@ -22,7 +21,8 @@ function sendJsonFormData(form, reload) {
             'X-CSRFToken': getCookie('csrftoken'),
         },
         body: JSON.stringify({
-            formData,
+            'formData': formData,
+            'action': action,
         }),
     })
 
