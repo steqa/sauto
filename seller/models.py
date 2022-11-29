@@ -51,18 +51,25 @@ class Announcement(models.Model):
         (2, 'Магазин'),
     )
     
+    COMMUNICATION_METHOD = (
+        (0, 'email'),
+        (1, 'telegram_username'),
+        (2, 'phone_number')
+    )
+    
     seller = models.ForeignKey(Seller, verbose_name="продавец", on_delete=models.CASCADE,)
     category = models.IntegerField(verbose_name="категория", choices=CATEGORIES)
     condition = models.IntegerField(verbose_name="состояние", choices=CONDITION)
     type_announcement = models.IntegerField(verbose_name="тип объявления", choices=TYPE_ANNOUNCEMENT)
     name = models.CharField(verbose_name="название", max_length=50)
     price = models.DecimalField(verbose_name="цена", max_digits=13, decimal_places=2)
-    description = models.CharField(verbose_name="описание", max_length=3000)
+    description = models.CharField(verbose_name="описание", max_length=3000, blank=True, null=True)
     sold = models.BooleanField(verbose_name="продано", default=False)
     latitude = models.FloatField(verbose_name="широта")
     longitude = models.FloatField(verbose_name="долгота")
     date_created = models.DateTimeField(verbose_name="дата создания", auto_now_add=True)
     date_updated = models.DateTimeField(verbose_name="дата изменения", auto_now_add=True)
+    communication_method = models.IntegerField(verbose_name="способ связи", choices=COMMUNICATION_METHOD, default=0)
     
     class Meta:
         verbose_name = 'объявление'

@@ -14,15 +14,14 @@ class SellerCreationForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         phone_number_widgets = self.fields['phone_number'].widget.widgets
         phone_number_widgets[0].attrs.update({'class': 'form-select'})
-        phone_number_widgets[1].attrs.update({'class': 'form-control', 'placeholder': 'Номер телефона',})
+        phone_number_widgets[1].attrs.update({'class': 'form-control'})
 
     telegram_username = forms.EmailField(
         label='Имя пользователя телеграм',
         max_length=32,
+        required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Имя пользователя телеграм',
-            'autofocus': 'true',
         }))
 
     class Meta:
@@ -41,10 +40,11 @@ class AnnouncementCreationForm(forms.ModelForm):
         self.fields['type_announcement'].widget.attrs.update({'class': 'form-select form-control'})
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
         self.fields['price'].widget.attrs.update({'class': 'form-control', 'max': 99999999999.99})
-        self.fields['description'] = forms.CharField(label='Описание', max_length=3000, widget=forms.Textarea({'class': 'form-control', 'rows': 5}))
+        self.fields['description'] = forms.CharField(label='Описание', max_length=3000, required=False, widget=forms.Textarea({'class': 'form-control', 'rows': 5}))
 
     latitude = forms.FloatField(
         label='Широта',
+        required=True,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
             'type': 'hidden'
@@ -52,11 +52,21 @@ class AnnouncementCreationForm(forms.ModelForm):
 
     longitude = forms.FloatField(
         label='Долгота',
+        required=True,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
             'type': 'hidden'
         }))
 
+    communication_method = forms.IntegerField(
+        label='Способ связи',
+        required=True,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type': 'hidden',
+            'value': '0'
+        }))
+
     class Meta:
         model = Announcement
-        fields = ('category', 'condition', 'type_announcement', 'name', 'price', 'description')
+        fields = ('category', 'condition', 'type_announcement', 'name', 'price', 'description', 'communication_method')

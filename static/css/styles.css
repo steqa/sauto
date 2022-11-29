@@ -9,3 +9,7 @@
 .pointer {
     cursor: pointer;
 }
+
+.not-selectable {
+    user-select: none;
+}
