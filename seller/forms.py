@@ -15,7 +15,7 @@ class SellerCreationForm(forms.ModelForm):
         phone_number_widgets = self.fields['phone_number'].widget.widgets
         phone_number_widgets[0].attrs.update({'class': 'form-select'})
         phone_number_widgets[1].attrs.update({'class': 'form-control', 'placeholder': 'Номер телефона',})
-    
+
     telegram_username = forms.EmailField(
         label='Имя пользователя телеграм',
         max_length=32,
@@ -24,7 +24,7 @@ class SellerCreationForm(forms.ModelForm):
             'placeholder': 'Имя пользователя телеграм',
             'autofocus': 'true',
         }))
-    
+
     class Meta:
         model = Seller
         fields = ('telegram_username', 'phone_number')
@@ -42,7 +42,21 @@ class AnnouncementCreationForm(forms.ModelForm):
         self.fields['name'].widget.attrs.update({'class': 'form-control'})
         self.fields['price'].widget.attrs.update({'class': 'form-control', 'max': 99999999999.99})
         self.fields['description'] = forms.CharField(label='Описание', max_length=3000, widget=forms.Textarea({'class': 'form-control', 'rows': 5}))
-    
+
+    latitude = forms.FloatField(
+        label='Широта',
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type': 'hidden'
+        }))
+
+    longitude = forms.FloatField(
+        label='Долгота',
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'type': 'hidden'
+        }))
+
     class Meta:
         model = Announcement
         fields = ('category', 'condition', 'type_announcement', 'name', 'price', 'description')

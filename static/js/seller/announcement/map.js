@@ -1,5 +1,5 @@
-const latitude = document.getElementById('latitude')
-const longitude = document.getElementById('longitude')
+const latitude = document.getElementById('id_latitude')
+const longitude = document.getElementById('id_longitude')
 ymaps.ready(init)
 function init() {
     let placemark,

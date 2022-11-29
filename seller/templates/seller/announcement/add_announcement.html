@@ -13,6 +13,9 @@
     <form action="{% url 'add-announcement' %}" method="post" id="add_announcement_form">
         {% csrf_token %}
         {% for field in form %}
+        {% if field.is_hidden %}
+        {{ field }}
+        {% else %}
         <div class="row mb-2">
             <div class="col-12 col-md-3 col-lg-3 mb-2">{{ field.label }}</div>
             <div class="col-12 col-md-9 col-lg-9 mb-3 field-block">
@@ -20,6 +23,7 @@
                 <div class="invalid-feedback"></div>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
         <div class="row mb-2">
             <div class="col-12 col-md-3 col-lg-3 mb-2">Изображения</div>
@@ -47,8 +51,6 @@
                 <div id="map" action="{% url 'add-announcement' %}" class="mb-3" style="height: 440px"></div>
             </div>
         </div>
-        <input type="hidden" id="latitude" name="latitude" value="">
-        <input type="hidden" id="longitude" name="longitude" value="">
         <script src="{% static 'js/seller/announcement/map.js' %}"></script>
         <div class="d-grid">
             <button class="btn btn-primary" type="submit">Разместить объявление</button>

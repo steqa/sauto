@@ -1,7 +1,7 @@
 const dropArea = document.querySelectorAll('#upload-container')
 const fileInputs = document.querySelectorAll('[data-image-upload-input]')
-const formData = new FormData()
-let returnedFormData = new FormData()
+const innerFormData = new FormData()
+let formData = new FormData()
 
 dropArea.forEach((elem) => {
     elem.addEventListener('dragover', function (e) {
@@ -28,34 +28,33 @@ fileInputs.forEach((elem) => {
 })
 
 function appendFile(file) {
-    formData.append(file.name, file)
+    innerFormData.append(file.name, file)
 }
 
 function deleteFile(file) {
     let quantity = 0
-    for (const f of formData.keys()) {
+    for (const f of innerFormData.keys()) {
         if (file.name == f) {
             quantity += 1
         }
     }
-    console.log(quantity)
     if (quantity > 1) {
-        formData.delete(file.name)
+        innerFormData.delete(file.name)
         while (quantity > 1) {
-            formData.append(file.name, file)
+            innerFormData.append(file.name, file)
             quantity -= 1
         }
     } else {
-        formData.delete(file.name)
+        innerFormData.delete(file.name)
     }
 }
 
 function formFile() {
-    returnedFormData = new FormData()
+    formData = new FormData()
     let number = 0
     fileInputs.forEach((elem) => {
-        if ([...formData.keys()].includes(elem.value.split('\\').pop())) {
-            returnedFormData.append(number, formData.get(elem.value.split('\\').pop()))
+        if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
+            formData.append(number, innerFormData.get(elem.value.split('\\').pop()))
             number += 1
         }
     })
@@ -63,21 +62,26 @@ function formFile() {
 
 function sendImage(form) {
     formFile()
+    formData.append('action', 'send_image')
+    for (const f of formData.entries()) {
+        console.log(f)
+    }
     let url = form.action
-    $.ajax({
-        url: url,
-        type: "POST",
-        data: returnedFormData,
-        headers: { "X-CSRFToken": getCookie("csrftoken") },
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            console.log(data)
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
         },
-        error: function (error) {
-            console.log(error)
-        }
+        body: formData
     })
+
+        .then((response) => {
+            return response.json()
+        })
+
+        .then((data) => {
+            console.log(data)
+        })
 }
 
 function previewFile(file, elem) {
