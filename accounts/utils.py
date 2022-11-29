@@ -76,5 +76,5 @@ def get_user_uidb64(user: User) -> str:
 
 def get_form_data(request, Form, *args):
     data = json.loads(request.body)
-    form_data = Form(*args, data['form_data'])
+    form_data = Form(*args, data['formData'])
     return form_data

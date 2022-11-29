@@ -8,7 +8,7 @@ from .forms import AnnouncementCreationForm
 def add_announcement(request):
     form = AnnouncementCreationForm
     if request.method == 'POST':
-        if request.POST.get('action') == 'send_image':
+        if request.POST.get('action') == 'send-image':
             print('files')
             print(request.FILES)
         else:

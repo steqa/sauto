@@ -62,10 +62,7 @@ function formFile() {
 
 function sendImage(form) {
     formFile()
-    formData.append('action', 'send_image')
-    for (const f of formData.entries()) {
-        console.log(f)
-    }
+    formData.append('action', 'send-image')
     let url = form.action
     fetch(url, {
         method: 'POST',
