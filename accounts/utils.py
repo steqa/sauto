@@ -1,5 +1,4 @@
 import json
-from typing import NamedTuple, Literal
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
@@ -7,40 +6,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from .tokens import email_token
-from .forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
 from .models import User
 from .threads import SendEmailThread
-
-
-class Response(NamedTuple):
-    body: dict
-    type: Literal['OK'] | \
-          Literal['redirect'] | \
-          Literal['ValidationError'] | \
-          Literal['BadRequest'] | \
-          Literal['EmailSendingError'] | \
-          Literal['AuthenticationError'] | \
-          Literal['NotFound']
-    status: Literal[200] | Literal[400]
-
-
-def validate_form_data(form_data:
-                       UserCreationForm |
-                       AuthenticationForm |
-                       PasswordResetForm |
-                       SetPasswordForm) -> Response:
-    try:
-        if form_data.is_valid():
-            return Response(body={}, type='OK', status=200)
-        else:
-            error = {}
-            for field in form_data.errors:
-                error[field] = [field_errors for field_errors in form_data.errors[field]]
-            return Response(body=error, type='ValidationError', status=400)
-    except:
-        return Response(
-            body={'error': 'Некорректные данные.'},
-            type='BadRequest', status=400)
 
 
 def send_email(request, user: User, email_subject: str, email_template: str):

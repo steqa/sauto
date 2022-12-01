@@ -7,7 +7,8 @@ from django.urls import reverse
 from .threads import DeleteUserAfterTimeElapsed
 from .tokens import email_token
 from .forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
-from .utils import validate_form_data, send_email, get_user_by_uidb64, Response, get_user_uidb64, get_form_data
+from .utils import send_email, get_user_by_uidb64, get_user_uidb64, get_form_data
+from sauto.utils import validate_form_data, Response
 from .models import User
 
 
