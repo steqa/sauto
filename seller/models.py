@@ -84,7 +84,7 @@ def _get_announcement_sale_image_filepath(self, image_name):
 
 
 class AnnouncementImage(models.Model):
-    announcement_sale = models.ForeignKey(Announcement, verbose_name="объявление",  on_delete=models.CASCADE)
+    announcement = models.ForeignKey(Announcement, verbose_name="объявление",  on_delete=models.CASCADE)
     image = models.ImageField(verbose_name="изображение", upload_to=_get_announcement_sale_image_filepath)
     
     class Meta:

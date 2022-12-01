@@ -46,7 +46,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
 
 @admin.register(AnnouncementImage)
 class AnnouncementImageAdmin(admin.ModelAdmin):
-    list_display = ('announcement_sale', 'image', 'preview',)
+    list_display = ('announcement', 'image', 'preview',)
     readonly_fields = ('preview_inside',)
     
     def preview(self, img):

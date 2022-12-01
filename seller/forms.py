@@ -16,9 +16,10 @@ class SellerCreationForm(forms.ModelForm):
         phone_number_widgets[0].attrs.update({'class': 'form-select'})
         phone_number_widgets[1].attrs.update({'class': 'form-control'})
 
-    telegram_username = forms.EmailField(
+    telegram_username = forms.CharField(
         label='Имя пользователя телеграм',
         max_length=32,
+        min_length=5,
         required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
