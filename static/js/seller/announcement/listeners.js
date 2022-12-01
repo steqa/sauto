@@ -33,18 +33,18 @@ announcementFields.forEach((element) => {
     element.addEventListener('input', (e) => {
         inputType = 'input'
         inputField = element
-        sendJsonFormData(announcementFields, reload = false, action = 'announcementData')
+        sendJsonFormData(announcementFields, reload = false, action = 'validate-announcement-data')
     })
 })
 
 communicationMethodRadio.forEach((element) => {
     element.addEventListener('input', (e) => {
-        sendJsonFormData(announcementFields, reload = false, action = 'announcementData')
+        sendJsonFormData(announcementFields, reload = false, action = 'validate-announcement-data')
     })
 })
 
 function mapListener() {
-    sendJsonFormData(announcementFields, reload = false, action = 'announcementData')
+    sendJsonFormData(announcementFields, reload = false, action = 'validate-announcement-data')
 }
 
 
@@ -54,13 +54,13 @@ sellerFields.forEach((element) => {
     element.addEventListener('input', (e) => {
         inputType = 'input'
         inputField = element
-        sendJsonFormData(sellerFields, reload = false, action = 'sellerData')
+        sendJsonFormData(sellerFields, reload = false, action = 'validate-seller-data')
     })
 })
 
 function formFormData() {
     const formData = new FormData()
-    formData.append('action', 'addAnnouncement')
+    formData.append('action', 'add-announcement')
     announcementFields.forEach((element) => {
         formData.append(element.name, element.value)
     })

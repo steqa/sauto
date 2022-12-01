@@ -36,7 +36,7 @@ function formFile() {
 
 function sendImage(form) {
     formFile()
-    formData.append('action', 'send-image')
+    formData.append('action', 'validate-image')
     let url = form.action
     fetch(url, {
         method: 'POST',

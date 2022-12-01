@@ -28,6 +28,7 @@
                     <div class="input-group">
                         {{ field }}
                         <span class="input-group-text">&#8381</span>
+                        <div class="invalid-feedback"></div>
                     </div>
                     {% else %}
                     {{ field }}
@@ -187,4 +188,5 @@
 <script src="{% static 'js/seller/announcement/image-upload.js' %}"></script>
 <script src="{% static 'js/seller/announcement/communication-method.js' %}"></script>
 <script src="{% static 'js/seller/announcement/listeners.js' %}"></script>
+<script src="{% static 'js/show-toast.js' %}"></script>
 {% endblock %}
