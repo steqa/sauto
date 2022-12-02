@@ -73,9 +73,9 @@
             <div class="col-12 col-md-9 col-lg-9">
                 <p class="mb-3 text-secondary">
                     {% if not seller_form %}
-                    Эта информация будет видна всем пользователям в объявлении. Её можно изменить в настройках.
+                    Эта информация будет видна всем пользователям в объявлении.<br>Её можно изменить в настройках.
                     {% else %}
-                    Эта информация будет видна всем пользователям в объявлении.
+                    Эта информация будет видна всем пользователям в объявлении.<br>Её можно будет изменить в настройках.
                     {% endif %}
                 </p>
                 <div class="row mb-2">
@@ -113,7 +113,7 @@
                         </div>
                     </div>
                     <div class="col-12 col-sm-6 sellerFields">
-                        <div class="input-group"
+                        <div class="input-group field-block"
                             data-communication-method-input-id="communicationMethodTelegramUsernameRadio">
                             <span class="input-group-text">@</span>
                             {% if not seller_form %}
@@ -126,8 +126,8 @@
                             {% else %}
                             {{ seller_form.telegram_username }}
                             {% endif %}
+                            <div class="invalid-feedback"></div>
                         </div>
-                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -160,14 +160,14 @@
                                 disabled>
                             {% endif %}
                             {% else %}
-                            <div class="col-12 col-sm-5 col-lg-6">
+                            <div class="col-12 col-lg-6 field-block mb-lg-0 mb-1">
                                 {{ seller_form.phone_number.subwidgets.0 }}
-                                <div class="invalid-feedback"></div>
+                                <div class="invalid-feedback my-lg-2 my-0"></div>
                             </div>
-                            <div class="col-12 col-sm-7 col-lg-6"
+                            <div class="col-12 col-lg-6 field-block"
                                 data-communication-method-input-id="communicationMethodPhoneNumberRadio">
                                 {{ seller_form.phone_number.subwidgets.1 }}
-                                <div class="invalid-feedback"></div>
+                                <div class="invalid-feedback my-lg-2 my-0"></div>
                             </div>
                             {% endif %}
                         </div>
@@ -189,4 +189,5 @@
 <script src="{% static 'js/seller/announcement/communication-method.js' %}"></script>
 <script src="{% static 'js/seller/announcement/listeners.js' %}"></script>
 <script src="{% static 'js/show-toast.js' %}"></script>
+<script src="{% static 'js/seller/announcement/announcement-change-validation-status-field.js' %}"></script>
 {% endblock %}

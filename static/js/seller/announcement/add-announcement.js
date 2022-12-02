@@ -7,7 +7,11 @@ function renderReturnedData(data) {
             return showToast(data['body']['error'], type = 'error')
         } else if (data['type'] == 'ValidationError') {
             if (inputType == 'input') {
-                changeValidationStatusField(data, field = inputField)
+                if (['id_phone_number_0', 'id_phone_number_1', 'id_telegram_username'].includes(inputField.id)) {
+                    sellerDataChangeValidationStatusField(data, field = inputField)
+                } else {
+                    changeValidationStatusField(data, field = inputField)
+                }
             }
         } else if (data['type'] == 'ImageValidationError') {
 

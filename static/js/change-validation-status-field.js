@@ -1,12 +1,11 @@
 function changeValidationStatusField(data, field) {
     if (field) {
         const invalidFeedbackBlock = field.closest('.field-block').querySelector('.invalid-feedback')
-        const fieldName = field.getAttribute('name')
         if (field.value != '') {
-            if (fieldName in data['body']) {
+            if (field.name in data['body']) {
                 field.classList.remove('is-valid')
                 field.classList.add('is-invalid')
-                invalidFeedbackBlock.innerHTML = data['body'][fieldName].join("<br>")
+                invalidFeedbackBlock.innerHTML = data['body'][field.name].join("<br>")
             } else {
                 field.classList.remove('is-invalid')
                 field.classList.add('is-valid')
