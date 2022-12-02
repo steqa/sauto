@@ -25,11 +25,9 @@ function deleteFile(file) {
 
 function formFile() {
     formData = new FormData()
-    let number = 0
     fileInputs.forEach((elem) => {
         if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
-            formData.append(number, innerFormData.get(elem.value.split('\\').pop()))
-            number += 1
+            formData.append(elem.id, innerFormData.get(elem.value.split('\\').pop()))
         }
     })
 }
@@ -51,7 +49,7 @@ function sendImage(form) {
         })
 
         .then((data) => {
-            console.log(data)
+            renderReturnedData(data)
         })
 }
 
@@ -75,4 +73,22 @@ function previewFile(file, elem) {
         deleteFile(file)
         sendImage(form)
     })
+}
+
+function imageChangeValidationStatusField(data, field) {
+    console.log(data)
+    const invalidFeedbackBlock = field.closest('.field-block').querySelector('.image-invalid-feedback')
+    const uploadContainerContent = field.closest('.upload-container-content')
+    console.log(uploadContainerContent)
+    if (field.id in data['body']) {
+        invalidFeedbackBlock.style.display = 'block'
+        invalidFeedbackBlock.innerHTML = data['body'][field.id].join("<br>")
+        uploadContainerContent.classList.remove('image-is-valid')
+        uploadContainerContent.classList.add('image-is-invalid')
+    } else {
+        invalidFeedbackBlock.style.display = 'none'
+        invalidFeedbackBlock.innerHTML = ''
+        uploadContainerContent.classList.remove('image-is-invalid')
+        uploadContainerContent.classList.add('image-is-valid')
+    }
 }

@@ -5,8 +5,9 @@
 
 {% block content %}
 <script src="https://api-maps.yandex.ru/2.1?apikey={{ yandex_map_api_key }}&lang=ru_RU" type="text/javascript"></script>
-
 <link rel="stylesheet" href="{% static 'css/dnd-area.css' %}">
+<link rel="stylesheet" href="{% static 'css/seller/seller.css' %}">
+
 <div class="container col-9 my-5">
     <h4 class="mb-4">Создание объявления</h4>
     <form action="{% url 'add-announcement' %}" method="post" id="add_announcement_form">
@@ -25,7 +26,7 @@
                 {% endif %}
                 <div class="col-12 col-md-9 col-lg-9 mb-3 field-block">
                     {% if field.id_for_label == 'id_price' %}
-                    <div class="input-group">
+                    <div class="input-group field-block">
                         {{ field }}
                         <span class="input-group-text">&#8381</span>
                         <div class="invalid-feedback"></div>
@@ -45,7 +46,7 @@
             <div class="col-12 col-md-9 col-lg-9 row pe-0">
                 <p class="mb-2 text-secondary">Перетащите изображения сюда или выберите их на своем компьютере.</p>
                 {% for r in '01234567' %}
-                <div class="col-12 col-sm-6 col-md-3 col-xxl-3 mb-3 pe-0">
+                <div class="col-12 col-sm-6 col-md-3 col-xxl-3 mb-3 pe-0 field-block">
                     <div id="upload-container">
                         <div class="upload-container-content">
                             <button type="button" style="display: none;" class="fw-bolder">Удалить</button>
@@ -56,6 +57,7 @@
                             </label>
                         </div>
                     </div>
+                    <div class="image-invalid-feedback"></div>
                 </div>
                 {% endfor %}
             </div>
@@ -189,5 +191,4 @@
 <script src="{% static 'js/seller/announcement/communication-method.js' %}"></script>
 <script src="{% static 'js/seller/announcement/listeners.js' %}"></script>
 <script src="{% static 'js/show-toast.js' %}"></script>
-<script src="{% static 'js/seller/announcement/announcement-change-validation-status-field.js' %}"></script>
 {% endblock %}

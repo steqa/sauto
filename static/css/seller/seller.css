@@ -1,0 +1,17 @@
+.image-invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875em;
+    color: #dc3545;
+}
+
+.image-is-valid {
+    box-shadow: 0 0 0 1px #198754;
+    outline: 2px dashed #198754;
+}
+
+.image-is-invalid {
+    box-shadow: 0 0 0 1px #dc3545;
+    outline: 2px dashed #dc3545;
+}

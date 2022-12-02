@@ -1,7 +1,6 @@
 const form = document.querySelector('#add_announcement_form')
 
 function renderReturnedData(data) {
-    console.log(data)
     if (data['status'] == 400) {
         if (data['type'] == 'BadRequest') {
             return showToast(data['body']['error'], type = 'error')
@@ -14,7 +13,7 @@ function renderReturnedData(data) {
                 }
             }
         } else if (data['type'] == 'ImageValidationError') {
-
+            imageChangeValidationStatusField(data, field = inputField)
         }
     } else if (data['status'] == 200) {
 

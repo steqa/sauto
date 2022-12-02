@@ -17,12 +17,11 @@ def validate_images(images: MultiValueDict) -> Response:
     for image in images:
         image_format = images[image].name.split('.')[-1]
         image_size = images[image].size
-        image_name = images[image].name
         if image_size > 1000000:
-            error[image_name] = ['Максимальный размер изображения 1МБ.']
+            error[image] = ['Максимальный размер изображения 1МБ.']
                                  
         if (image_format != 'jpg') and (image_format != 'png'):
-            error[image_name] = ['Допустимые форматы изображения JPG или PNG.']
+            error[image] = ['Допустимые форматы изображения JPG или PNG.']
     
     return Response(body=error, type='ImageValidationError', status=400)
 
