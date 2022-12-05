@@ -23,7 +23,7 @@ function deleteFile(file) {
     }
 }
 
-function formFile() {
+function formFiles() {
     formData = new FormData()
     fileInputs.forEach((elem) => {
         if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
@@ -32,8 +32,19 @@ function formFile() {
     })
 }
 
-function sendImage(form) {
-    formFile()
+function formFile(elem) {
+    formData = new FormData()
+    if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
+        formData.append(elem.id, innerFormData.get(elem.value.split('\\').pop()))
+    }
+}
+
+function sendImage(form, elem = null) {
+    if (elem == null) {
+        formFiles()
+    } else {
+        formFile(elem)
+    }
     formData.append('action', 'validate-image')
     let url = form.action
     fetch(url, {
@@ -76,10 +87,8 @@ function previewFile(file, elem) {
 }
 
 function imageChangeValidationStatusField(data, field) {
-    console.log(data)
     const invalidFeedbackBlock = field.closest('.field-block').querySelector('.image-invalid-feedback')
     const uploadContainerContent = field.closest('.upload-container-content')
-    console.log(uploadContainerContent)
     if (field.id in data['body']) {
         invalidFeedbackBlock.style.display = 'block'
         invalidFeedbackBlock.innerHTML = data['body'][field.id].join("<br>")
@@ -90,5 +99,10 @@ function imageChangeValidationStatusField(data, field) {
         invalidFeedbackBlock.innerHTML = ''
         uploadContainerContent.classList.remove('image-is-invalid')
         uploadContainerContent.classList.add('image-is-valid')
+    }
+    if ('images' in data['body']) {
+        document.querySelector('.imagesInvalid').style.display = 'block'
+    } else {
+        document.querySelector('.imagesInvalid').style.display = 'none'
     }
 }
