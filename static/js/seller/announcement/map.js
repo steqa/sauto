@@ -81,3 +81,12 @@ function init() {
     map.controls.remove('zoomControl')
     map.controls.remove('rulerControl')
 }
+
+
+function locationChangeValidationStatusField(data) {
+    if (('latitude' in data['body']) || ('longitude' in data['body'])) {
+        document.querySelector('.locationInvalid').style.display = 'block'
+    } else {
+        document.querySelector('.locationInvalid').style.display = 'none'
+    }
+}

@@ -47,8 +47,12 @@ communicationMethodRadio.forEach((element) => {
     })
 })
 
+const locationFields = document.querySelector('.locationFields').querySelectorAll('input')
+
 function mapListener() {
-    sendJsonFormData(announcementFields, reload = false, action = 'validate-announcement-data')
+    inputField = 'location'
+    inputType = 'input'
+    sendJsonFormData(locationFields, reload = false, action = 'validate-announcement-data')
 }
 
 
@@ -69,13 +73,16 @@ function formFormData() {
         formData.append(element.name, element.value)
     })
     let number = 0
-    fileInputs.forEach((elem) => {
-        if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
-            formData.append(number, innerFormData.get(elem.value.split('\\').pop()))
+    fileInputs.forEach((element) => {
+        if ([...innerFormData.keys()].includes(element.value.split('\\').pop())) {
+            formData.append(number, innerFormData.get(element.value.split('\\').pop()))
             number += 1
         }
     })
     sellerFields.forEach((element) => {
+        formData.append(element.name, element.value)
+    })
+    locationFields.forEach((element) => {
         formData.append(element.name, element.value)
     })
     return formData
@@ -83,6 +90,7 @@ function formFormData() {
 
 form.addEventListener('submit', (e) => {
     e.preventDefault()
+    inputType = 'submit'
     formData = formFormData()
     const url = form.action + '?reload=true'
     fetch(url, {

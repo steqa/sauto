@@ -4,7 +4,7 @@
 {% block title %}Разместить объявление{% endblock %}
 
 {% block content %}
-<script src="https://api-maps.yandex.ru/2.1?apikey={{ yandex_map_api_key }}&lang=ru_RU" type="text/javascript"></script>
+<script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU" type="text/javascript"></script>
 <link rel="stylesheet" href="{% static 'css/dnd-area.css' %}">
 <link rel="stylesheet" href="{% static 'css/seller/seller.css' %}">
 
@@ -15,7 +15,12 @@
         <div class="announcementFields">
             {% for field in form %}
             {% if field.is_hidden %}
-            {{ field }}
+            {% if field.id_for_label != 'id_latitude' and field.id_for_label != 'id_longitude' %}
+            <div class="field-block">
+                {{ field }}
+                <div class="invalid-feedback"></div>
+            </div>
+            {% endif %}
             {% else %}
             <div class="row mb-2">
                 {% if field.id_for_label == 'id_description' %}
@@ -40,12 +45,12 @@
             {% endif %}
             {% endfor %}
         </div>
-        <div class="row mb-2">
+        <div class="row mb-2 imageFields">
             <div class="col-12 col-md-3 col-lg-3 mb-2">Изображения<span class="not-selectable text-danger"> *</span>
+                <p class="mb-2 p-invalid-feedback imagesInvalid"></p>
             </div>
             <div class="col-12 col-md-9 col-lg-9 row pe-0">
                 <p class="mb-2 text-secondary">Перетащите изображения сюда или выберите их на своем компьютере.</p>
-                <p class="mb-2 image-invalid-feedback imagesInvalid">Вы можете загрузить до 8 изображений.</p>
                 {% for r in '01234567' %}
                 <div class="col-12 col-sm-6 col-md-3 col-xxl-3 mb-3 pe-0 field-block">
                     <div id="upload-container">
@@ -58,20 +63,23 @@
                             </label>
                         </div>
                     </div>
-                    <div class="image-invalid-feedback"></div>
+                    <div class="p-invalid-feedback"></div>
                 </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="row mb-2">
+        <div class="row mb-2 locationFields">
             <div class="col-12 col-md-3 col-lg-3 mb-2">Местоположение<span class="not-selectable text-danger"> *</span>
+                <p class="mb-2 p-invalid-feedback locationInvalid">Выберите местоположение.</p>
             </div>
             <div class="col-12 col-md-9 col-lg-9">
+                {{ form.latitude }}
+                {{ form.longitude }}
                 <div id="map" action="{% url 'add-announcement' %}" class="mb-3" style="height: 440px;"></div>
             </div>
             <script src="{% static 'js/seller/announcement/map.js' %}"></script>
         </div>
-        <div class="row mb-2">
+        <div class="row mb-2 sellerFields">
             <div class="col-12 col-md-3 col-lg-3 mb-2">Способ связи</div>
             <div class="col-12 col-md-9 col-lg-9">
                 <p class="mb-3 text-secondary">
@@ -91,8 +99,9 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-12 col-sm-6">
+                    <div class="col-12 col-sm-6 field-block">
                         <input type="email" class="form-control" value="{{ request.user.email }}" disabled>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
                 <div class="row mb-2">
@@ -125,6 +134,7 @@
                             {% else %}
                             <input type="text" class="form-control" value="{{ request.user.seller.telegram_username }}"
                                 disabled>
+                            <div class="invalid-feedback"></div>
                             {% endif %}
                             {% else %}
                             {{ seller_form.telegram_username }}
@@ -162,6 +172,7 @@
                             <input type="text" class="form-control" value="{{ request.user.seller.phone_number }}"
                                 disabled>
                             {% endif %}
+                            <div class="invalid-feedback"></div>
                             {% else %}
                             <div class="col-12 col-lg-6 field-block mb-lg-0 mb-1">
                                 {{ seller_form.phone_number.subwidgets.0 }}
