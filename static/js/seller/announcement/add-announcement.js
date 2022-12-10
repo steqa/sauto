@@ -12,6 +12,8 @@ function renderReturnedData(data) {
                     sellerChangeValidationStatusField(data, field = inputField)
                 } else if (inputField == 'location') {
                     locationChangeValidationStatusField(data)
+                } else if (inputField == 'communicationMethod') {
+
                 } else {
                     changeValidationStatusField(data, field = inputField)
                 }

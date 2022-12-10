@@ -3,7 +3,7 @@ import json
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from .forms import AnnouncementCreationForm, SellerCreationForm
-from .utils import is_seller, validate_images, validate_seller_data, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page
+from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page
 from sauto.utils import validate_form_data
 
 
@@ -13,6 +13,10 @@ def add_announcement(request):
         if request.POST.get('action') == 'add-announcement':
             data = get_all_data_from_announcement_creation_page(request)
             response = validate_all_data_from_announcement_creation_page(data)
+            if response.status == 200:
+                seller = get_or_create_seller(request, data)
+                announcement = create_and_get_announcement(seller, data)
+                create_announcement_images(announcement, data)
             return JsonResponse(response._asdict())
         elif request.POST.get('action') == 'validate-image':
             images = request.FILES

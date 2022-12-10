@@ -43,6 +43,7 @@ announcementFields.forEach((element) => {
 
 communicationMethodRadio.forEach((element) => {
     element.addEventListener('input', (e) => {
+        inputField = 'communicationMethod'
         sendJsonFormData(announcementFields, reload = false, action = 'validate-announcement-data')
     })
 })

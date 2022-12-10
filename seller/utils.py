@@ -2,13 +2,16 @@ from django.utils.datastructures import MultiValueDict
 from sauto.utils import Response
 from phonenumber_field.phonenumber import PhoneNumber
 from accounts.models import User
-from .models import Seller
+from .models import Seller, Announcement, AnnouncementImage
 from .forms import AnnouncementCreationForm
 from sauto.utils import validate_form_data
 
 
 def is_seller(user: User) -> bool:
-    return True if Seller.objects.filter(user=user).first() else False
+    try:
+        return True if Seller.objects.filter(user=user).first() else False
+    except:
+        return False
 
 
 def validate_images(images: MultiValueDict) -> Response:
@@ -41,7 +44,7 @@ def validate_seller_data(data: dict) -> Response:
     region = data['phone_number_0']
     number = data['phone_number_1']
     telegram_username = data['telegram_username']
-    if number != '':
+    if number != '' and region != None:
         try:
             phone_number = PhoneNumber.from_string(phone_number=number, region=region).as_e164
         except:
@@ -105,3 +108,47 @@ def validate_all_data_from_announcement_creation_page(data: dict) -> Response:
     images_response = validate_images(data['images'])
     response = merge_responses(announcement_data_response, seller_data_response, images_response)
     return response
+
+
+def get_or_create_seller(request, data: dict) -> Seller:
+    if not is_seller(request.user):
+        communication_method = data['announcement_data']['communication_method']
+        user = request.user
+        telegram_username = None
+        phone_number = None
+        if communication_method == '1':
+            telegram_username = data['seller_data']['telegram_username']
+        elif communication_method == '2':
+            phone_number = PhoneNumber.from_string(
+                phone_number=data['seller_data']['phone_number_1'],
+                region=data['seller_data']['phone_number_0']).as_e164
+        
+        seller = Seller.objects.create(
+            user=user,
+            telegram_username=telegram_username,
+            phone_number=phone_number
+        )
+    else:
+        seller = Seller.objects.get(user=request.user)
+    
+    return seller
+
+
+def create_and_get_announcement(seller: Seller, data: dict) -> Announcement:
+    announcement_form_data = AnnouncementCreationForm(data['announcement_data'])
+    announcement = announcement_form_data.save(commit=False)
+    announcement.seller = seller
+    announcement.latitude = data['announcement_data']['latitude']
+    announcement.longitude = data['announcement_data']['longitude']
+    announcement.save()
+    return announcement
+
+
+def create_announcement_images(announcement: Announcement, data: dict):
+    images = data['images']
+    for image in images:
+        image = images[image]
+        AnnouncementImage.objects.create(
+            announcement=announcement,
+            image=image
+        )

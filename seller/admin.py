@@ -31,6 +31,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
                 'type_announcement',
                 'latitude',
                 'longitude',
+                'communication_method',
         )}),
         ('Состояние',
             {'fields': (

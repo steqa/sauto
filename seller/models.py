@@ -58,7 +58,7 @@ class Announcement(models.Model):
         (2, 'phone_number')
     )
     
-    seller = models.ForeignKey(Seller, verbose_name="продавец", on_delete=models.CASCADE,)
+    seller = models.ForeignKey(Seller, verbose_name="продавец", on_delete=models.CASCADE)
     category = models.IntegerField(verbose_name="категория", choices=CATEGORIES)
     condition = models.IntegerField(verbose_name="состояние", choices=CONDITION)
     type_announcement = models.IntegerField(verbose_name="тип объявления", choices=TYPE_ANNOUNCEMENT)
@@ -81,7 +81,7 @@ class Announcement(models.Model):
 
 
 def _get_announcement_sale_image_filepath(self, image_name):
-    return f'user_images/{self.announcement_sale.seller.user.pk}/{self.announcement_sale.pk}/{image_name}'
+    return f'user_images/{self.announcement.seller.user.pk}/{self.announcement.pk}/{image_name}'
 
 
 class AnnouncementImage(models.Model):
