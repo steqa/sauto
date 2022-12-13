@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     
     'accounts.apps.AccountsConfig',
     'seller.apps.SellerConfig',
+    'announcement.apps.AnnouncementConfig',
 ]
 
 MIDDLEWARE = [

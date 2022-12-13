@@ -1,6 +1,7 @@
 from typing import NamedTuple, Literal
 from accounts.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
-from seller.forms import AnnouncementCreationForm, SellerCreationForm
+from seller.forms import SellerCreationForm
+from announcement.forms import AnnouncementCreationForm
 
 
 class Response(NamedTuple):
