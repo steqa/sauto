@@ -6,6 +6,7 @@ from seller.forms import SellerCreationForm
 from .forms import AnnouncementCreationForm
 from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page
 from sauto.utils import validate_form_data
+from .models import Announcement, Seller
 
 
 def add_announcement(request):
@@ -44,4 +45,14 @@ def add_announcement(request):
         seller_form = SellerCreationForm
         context['seller_form'] = seller_form
         
-    return render(request, 'announcement/add_announcement.html', context)
+    return render(request, 'announcement/add-announcement.html', context)
+
+
+def show_announcement(request, pk: int):
+    announcement = Announcement.objects.get(pk=pk)
+    seller = Seller.objects.get(pk=announcement.seller.pk)
+    context = {
+        'announcement': announcement,
+        'seller': seller,
+    }
+    return render(request, 'announcement/show-announcement.html', context)

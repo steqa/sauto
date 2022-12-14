@@ -1,0 +1,93 @@
+{% extends 'announcement/base.html' %}
+{% load static %}
+
+{% block title %}{{ announcement.name }}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/profile-img.css' %}">
+
+<div class="container my-5">
+    <div class="row gx-5">
+        <div class="col-12 col-lg-8 order-1 order-lg-0">
+            <h4 class="mb-4 hidden">{{ announcement.name }}</h4>
+            <div style="background-color: gray; height: 400px;" class="mb-4">
+
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 col-lg-3 mb-2">
+                    <span class="text-secondary">Описание</span>
+                </div>
+                <div class="col-12 col-md-9 col-lg-9 mb-3">
+                    {{ announcement.description }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 col-lg-3 mb-2">
+                    <span class="text-secondary">Категория</span>
+                </div>
+                <div class="col-12 col-md-9 col-lg-9 mb-3">
+                    {{ announcement.get_category_display }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 col-lg-3 mb-2">
+                    <span class="text-secondary">Состояние</span>
+                </div>
+                <div class="col-12 col-md-9 col-lg-9 mb-3">
+                    {{ announcement.get_condition_display }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 col-lg-3 mb-2">
+                    <span class="text-secondary">Тип объявления</span>
+                </div>
+                <div class="col-12 col-md-9 col-lg-9 mb-3">
+                    {{ announcement.get_type_announcement_display }}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 col-lg-3 mb-2">
+                    <span class="text-secondary">Размещено</span>
+                </div>
+                <div class="col-12 col-md-9 col-lg-9 mb-3">
+                    {{ announcement.date_created|date:"d b Y" }}
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-lg-4 order-0 order-lg-1 mb-3 mb-lg-0">
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h4 class="m-0">{{ announcement.price|floatformat:"-2g" }} ₽</h4>
+                <div class="d-flex ms-2" style="white-space: nowrap">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            class="bi bi-heart" viewBox="0 0 16 16">
+                            <path
+                                d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+                        </svg>
+                    </div>
+                    <div class="visually-hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                            class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                        </svg>
+                    </div>
+                    <span class="ms-2">В избранное</span>
+                </div>
+            </div>
+            <div class="d-grid mb-4">
+                <button class="btn btn-primary" type="submit">Показать контакт</button>
+            </div>
+            <div class="d-flex align-items-center px-2">
+                <div class="profile-img flex-shrink-0">
+                    <img src="{{ seller.user.profile_image.url }}" alt="...">
+                </div>
+                <div class="flex-grow-1 ms-3">
+                    <p class="m-0 mb-1 text-primary">{{ seller.user.first_name }} {{ seller.user.last_name }}</p>
+                    <p class="m-0">на Sauto с {{ seller.user.date_joined|date:"d b Y" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
