@@ -5,13 +5,26 @@
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/profile-img.css' %}">
+<link rel="stylesheet" href="{% static 'css/announcement/announcement.css' %}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 
 <div class="container my-5">
     <div class="row gx-5">
         <div class="col-12 col-lg-8 order-1 order-lg-0">
             <h4 class="mb-4 hidden">{{ announcement.name }}</h4>
-            <div style="background-color: gray; height: 400px;" class="mb-4">
-
+            <div class="mb-4 img-container">
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        {% for image in images %}
+                        <div class="swiper-slide">
+                            <img src="{{ image.image.url }}" alt="...">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-prev"></div>
+                    <div class="swiper-button-next"></div>
+                </div>
             </div>
             <div class="row mb-2">
                 <div class="col-12 col-md-3 col-lg-3 mb-2">
@@ -90,4 +103,7 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script src="{% static 'js/announcement/image-slider.js' %}"></script>
 {% endblock %}
