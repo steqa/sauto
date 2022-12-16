@@ -4,13 +4,15 @@
 {% block title %}{{ announcement.name }}{% endblock %}
 
 {% block content %}
+<script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU"
+    type="text/javascript"></script>
 <link rel="stylesheet" href="{% static 'css/profile-img.css' %}">
 <link rel="stylesheet" href="{% static 'css/announcement/announcement.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 
 <div class="container my-5">
     <div class="row gx-5">
-        <div class="col-12 col-lg-8 order-1 order-lg-0">
+        <div class="col-8">
             <h4 class="mb-4 hidden">{{ announcement.name }}</h4>
             <div class="mb-4 img-container">
                 <div class="swiper">
@@ -66,8 +68,16 @@
                     {{ announcement.date_created|date:"d b Y" }}
                 </div>
             </div>
+            <div class="row mb-2">
+                <div class="col-12 col-md-3 col-lg-3 mb-2">
+                    <span class="text-secondary">Местоположение</span>
+                </div>
+                <div class="col-12 col-md-9 col-lg-9">
+                    <div id="map" class="show-map-container" data-latitude="{{ announcement.latitude }}" data-longitude="{{ announcement.longitude }}"></div>
+                </div>
+            </div>
         </div>
-        <div class="col-12 col-lg-4 order-0 order-lg-1 mb-3 mb-lg-0">
+        <div class="col-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h4 class="m-0">{{ announcement.price|floatformat:"-2g" }} ₽</h4>
                 <div class="d-flex ms-2" style="white-space: nowrap">
@@ -105,5 +115,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
-<script src="{% static 'js/announcement/image-slider.js' %}"></script>
+<script src="{% static 'js/announcement/show-announcement/image-slider.js' %}"></script>
+<script src="{% static 'js/announcement/show-announcement/map.js' %}"></script>
 {% endblock %}

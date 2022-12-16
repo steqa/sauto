@@ -38,3 +38,13 @@
 .swiper .swiper-button-next::after {
     -webkit-text-stroke: 1px #ced4da;
 }
+
+.show-map-container {
+    width: 100%;
+    height: 300px;
+}
+
+.add-map-container {
+    width: 100%;
+    height: 440px;
+}
