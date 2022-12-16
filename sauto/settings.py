@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'seller.apps.SellerConfig',
     'announcement.apps.AnnouncementConfig',
+    'favorite.apps.FavoriteConfig',
 ]
 
 MIDDLEWARE = [
@@ -159,4 +160,4 @@ EMAIL_PORT = env.str('EMAIL_PORT')
 
 # API keys
 
-YANDEX_MAP_API_KEY = 'a71e09eb-d6af-4b2e-a850-6487bac54edd'
+YANDEX_MAP_API_KEY = '8fac5112-28f5-4cec-af49-7b021132d83c'
