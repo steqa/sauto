@@ -27,6 +27,25 @@
         </div>
     </div>
 
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand ms-3 ms-lg-5" href="{% url 'announcements' %}">sauto</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse my-4 my-lg-0" id="navbarSupportedContent">
+                <div class="container-fluid input-group ps-3 ps-lg-4 pe-3 pe-lg-0 me-3">
+                    <input type="search" name="q" class="form-control" aria-describedby="button-addon2">
+                    <button class="btn btn-outline-primary" id="button-addon2">Найти</button>
+                </div>
+                <a href="{% url 'add-announcement' %}" class="btn btn-primary ms-3 ms-lg-0 mt-3 mt-lg-0" style="white-space: nowrap;">Разместить объявление</a>
+                <a href="{% url 'login-user' %}" class="btn btn-outline-primary ms-3 me-5 mt-3 mt-lg-0">Войти</a>
+            </div>
+        </div>
+    </nav>
+
     {% block content %}
     {% endblock %}
 

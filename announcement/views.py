@@ -10,6 +10,40 @@ from .utils import is_seller, validate_images, validate_seller_data, get_or_crea
 from .models import Announcement, Seller, AnnouncementImage
 
 
+def announcements(request):
+    announcements = Announcement.objects.all()
+    images = AnnouncementImage.objects.all()
+    categories = Announcement.CATEGORIES[1:]
+    conditions = Announcement.CONDITION[1:]
+    types_announcement = Announcement.TYPE_ANNOUNCEMENT[1:]
+    communication_methods = Announcement.COMMUNICATION_METHOD
+    context = {
+        'announcements': announcements,
+        'categories': categories,
+        'conditions': conditions,
+        'types_announcement': types_announcement,
+        'communication_methods': communication_methods,
+        'images': images,
+    }
+    return render(request, 'announcement/announcements.html', context)
+
+
+def show_announcement(request, pk: int):
+    announcement = Announcement.objects.get(pk=pk)
+    seller = Seller.objects.get(pk=announcement.seller.pk)
+    images = AnnouncementImage.objects.filter(announcement=announcement)
+    if request.method == 'GET':
+        if request.GET.get('show-contact-info'):
+            response = get_contact_info(request, announcement)
+            return JsonResponse(response._asdict())
+    context = {
+        'announcement': announcement,
+        'seller': seller,
+        'images': images,
+    }
+    return render(request, 'announcement/show-announcement.html', context)
+
+
 @login_required
 def add_announcement(request):
     form = AnnouncementCreationForm
@@ -48,19 +82,3 @@ def add_announcement(request):
         context['seller_form'] = seller_form
         
     return render(request, 'announcement/add-announcement.html', context)
-
-
-def show_announcement(request, pk: int):
-    announcement = Announcement.objects.get(pk=pk)
-    seller = Seller.objects.get(pk=announcement.seller.pk)
-    images = AnnouncementImage.objects.filter(announcement=announcement)
-    if request.method == 'GET':
-        if request.GET.get('show-contact-info'):
-            response = get_contact_info(request, announcement)
-            return JsonResponse(response._asdict())
-    context = {
-        'announcement': announcement,
-        'seller': seller,
-        'images': images,
-    }
-    return render(request, 'announcement/show-announcement.html', context)

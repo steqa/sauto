@@ -39,9 +39,9 @@ class Announcement(models.Model):
     )
     
     COMMUNICATION_METHOD = (
-        (0, 'email'),
-        (1, 'telegram_username'),
-        (2, 'phone_number')
+        (0, 'Адрес электронной почты'),
+        (1, 'Имя пользователя телеграм'),
+        (2, 'Номер телефона')
     )
     
     seller = models.ForeignKey(Seller, verbose_name="продавец", on_delete=models.CASCADE)

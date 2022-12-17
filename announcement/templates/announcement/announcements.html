@@ -1,0 +1,196 @@
+{% extends 'announcement/base.html' %}
+{% load static %}
+
+{% block title %}Объявления{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/announcement/announcements.css' %}">
+
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-xl-4 col-xxl-3 my-5">
+            <div class="accordion" id="accordionPanelsStayOpenExample">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapseOne">
+                            Цена, ₽
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show"
+                        aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <div class="input-group">
+                                <span class="input-group-text">от</span>
+                                <input type="number" class="form-control" min="0.01" max="99999999999.99">
+                                <span class="input-group-text">до</span>
+                                <input type="number" class="form-control" min="0.01" max="99999999999.99">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-top">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseTwo">
+                            Категория
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body">
+                            {% for category in categories %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{{ category.0 }}"
+                                    id="flexCheckDefault{{ category.1 }}">
+                                <label class="form-check-label" for="flexCheckDefault{{ category.1 }}">
+                                    {{ category.1 }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-top">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseThree">
+                            Состояние
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingThree">
+                        <div class="accordion-body">
+                            {% for condition in conditions %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{{ condition.0 }}"
+                                    id="flexCheckDefault{{ condition.1 }}">
+                                <label class="form-check-label" for="flexCheckDefault{{ condition.1 }}">
+                                    {{ condition.1 }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-top">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingFour">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseFour">
+                            Тип объявления
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingFour">
+                        <div class="accordion-body">
+                            {% for type_announcement in types_announcement %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{{ type_announcement.0 }}"
+                                    id="flexCheckDefault{{ type_announcement.1 }}">
+                                <label class="form-check-label" for="flexCheckDefault{{ type_announcement.1 }}">
+                                    {{ type_announcement.1 }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-top">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false"
+                            aria-controls="panelsStayOpen-collapseFive">
+                            Способ связи
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse"
+                        aria-labelledby="panelsStayOpen-headingFive">
+                        <div class="accordion-body">
+                            {% for communication_method in communication_methods %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="{{ communication_method.0 }}"
+                                    id="flexCheckDefault{{ communication_method.1 }}">
+                                <label class="form-check-label" for="flexCheckDefault{{ communication_method.1 }}">
+                                    {{ communication_method.1 }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item border-top">
+                    <h2 class="accordion-header" id="panelsStayOpen-headingSix">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="true"
+                            aria-controls="panelsStayOpen-collapseSix">
+                            Срок размещения
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse show"
+                        aria-labelledby="panelsStayOpen-headingSix">
+                        <div class="accordion-body">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault1">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    За 24 часа
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault2">
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    За 7 дней
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault3" checked>
+                                <label class="form-check-label" for="flexRadioDefault3">
+                                    За все время
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-xl-8 col-xxl-9 mt-5">
+            <div class="mt-3"></div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4 g-4">
+                {% for announcement in announcements %}
+                <div class="col">
+                    <a href="{% url 'show-announcement' announcement.pk %}" class="text-decoration-none text-dark">
+                        <div class="card">
+                            <div class="ratio">
+                                <div class="ratio-inner ratio-4-3">
+                                    <div class="ratio-content">
+                                        {% for image in images %}
+                                        {% if image.announcement == announcement %}
+                                        <img src="{{ image.image.url }}" class="card-img-top" alt="...">
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ announcement.price|floatformat:"-2g" }} ₽</h5>
+                                <div class="card-truncate-text-container">
+                                    <div class="card-truncate-text">
+                                        {{ announcement.name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

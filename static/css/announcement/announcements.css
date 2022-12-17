@@ -1,0 +1,68 @@
+.accordion-item {
+    border: none;
+}
+
+.accordion-body {
+    padding: 0.5rem 0.25rem 1.6rem 0.25rem;
+}
+
+.accordion-button {
+    padding: 1rem 0rem 1rem 0rem;
+}
+
+.accordion-button:not(.collapsed) {
+    color: #212529;
+    background-color: #fff;
+    box-shadow: none;
+}
+
+.accordion-button:not(.collapsed)::after {
+    background-image: var(--bs-accordion-btn-icon);
+}
+
+.accordion-button:focus {
+    z-index: 3;
+    border: none;
+    outline: 0;
+    box-shadow: none;
+}
+
+.card-truncate-text-container {
+    width: 100%;
+    height: 21px;
+}
+
+.card-truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ratio {
+    width: 100%;
+    overflow: hidden;
+}
+
+.ratio-inner {
+    position: relative;
+    height: 0;
+    border: none;
+}
+
+.ratio-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.ratio-4-3 {
+    padding-top: 100%;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
