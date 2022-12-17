@@ -126,7 +126,7 @@
                 </div>
             </div>
             <div class="d-grid mb-4">
-                <button class="btn btn-primary" type="submit">Показать контакт</button>
+                <button class="btn btn-primary" id="show-contact-info" data-action="{% url 'show-announcement' announcement.pk %}">Показать контакт</button>
             </div>
             <div class="d-flex align-items-center px-2">
                 <div class="profile-img flex-shrink-0">
@@ -145,4 +145,5 @@
 <script src="{% static 'js/announcement/show-announcement/image-slider.js' %}"></script>
 <script src="{% static 'js/announcement/show-announcement/map.js' %}"></script>
 <script src="{% static 'js/favorite/favorite.js' %}"></script>
+<script src="{% static 'js/announcement/show-announcement/show-communication-method.js' %}"></script>
 {% endblock %}

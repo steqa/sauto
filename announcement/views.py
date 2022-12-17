@@ -4,7 +4,7 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from seller.forms import SellerCreationForm
 from .forms import AnnouncementCreationForm
-from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page
+from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info
 from sauto.utils import validate_form_data
 from .models import Announcement, Seller, AnnouncementImage
 
@@ -52,6 +52,10 @@ def show_announcement(request, pk: int):
     announcement = Announcement.objects.get(pk=pk)
     seller = Seller.objects.get(pk=announcement.seller.pk)
     images = AnnouncementImage.objects.filter(announcement=announcement)
+    if request.method == 'GET':
+        if request.GET.get('show-contact-info'):
+            response = get_contact_info(announcement)
+            return JsonResponse(response._asdict())
     context = {
         'announcement': announcement,
         'seller': seller,
