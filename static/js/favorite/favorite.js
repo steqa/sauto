@@ -15,7 +15,7 @@ function sendData(element) {
 
         .then((data) => {
             if (data['status'] == 400) {
-                if (data['type'] == 'BadRequest') {
+                if ((data['type'] == 'BadRequest') || (data['type'] == 'AuthenticationError')) {
                     return showToast(data['body']['error'], type = 'error')
                 } else if (data['type'] == 'ValidationError') {
                     changeFavoriteBtn(element)

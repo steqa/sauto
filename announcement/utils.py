@@ -148,19 +148,24 @@ def create_announcement_images(announcement: Announcement, data: dict):
         )
 
 
-def get_contact_info(announcement: Announcement) -> Response:
-    contact_info = None
-    contact_type = None
-    if announcement.communication_method == 0:
-        contact_info = announcement.seller.user.email
-        contact_type = 'email'
-    elif announcement.communication_method == 1:
-        contact_info = announcement.seller.telegram_username
-        contact_type = 'telegram_username'
-    elif announcement.communication_method == 2:
-        contact_info = announcement.seller.phone_number
-        contact_type = 'phone_number'
-    response = Response(
-        body={'contact_type': contact_type, 'contact_info': str(contact_info)},
-        type='OK', status=200)
+def get_contact_info(request, announcement: Announcement) -> Response:
+    if request.user.is_authenticated:
+        contact_info = None
+        contact_type = None
+        if announcement.communication_method == 0:
+            contact_info = announcement.seller.user.email
+            contact_type = 'email'
+        elif announcement.communication_method == 1:
+            contact_info = announcement.seller.telegram_username
+            contact_type = 'telegram_username'
+        elif announcement.communication_method == 2:
+            contact_info = announcement.seller.phone_number
+            contact_type = 'phone_number'
+        response = Response(
+            body={'contact_type': contact_type, 'contact_info': str(contact_info)},
+            type='OK', status=200)
+    else:
+        response = Response(
+            body={'error': 'Для получения контактной информации необходимо войти в систему.'},
+            type='AuthenticationError', status=400)
     return response

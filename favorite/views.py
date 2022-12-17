@@ -1,45 +1,30 @@
-from django.shortcuts import render
 from django.http.response import JsonResponse
+from .utils import add_favorite_or_error, remove_favorite_or_error
 from sauto.utils import Response
-from .models import Favorite
 
 
-def add_favorite(request, user_pk: int, announcement_pk: int):
-    try:
-        favorite, created = Favorite.objects.get_or_create(
-            user_id=user_pk, announcement_id=announcement_pk)
-        if not created:
+def add_favorite(request, announcement_pk: int):
+    if request.user.is_authenticated:
+        try:
+            response = add_favorite_or_error(request, announcement_pk)
+        except:
             response = Response(
-                body={'error': 'Это объявление уже находится в избранных.'},
-                type='ValidationError', status=400)
-        else:
-            response = Response(
-                body={'OK': 'OK'},
-                type='OK', status=200)
-    except:
+                body={'error': 'Произошла ошибка.'},
+                type='BadRequest', status=400)
+    else:
         response = Response(
-            body={'error': 'BadRequest'},
-            type='BadRequest', status=400)
+            body={'error': 'Для добавления объявления в избранное необходимо войти в систему.'},
+            type='AuthenticationError', status=400)
         
     return JsonResponse(response._asdict())
 
 
-def remove_favorite(request, user_pk: int, announcement_pk: int):
+def remove_favorite(request, announcement_pk: int):
     try:
-        favorite = Favorite.objects.filter(
-            user_id=user_pk, announcement_id=announcement_pk).first()
-        if favorite:
-            favorite.delete()
-            response = Response(
-                body={'OK': 'OK'},
-                type='OK', status=200)
-        else:
-            response = Response(
-                body={'error': 'Этого объявления нет в избранных.'},
-                type='ValidationError', status=400)
+        response = remove_favorite_or_error(request, announcement_pk)
     except:
         response = Response(
-            body={'error': 'BadRequest'},
+            body={'error': 'Произошла ошибка.'},
             type='BadRequest', status=400)
         
     return JsonResponse(response._asdict())

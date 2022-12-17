@@ -84,7 +84,7 @@
                 <h4 class="m-0">{{ announcement.price|floatformat:"-2g" }} ₽</h4>
                 <div class="d-flex ms-2" style="white-space: nowrap">
                     {% if not announcement|is_favorite:request.user %}
-                    <button data-action="{% url 'add-favorite' request.user.pk announcement.pk %}" data-favorite-btn="1"
+                    <button data-action="{% url 'add-favorite' announcement.pk %}" data-favorite-btn="1"
                         data-favorite-btn-type="add" class="btn-as-text text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                             class="bi bi-heart" viewBox="0 0 16 16">
@@ -93,7 +93,7 @@
                         </svg>
                         <span class="ms-2">В избранное</span>
                     </button>
-                    <button data-action="{% url 'remove-favorite' request.user.pk announcement.pk %}"
+                    <button data-action="{% url 'remove-favorite' announcement.pk %}"
                         data-favorite-btn="1" data-favorite-btn-type="remove" class="btn-as-text text-primary"
                         style="display: none;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
@@ -104,7 +104,7 @@
                         <span class="ms-2">В избранное</span>
                     </button>
                     {% else %}
-                    <button data-action="{% url 'add-favorite' request.user.pk announcement.pk %}" data-favorite-btn="1"
+                    <button data-action="{% url 'add-favorite' announcement.pk %}" data-favorite-btn="1"
                         data-favorite-btn-type="add" class="btn-as-text text-primary" style="display: none;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                             class="bi bi-heart" viewBox="0 0 16 16">
@@ -113,7 +113,7 @@
                         </svg>
                         <span class="ms-2">В избранное</span>
                     </button>
-                    <button data-action="{% url 'remove-favorite' request.user.pk announcement.pk %}"
+                    <button data-action="{% url 'remove-favorite' announcement.pk %}"
                         data-favorite-btn="1" data-favorite-btn-type="remove" class="btn-as-text text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                             class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -126,7 +126,8 @@
                 </div>
             </div>
             <div class="d-grid mb-4">
-                <button class="btn btn-primary" id="show-contact-info" data-action="{% url 'show-announcement' announcement.pk %}">Показать контакт</button>
+                <button class="btn btn-primary" id="show-contact-info"
+                    data-action="{% url 'show-announcement' announcement.pk %}">Показать контакт</button>
             </div>
             <div class="d-flex align-items-center px-2">
                 <div class="profile-img flex-shrink-0">
@@ -145,5 +146,5 @@
 <script src="{% static 'js/announcement/show-announcement/image-slider.js' %}"></script>
 <script src="{% static 'js/announcement/show-announcement/map.js' %}"></script>
 <script src="{% static 'js/favorite/favorite.js' %}"></script>
-<script src="{% static 'js/announcement/show-announcement/show-communication-method.js' %}"></script>
+<script src="{% static 'js/announcement/show-announcement/show-contact-info.js' %}"></script>
 {% endblock %}

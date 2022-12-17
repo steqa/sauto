@@ -10,8 +10,10 @@ from .forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetP
 from .utils import send_email, get_user_by_uidb64, get_user_uidb64, get_form_data
 from sauto.utils import validate_form_data, Response
 from .models import User
+from .decorators import unauthenticated_user
 
 
+@unauthenticated_user
 def registration_user(request):
     form = UserCreationForm
     if request.method == 'POST':
@@ -70,6 +72,7 @@ def resend_verification_email(request, uidb64):
     return JsonResponse(response._asdict())
     
 
+@unauthenticated_user
 def login_user(request):
     form = AuthenticationForm
     if request.method == 'POST':
@@ -81,7 +84,7 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 response = Response(
-                    body={'success': f'Добро пожаловать, {user.first_name}.', 'url': request.build_absolute_uri(reverse('registration-user'))},
+                    body={'success': f'Добро пожаловать, {user.first_name}.', 'url': request.build_absolute_uri(reverse('announcements'))},
                     type='redirect', status=200)
             else:
                 response = Response(

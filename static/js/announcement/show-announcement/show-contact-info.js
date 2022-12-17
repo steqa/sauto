@@ -13,7 +13,9 @@ function sendRequestContactInfo(element) {
 
         .then((data) => {
             console.log(data)
-            if (data['status'] == 200) {
+            if (data['status'] == 400) {
+                return showToast(data['body']['error'], type = 'error')
+            } else if (data['status'] == 200) {
                 if (data['body']['contact_type'] == 'email') {
                     showContactInfoBtn.innerHTML = `Адрес электронной почты:<br>${data['body']['contact_info']}`
                 } else if (data['body']['contact_type'] == 'telegram_username') {
