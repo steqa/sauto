@@ -1,10 +1,11 @@
 from sauto import settings
 import json
 from django.http.response import JsonResponse
+from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from seller.forms import SellerCreationForm
-from sauto.utils import validate_form_data
+from sauto.utils import validate_form_data, Response
 from .forms import AnnouncementCreationForm
 from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements
 from .models import Announcement, Seller, AnnouncementImage
@@ -62,6 +63,10 @@ def add_announcement(request):
                 seller = get_or_create_seller(request, data)
                 announcement = create_and_get_announcement(seller, data)
                 create_announcement_images(announcement, data)
+                response = Response(
+                    body={'success': 'Объявление добавлено.',
+                          'url': request.build_absolute_uri(reverse('announcements'))},
+                    type='redirect', status=200)
             return JsonResponse(response._asdict())
         elif request.POST.get('action') == 'validate-image':
             images = request.FILES
