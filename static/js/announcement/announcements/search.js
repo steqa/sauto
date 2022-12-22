@@ -5,5 +5,5 @@ searchField.addEventListener('input', (e) => {
     clearTimeout(time)
     time = setTimeout((e) => {
         sendFilteringRequest()
-    }, 300)
+    }, 800)
 })
