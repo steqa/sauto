@@ -2,7 +2,7 @@ from . import constants
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from .threads import DeleteUserAfterTimeElapsed
 from .tokens import email_token
@@ -159,4 +159,8 @@ def reset_password_confirm(request, uidb64, token):
         return render(request, 'accounts/reset-password/reset-password-confirm.html', context)
     else:
         return render(request, 'accounts/reset-password/reset-password-failed.html', {'user': user})
-    
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('announcements')
