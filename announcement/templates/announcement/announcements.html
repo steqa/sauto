@@ -3,6 +3,11 @@
 
 {% block title %}Объявления{% endblock %}
 
+{% block search %}
+<input type="search" name="q" class="form-control" aria-describedby="button-addon2">
+<button class="btn btn-outline-primary" id="button-addon2">Найти</button>
+{% endblock %}
+
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/announcement/announcements.css' %}">
 
@@ -91,8 +96,8 @@
                         <div class="accordion-body">
                             {% for type_announcement in types_announcement %}
                             <div class="form-check">
-                                <input class="form-check-input pointer" type="checkbox" value="{{ type_announcement.0 }}"
-                                    id="flexCheckDefault{{ type_announcement.1 }}"
+                                <input class="form-check-input pointer" type="checkbox"
+                                    value="{{ type_announcement.0 }}" id="flexCheckDefault{{ type_announcement.1 }}"
                                     data-filter-field-type="type-announcement">
                                 <label class="form-check-label pointer" for="flexCheckDefault{{ type_announcement.1 }}">
                                     {{ type_announcement.1 }}
@@ -115,10 +120,12 @@
                         <div class="accordion-body">
                             {% for communication_method in communication_methods %}
                             <div class="form-check">
-                                <input class="form-check-input pointer" type="checkbox" value="{{ communication_method.0 }}"
+                                <input class="form-check-input pointer" type="checkbox"
+                                    value="{{ communication_method.0 }}"
                                     id="flexCheckDefault{{ communication_method.1 }}"
                                     data-filter-field-type="communication-method">
-                                <label class="form-check-label pointer" for="flexCheckDefault{{ communication_method.1 }}">
+                                <label class="form-check-label pointer"
+                                    for="flexCheckDefault{{ communication_method.1 }}">
                                     {{ communication_method.1 }}
                                 </label>
                             </div>
@@ -173,4 +180,6 @@
 </div>
 
 <script src="{% static 'js/announcement/announcements/filter.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/search.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/form-url.js' %}"></script>
 {% endblock %}

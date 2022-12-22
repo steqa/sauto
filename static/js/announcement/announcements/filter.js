@@ -66,11 +66,3 @@ function sendFilteringRequest() {
             }
         })
 }
-
-function formUrl() {
-    let urlParams = ''
-    filterValues.forEach((value, key) => {
-        urlParams += `${key}=${value}&`
-    })
-    return window.location.href + '?filter=true&' + urlParams
-}

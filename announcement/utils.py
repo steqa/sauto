@@ -174,9 +174,15 @@ def get_contact_info(request, announcement: Announcement) -> Response:
     return response
 
 
-def filter_announcements(request):
+def form_announcements(request):
     try:
-        filtered_announcements = filter_announcement(request)
+        filtered_announcements = Announcement.objects.all()
+        
+        if request.GET.get('filter'):
+            filtered_announcements = filter_announcements(request, filtered_announcements)
+        if request.GET.get('q'):
+            filtered_announcements = search_announcements(request, filtered_announcements)
+        
         filtered_images = AnnouncementImage.objects.filter(
             announcement__in=filtered_announcements)
         
@@ -194,15 +200,13 @@ def filter_announcements(request):
             type='OK', status=200)
     except:
         response = Response(
-            body={'error': 'Возникла ошибка при попытке валидации.'},
+            body={'error': 'Возникла ошибка.'},
             type='BadRequest', status=400)
     
     return response
 
 
-def filter_announcement(request):
-    filtered_announcements = Announcement.objects.all()
-    
+def filter_announcements(request, filtered_announcements):
     price_from = request.GET.get('price-from')
     if price_from is not None:
         filtered_announcements = filtered_announcements.filter(
@@ -247,4 +251,10 @@ def filter_announcement(request):
             filtered_announcements = filtered_announcements.filter(
                 date_created__gte=filter_datetime)
     
+    return filtered_announcements
+
+
+def search_announcements(request, filtered_announcements):
+    q = request.GET.get('q')
+    filtered_announcements = filtered_announcements.filter(name__iregex=q)
     return filtered_announcements

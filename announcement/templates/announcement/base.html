@@ -37,8 +37,7 @@
             </button>
             <div class="collapse navbar-collapse my-4 my-lg-0" id="navbarSupportedContent">
                 <div class="container-fluid input-group ps-3 ps-lg-4 pe-3 pe-lg-0 me-3">
-                    <input type="search" name="q" class="form-control" aria-describedby="button-addon2">
-                    <button class="btn btn-outline-primary" id="button-addon2">Найти</button>
+                    {% block search %}{% endblock %}
                 </div>
                 <a href="{% url 'add-announcement' %}" class="btn btn-primary ms-3 ms-lg-0 mt-3 mt-lg-0" style="white-space: nowrap;">Разместить объявление</a>
                 {% if request.user.is_authenticated %}
