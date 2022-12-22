@@ -1,0 +1,27 @@
+{% for announcement in announcements %}
+<div class="col">
+    <a href="{% url 'show-announcement' announcement.pk %}" class="text-decoration-none text-dark">
+        <div class="card">
+            <div class="ratio">
+                <div class="ratio-inner ratio-4-3">
+                    <div class="ratio-content">
+                        {% for image in images %}
+                        {% if image.announcement == announcement %}
+                        <img src="{{ image.image.url }}" class="card-img-top" alt="...">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ announcement.price|floatformat:"-2g" }} ₽</h5>
+                <div class="card-truncate-text-container">
+                    <div class="card-truncate-text">
+                        {{ announcement.name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
+{% endfor %}

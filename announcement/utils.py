@@ -1,11 +1,14 @@
+import pytz
+from datetime import datetime, timedelta
+from sauto import settings
 from django.utils.datastructures import MultiValueDict
-from sauto.utils import Response
+from django.template.loader import render_to_string
 from phonenumber_field.phonenumber import PhoneNumber
+from sauto.utils import validate_form_data, Response
 from seller.models import Seller
+from seller.utils import is_seller
 from .models import Announcement, AnnouncementImage
 from .forms import AnnouncementCreationForm
-from seller.utils import is_seller
-from sauto.utils import validate_form_data
 
 
 def validate_images(images: MultiValueDict) -> Response:
@@ -169,3 +172,79 @@ def get_contact_info(request, announcement: Announcement) -> Response:
             body={'error': 'Для получения контактной информации необходимо войти в систему.'},
             type='AuthenticationError', status=400)
     return response
+
+
+def filter_announcements(request):
+    try:
+        filtered_announcements = filter_announcement(request)
+        filtered_images = AnnouncementImage.objects.filter(
+            announcement__in=filtered_announcements)
+        
+        filtered_context = {
+            'announcements': filtered_announcements,
+            'images': filtered_images,
+        }
+
+        template = render_to_string(
+            'announcement/announcement-cards.html',
+            filtered_context, request)
+
+        response = Response(
+            body={'template': template},
+            type='OK', status=200)
+    except:
+        response = Response(
+            body={'error': 'Возникла ошибка при попытке валидации.'},
+            type='BadRequest', status=400)
+    
+    return response
+
+
+def filter_announcement(request):
+    filtered_announcements = Announcement.objects.all()
+    
+    price_from = request.GET.get('price-from')
+    if price_from is not None:
+        filtered_announcements = filtered_announcements.filter(
+            price__gte=price_from)
+    
+    price_to = request.GET.get('price-to')
+    if price_to is not None:
+        filtered_announcements = filtered_announcements.filter(
+            price__lte=price_to)
+    
+    category = request.GET.get('category')
+    if category is not None:
+        filtered_announcements = filtered_announcements.filter(
+            category__in=category.split(','))
+    
+    condition = request.GET.get('condition')
+    if condition is not None:
+        filtered_announcements = filtered_announcements.filter(
+            condition__in=condition.split(','))
+    
+    type_announcement = request.GET.get('type-announcement')
+    if type_announcement is not None:
+        filtered_announcements = filtered_announcements.filter(
+            type_announcement__in=type_announcement.split(','))
+    
+    communication_method = request.GET.get('communication-method')
+    if communication_method is not None:
+        filtered_announcements = filtered_announcements.filter(
+            communication_method__in=communication_method.split(','))
+    
+    placement_period = request.GET.get('placement-period')
+    if placement_period is not None:
+        tz = pytz.timezone(settings.TIME_ZONE)
+        datetime_now = datetime.now(tz)
+        filter_datetime = None
+        
+        if placement_period in ['24h', '7d']:
+            if placement_period == '24h':
+                filter_datetime = datetime_now - timedelta(days=1)
+            elif placement_period == '7d':
+                filter_datetime = datetime_now - timedelta(days=7)
+            filtered_announcements = filtered_announcements.filter(
+                date_created__gte=filter_datetime)
+    
+    return filtered_announcements
