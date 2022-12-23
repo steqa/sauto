@@ -1,5 +1,10 @@
 function formUrl() {
-    let url = window.location.href + '?'
+    let url = window.location.href
+    if (window.location.href.split('?').length == 1) {
+        url += '?'
+    } else {
+        url += '&'
+    }
     if (filterValues.size > 0) {
         url += 'filter=true&'
         let urlParams = ''
@@ -9,7 +14,7 @@ function formUrl() {
         url += urlParams
     }
     if (searchField.value != '') {
-        url += `q=${searchField.value}&`
+        url += `search=${searchField.value}&`
     }
     if ((filterValues.size <= 0) & (searchField.value == '')) {
         url += 'all=true'

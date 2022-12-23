@@ -7,26 +7,30 @@ from django.contrib.auth.decorators import login_required
 from seller.forms import SellerCreationForm
 from sauto.utils import validate_form_data, Response
 from .forms import AnnouncementCreationForm
-from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements
+from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements_and_images, paginate_announcements
 from .models import Announcement, Seller, AnnouncementImage
 
 
 def announcements(request):
     announcements = Announcement.objects.all()
-    images = AnnouncementImage.objects.all()
     categories = Announcement.CATEGORIES[1:]
     conditions = Announcement.CONDITION[1:]
     types_announcement = Announcement.TYPE_ANNOUNCEMENT[1:]
     communication_methods = Announcement.COMMUNICATION_METHOD
     if request.method == 'GET':
         if (request.GET.get('filter')
-            or request.GET.get('q')
+            or request.GET.get('search')
                 or request.GET.get('all')):
-            response = form_announcements(request)
+            response = form_announcements_and_images(request)
             return JsonResponse(response._asdict())
     
+    page_announcements, paginator = paginate_announcements(request, announcements)
+    images = AnnouncementImage.objects.filter(
+        announcement__in=page_announcements)
+    
     context = {
-        'announcements': announcements,
+        'announcements': page_announcements,
+        'paginator': paginator,
         'images': images,
         'categories': categories,
         'conditions': conditions,

@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 from sauto import settings
 from django.utils.datastructures import MultiValueDict
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator, Page
+from django.db.models.query import QuerySet
 from phonenumber_field.phonenumber import PhoneNumber
 from sauto.utils import validate_form_data, Response
 from seller.models import Seller
@@ -174,20 +176,23 @@ def get_contact_info(request, announcement: Announcement) -> Response:
     return response
 
 
-def form_announcements(request):
+def form_announcements_and_images(request) -> Response:
     try:
         filtered_announcements = Announcement.objects.all()
         
         if request.GET.get('filter'):
             filtered_announcements = filter_announcements(request, filtered_announcements)
-        if request.GET.get('q'):
+        if request.GET.get('search'):
             filtered_announcements = search_announcements(request, filtered_announcements)
+        
+        page_announcements, paginator = paginate_announcements(request, filtered_announcements)
         
         filtered_images = AnnouncementImage.objects.filter(
             announcement__in=filtered_announcements)
         
         filtered_context = {
-            'announcements': filtered_announcements,
+            'announcements': page_announcements,
+            'paginator': paginator,
             'images': filtered_images,
         }
 
@@ -206,7 +211,7 @@ def form_announcements(request):
     return response
 
 
-def filter_announcements(request, filtered_announcements):
+def filter_announcements(request, filtered_announcements: QuerySet) -> QuerySet:
     price_from = request.GET.get('price-from')
     if price_from is not None:
         filtered_announcements = filtered_announcements.filter(
@@ -254,7 +259,14 @@ def filter_announcements(request, filtered_announcements):
     return filtered_announcements
 
 
-def search_announcements(request, filtered_announcements):
-    q = request.GET.get('q')
+def search_announcements(request, filtered_announcements: QuerySet) -> QuerySet:
+    q = request.GET.get('search')
     filtered_announcements = filtered_announcements.filter(name__iregex=q)
     return filtered_announcements
+
+
+def paginate_announcements(request, announcements: QuerySet) -> tuple[Page, Paginator]:
+    paginator = Paginator(announcements, 32)
+    page = request.GET.get('page')
+    page_announcements = paginator.get_page(page)
+    return page_announcements, paginator
