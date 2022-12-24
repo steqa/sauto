@@ -7,7 +7,6 @@
 {% block content %}
 <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU"
     type="text/javascript"></script>
-<link rel="stylesheet" href="{% static 'css/profile-img.css' %}">
 <link rel="stylesheet" href="{% static 'css/announcement/show-announcement.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 
@@ -130,9 +129,7 @@
                     data-action="{% url 'show-announcement' announcement.pk %}">Показать контакт</button>
             </div>
             <div class="d-flex align-items-center px-2">
-                <div class="profile-img flex-shrink-0">
-                    <img src="{{ seller.user.profile_image.url }}" alt="...">
-                </div>
+                <img src="{{ seller.user.profile_image.url }}" alt="..." width="44" height="44" class="rounded-circle">
                 <div class="flex-grow-1 ms-3">
                     <p class="m-0 mb-1 text-primary">{{ seller.user.first_name }} {{ seller.user.last_name }}</p>
                     <p class="m-0">на Sauto с {{ seller.user.date_joined|date:"d b Y" }}</p>

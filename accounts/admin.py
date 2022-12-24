@@ -9,7 +9,7 @@ from .models import User
 class UserAdmin(UserAdmin):
     list_display = ('email', 'first_name', 'last_name', 'date_joined', 'is_staff')
     search_fields = ('email', 'first_name', 'last_name', 'date_joined')
-    readonly_fields = ('id', 'preview_inside', 'date_joined', 'last_login')
+    readonly_fields = ('id', 'preview_inside', 'date_joined', 'last_login', 'last_password_updated')
     fieldsets = (
         (None,
             {'fields': (

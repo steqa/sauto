@@ -44,12 +44,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'django.contrib.humanize',
+    
     'phonenumber_field',
     
     'accounts.apps.AccountsConfig',
     'seller.apps.SellerConfig',
     'announcement.apps.AnnouncementConfig',
     'favorite.apps.FavoriteConfig',
+    'userprofile.apps.UserprofileConfig',
 ]
 
 MIDDLEWARE = [

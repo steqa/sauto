@@ -4,11 +4,11 @@
         <a href="{% url 'show-announcement' announcement.pk %}" class="text-decoration-none text-dark">
             <div class="card">
                 <div class="ratio">
-                    <div class="ratio-inner ratio-4-3">
+                    <div class="ratio-inner ratio-1-1">
                         <div class="ratio-content">
                             {% for image in images %}
                             {% if image.announcement == announcement %}
-                            <img src="{{ image.image.url }}" class="card-img-top" alt="...">
+                            <img src="{{ image.image.url }}" class="img-100" alt="...">
                             {% endif %}
                             {% endfor %}
                         </div>
