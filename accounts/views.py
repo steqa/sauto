@@ -43,11 +43,11 @@ def registration_user(request):
     return render(request, 'accounts/registration/registration.html', context)
 
 
-def activate_user(request, uidb64, token):
+def activate_user(request, uidb64: str, token: str):
     user = get_user_by_uidb64(uidb64)
-    if (user is not None and
-        email_token.check_token(user, token, constants.LIFETIME_EMAIL_USER_ACTIVATION) and
-            not user.is_email_verified):
+    if (user is not None
+        and email_token.check_token(user, token, constants.LIFETIME_EMAIL_USER_ACTIVATION)
+            and not user.is_email_verified):
         user.is_email_verified = True
         user.save()
         return redirect('login-user')
@@ -55,7 +55,7 @@ def activate_user(request, uidb64, token):
         return render(request, 'accounts/registration/user-verification-failed.html', {'user': user})
 
 
-def resend_verification_email(request, uidb64):
+def resend_verification_email(request, uidb64: str):
     user = get_user_by_uidb64(uidb64)
     if user is not None and not user.is_email_verified:
         send_email(request, user,
@@ -134,10 +134,10 @@ def reset_password(request):
     return render(request, 'accounts/reset-password/reset-password.html', context)
 
 
-def reset_password_confirm(request, uidb64, token):
+def reset_password_confirm(request, uidb64: str, token: str):
     user = get_user_by_uidb64(uidb64)
     if (user is not None and
-        email_token.check_token(user, token, constants.LIFETIME_EMAIL_RESET_PASSWORD)):
+            email_token.check_token(user, token, constants.LIFETIME_EMAIL_RESET_PASSWORD)):
         form = SetPasswordForm(user)
         if request.method == 'POST':
             form_data = get_form_data(request, SetPasswordForm, user)

@@ -188,7 +188,7 @@ def form_announcements_and_images(request) -> Response:
         page_announcements, paginator = paginate_announcements(request, filtered_announcements)
         
         filtered_images = AnnouncementImage.objects.filter(
-            announcement__in=filtered_announcements)
+            announcement__in=page_announcements)
         
         filtered_context = {
             'announcements': page_announcements,
