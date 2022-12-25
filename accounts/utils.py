@@ -1,4 +1,3 @@
-import json
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
@@ -39,9 +38,3 @@ def get_user_by_uidb64(uidb64: str) -> User | None:
 def get_user_uidb64(user: User) -> str:
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     return uidb64
-
-
-def get_form_data(request, Form, *args):
-    data = json.loads(request.body)
-    form_data = Form(*args, data['formData'])
-    return form_data

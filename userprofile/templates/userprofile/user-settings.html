@@ -60,7 +60,9 @@
                     {{ user.first_name }}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer">Изменить</a>
+                    <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите имя" data-modal-input-type="text"
+                        data-modal-input-value="{{ user.first_name }}" data-modal-input-name="first_name">Изменить</a>
                 </div>
             </div>
             <div class="row mb-2">
@@ -71,7 +73,9 @@
                     {{ user.last_name }}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer">Изменить</a>
+                    <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите фамилию" data-modal-input-type="text"
+                        data-modal-input-value="{{ user.last_name }}" data-modal-input-name="last_name">Изменить</a>
                 </div>
             </div>
             <div class="row mb-2">
@@ -82,7 +86,10 @@
                     {{ user.email }}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer">Изменить</a>
+                    <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите адрес электронной почты"
+                        data-modal-input-type="email" data-modal-input-value="{{ user.email }}"
+                        data-modal-input-name="email">Изменить</a>
                 </div>
             </div>
             <div class="row mb-2">
@@ -165,8 +172,37 @@
     </div>
 </div>
 
+<div class="modal fade change-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="{% url 'user-settings' %}">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="field-block">
+                        <input class="form-control">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Отменить</button>
+                    <button type="submit" class="btn btn-primary" data-action="">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
+    const changeModalJs = new bootstrap.Modal(document.getElementById('exampleModal'))
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 </script>
+
+<script src="{% static 'js/userprofile/user-settings.js' %}"></script>
+<script src="{% static 'js/get-cookie.js' %}"></script>
+<script src="{% static 'js/send-json-form-data.js' %}"></script>
 {% endblock %}

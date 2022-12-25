@@ -1,5 +1,6 @@
+import json
 from typing import NamedTuple, Literal
-from accounts.forms import UserCreationForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
+from accounts.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
 from seller.forms import SellerCreationForm
 from announcement.forms import AnnouncementCreationForm
 
@@ -19,6 +20,7 @@ class Response(NamedTuple):
 
 def validate_form_data(form_data:
                        UserCreationForm |
+                       UserChangeForm |
                        AuthenticationForm |
                        PasswordResetForm |
                        SetPasswordForm |
@@ -36,3 +38,9 @@ def validate_form_data(form_data:
         return Response(
             body={'error': 'Некорректные данные.'},
             type='BadRequest', status=400)
+
+
+def get_form_data(request, Form, *args):
+    data = json.loads(request.body)
+    form_data = Form(*args, data['formData'])
+    return form_data

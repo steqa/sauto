@@ -2,7 +2,7 @@ from django.contrib.auth import password_validation
 from django.utils.functional import lazy
 from django.utils.html import format_html, format_html_join
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, PasswordResetForm, SetPasswordForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, SetPasswordForm
 from .models import User
 
 
@@ -60,6 +60,34 @@ class UserCreationForm(UserCreationForm):
         model = User
         fields = ('email', 'first_name', 'last_name', 'password1', 'password2')
         field_classes = {}
+
+
+class UserChangeForm(UserChangeForm):
+    first_name = forms.CharField(
+        label='Имя',
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Имя',
+        }))
+    last_name = forms.CharField(
+        label='Фамилия',
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Фамилия',
+        }))
+    email = forms.EmailField(
+        label='Адрес электронной почты',
+        max_length=260,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Email',
+        }))
+    
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
 
 
 class AuthenticationForm(forms.Form):
