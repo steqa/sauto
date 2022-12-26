@@ -1,4 +1,5 @@
 import json
+from django.contrib.auth.decorators import login_required
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from accounts.models import User
@@ -6,6 +7,7 @@ from seller.models import Seller
 from .utils import change_user_data
 
 
+@login_required
 def user_settings(request):
     user = User.objects.get(pk=request.user.id)
     try:

@@ -61,6 +61,7 @@ class Announcement(models.Model):
     class Meta:
         verbose_name = 'объявление'
         verbose_name_plural = 'объявления'
+        ordering = ('-date_created', )
     
     def __str__(self):
         return self.name if len(self.name) <= 25 else f'{self.name[0:25]}...'

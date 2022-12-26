@@ -1,6 +1,7 @@
 {% extends 'announcement/base.html' %}
 {% load static %}
 {% load humanize %}
+{% load userprofile %}
 
 {% block title %}{{ user.first_name }} {{ user.last_name }}{% endblock %}
 
@@ -83,7 +84,7 @@
                     <span class="text-secondary">E-mail</span>
                 </div>
                 <div class="col-12 col-md-7 col-lg-7 mb-3 order-2 order-md-1">
-                    {{ user.email }}
+                    <span id="user-email">{{ user.email|idna_decode }}</span>
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
                     <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
