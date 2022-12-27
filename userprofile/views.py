@@ -4,11 +4,13 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from accounts.models import User
 from seller.models import Seller
+from seller.forms import SellerCreationForm
 from .utils import change_user_data
 
 
 @login_required
 def user_settings(request):
+    seller_form = SellerCreationForm
     user = User.objects.get(pk=request.user.id)
     try:
         seller = Seller.objects.get(user=user)
@@ -24,5 +26,6 @@ def user_settings(request):
     context = {
         'user': user,
         'seller': seller,
+        'seller_form': seller_form,
     }
     return render(request, 'userprofile/user-settings.html', context)

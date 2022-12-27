@@ -1,52 +1,82 @@
 const changeModal = document.querySelector('.change-modal')
 const changeModalTitle = changeModal.querySelector('h1')
-const changeModalInput = changeModal.querySelector('input')
-const changeModalInputAsList = changeModal.querySelectorAll('input')
-const changeModalInputErrorField = changeModalInput.closest('.field-block').querySelector('div.invalid-feedback')
 const changeModalSubmitBtn = changeModal.querySelector('button[type="submit"]')
 const form = changeModal.querySelector('form')
+const changeBtns = document.querySelectorAll('.change-btn')
+const changeInputDiv = document.querySelector('.change-input-div')
+let changeModalInputs = null
 
 let inputType = null
 
-changeModalSubmitBtn.addEventListener('click', (e) => {
-    e.preventDefault()
-    inputType = 'submit'
-    if (checkFieldChange()) {
-        sendJsonFormData(changeModalInputAsList, reload = true, action = changeModalSubmitBtn.dataset.action)
-    } else {
-        displayErrorUnchangedField()
-    }
-})
-
-changeModalInput.addEventListener('input', (e) => {
-    inputType = 'input'
-    if (checkFieldChange()) {
-        sendJsonFormData(changeModalInputAsList, reload = false, action = changeModalSubmitBtn.dataset.action)
-    } else {
-        displayErrorUnchangedField()
-    }
-})
-
-const userDataChangeBtns = document.querySelectorAll('.user-data-change-btn')
-
-userDataChangeBtns.forEach((element) => {
+changeBtns.forEach((element) => {
     element.addEventListener('click', (e) => {
-        removeErrorField()
         changeModalTitle.innerHTML = element.dataset.modalTitle
-        changeModalInput.type = element.dataset.modalInputType
-        changeModalInput.name = element.dataset.modalInputName
-        changeModalInput.value = element.dataset.modalInputValue
-        changeModalSubmitBtn.dataset.action = 'change-user-data'
+        let changeInput = null
+        if (element.dataset.modalInputName == 'phone_number') {
+            changeInput = document.querySelector('.phone_number')
+            changeModalSubmitBtn.dataset.action = 'change-seller-data'
+        } else if (element.dataset.modalInputName == 'telegram_username') {
+            changeInput = document.querySelector('.telegram_username')
+            const input = changeInput.querySelector('input')
+            input.value = element.dataset.modalInputValue
+            changeModalSubmitBtn.dataset.action = 'change-seller-data'
+        } else if (element.dataset.modalInputName == 'password') {
+            changeInput = document.querySelector('.change_input')
+            const input = changeInput.querySelector('input')
+            input.type = element.dataset.modalInputType
+            input.name = element.dataset.modalInputName
+            input.autocomplete = 'new-password'
+            changeModalSubmitBtn.dataset.action = 'change-user-password'
+        } else {
+            changeInput = document.querySelector('.change_input')
+            const input = changeInput.querySelector('input')
+            input.type = element.dataset.modalInputType
+            input.name = element.dataset.modalInputName
+            input.value = element.dataset.modalInputValue
+            changeModalSubmitBtn.dataset.action = 'change-user-data'
+        }
+        changeInputDiv.innerHTML = ''
+        changeInputDiv.append(changeInput.cloneNode(true))
+        changeModalInputs = changeInputDiv.querySelectorAll('select, input')
+        removeErrorField()
+        changeModalInputsListener(element)
     })
 })
 
+function changeModalInputsListener(changeBtn) {
+    changeModalInputs.forEach((element) => {
+        element.addEventListener('input', (e) => {
+            inputType = 'input'
+            if (changeBtn.dataset.modalInputValue == element.value) {
+                displayErrorUnchangedField()
+            } else if (element.value == '') {
+                displayErrorEmptyField()
+            } else {
+                removeErrorField()
+                sendJsonFormData(changeModalInputs, reload = false, action = changeModalSubmitBtn.dataset.action)
+            }
+        })
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault()
+            inputType = 'submit'
+            if (changeBtn.dataset.modalInputValue == element.value) {
+                displayErrorUnchangedField()
+            } else if (element.value == '') {
+                displayErrorEmptyField()
+            } else {
+                removeErrorField()
+                sendJsonFormData(changeModalInputs, reload = true, action = changeModalSubmitBtn.dataset.action)
+            }
+        })
+    })
+}
+
 function renderReturnedData(data) {
-    console.log(data)
     if (data['status'] == 400) {
         if (data['type'] == 'ValidationError') {
-            if (changeModalInput.name in data['body']) {
-                displayErrorField()
-                changeModalInputErrorField.innerHTML = data['body'][changeModalInput.type]
+            if (changeModalInputs[0].name in data['body']) {
+                displayErrorField(data['body'][changeModalInputs[0].name])
             } else {
                 displaySuccessField()
             }
@@ -64,35 +94,52 @@ function renderReturnedData(data) {
     }
 }
 
-function checkFieldChange() {
-    const userDataChangeBtn = document.querySelector(`[data-modal-input-name="${changeModalInput.name}"]`)
-    if (userDataChangeBtn.dataset.modalInputValue != changeModalInput.value) {
-        return true
-    } else {
-        return false
-    }
+function displayErrorUnchangedField() {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.add('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = 'Вы ничего не изменили.'
+    })
 }
 
-function displayErrorUnchangedField() {
-    changeModalInput.classList.remove('is-valid')
-    changeModalInput.classList.add('is-invalid')
-    changeModalInputErrorField.innerHTML = 'Вы ничего не изменили.'
+function displayErrorEmptyField() {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.add('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = 'Обязательное поле.'
+    })
 }
 
 function removeErrorField() {
-    changeModalInput.classList.remove('is-valid')
-    changeModalInput.classList.remove('is-invalid')
-    changeModalInputErrorField.innerHTML = ''
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.remove('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = ''
+    })
 }
 
 function displaySuccessField() {
-    changeModalInput.classList.remove('is-invalid')
-    changeModalInput.classList.add('is-valid')
-    changeModalInputErrorField.innerHTML = ''
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-invalid')
+        input.classList.add('is-valid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = ''
+    })
 }
 
-function displayErrorField() {
-    changeModalInput.classList.remove('is-valid')
-    changeModalInput.classList.add('is-invalid')
-    changeModalInputErrorField.innerHTML = ''
+function displayErrorField(error) {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.add('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = error
+    })
 }

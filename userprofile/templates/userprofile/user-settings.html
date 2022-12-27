@@ -61,9 +61,11 @@
                     {{ user.first_name }}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
+
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите имя" data-modal-input-type="text"
                         data-modal-input-value="{{ user.first_name }}" data-modal-input-name="first_name">Изменить</a>
+
                 </div>
             </div>
             <div class="row mb-2">
@@ -74,9 +76,11 @@
                     {{ user.last_name }}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
+
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите фамилию" data-modal-input-type="text"
                         data-modal-input-value="{{ user.last_name }}" data-modal-input-name="last_name">Изменить</a>
+
                 </div>
             </div>
             <div class="row mb-2">
@@ -87,10 +91,12 @@
                     <span id="user-email">{{ user.email|idna_decode }}</span>
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer user-data-change-btn" data-bs-toggle="modal"
+
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите адрес электронной почты"
-                        data-modal-input-type="email" data-modal-input-value="{{ user.email }}"
+                        data-modal-input-type="email" data-modal-input-value="{{ user.email|idna_decode }}"
                         data-modal-input-name="email">Изменить</a>
+
                 </div>
             </div>
             <div class="row mb-2">
@@ -105,11 +111,17 @@
                     {% endif %}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
+
                     {% if seller %}
-                    <a class="text-decoration-none pointer">Изменить</a>
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите номер телефона"
+                        data-modal-input-name="phone_number">Изменить</a>
                     {% else %}
-                    <a class="text-decoration-none pointer">Добавить</a>
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите номер телефона"
+                        data-modal-input-name="phone_number">Добавить</a>
                     {% endif %}
+
                 </div>
             </div>
             <div class="row mb-2">
@@ -124,11 +136,18 @@
                     {% endif %}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
+
                     {% if seller %}
-                    <a class="text-decoration-none pointer">Изменить</a>
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите имя пользователя телеграм"
+                        data-modal-input-value="{{ seller.telegram_username }}"
+                        data-modal-input-name="telegram_username">Изменить</a>
                     {% else %}
-                    <a class="text-decoration-none pointer">Добавить</a>
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите имя пользователя телеграм"
+                        data-modal-input-value="" data-modal-input-name="telegram_username">Добавить</a>
                     {% endif %}
+
                 </div>
             </div>
             <div class="row mb-2">
@@ -139,7 +158,11 @@
                     Обновлён {{ user.last_password_updated|naturalday }}
                 </div>
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
-                    <a class="text-decoration-none pointer">Изменить</a>
+
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите пароль"
+                        data-modal-input-type="password" data-modal-input-name="password">Изменить</a>
+
                 </div>
             </div>
 
@@ -182,11 +205,7 @@
                     <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="field-block">
-                        <input class="form-control">
-                        <div class="invalid-feedback"></div>
-                    </div>
+                <div class="modal-body change-input-div">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Отменить</button>
@@ -194,6 +213,28 @@
                 </div>
             </form>
         </div>
+    </div>
+</div>
+
+<div style="display: none;">
+    <div class="field-block change_input">
+        <input class="form-control">
+        <div class="invalid-feedback"></div>
+    </div>
+    <div class="row g-0 field-block phone_number">
+        <div class="col-6">
+            {{ seller_form.phone_number.subwidgets.0 }}
+        </div>
+        <div class="col-6">
+            {{ seller_form.phone_number.subwidgets.1 }}
+        </div>
+        <input type="hidden" class="form-control is-invalid">
+        <div class="invalid-feedback"></div>
+    </div>
+    <div class="input-group field-block telegram_username">
+        <span class="input-group-text">@</span>
+        {{ seller_form.telegram_username }}
+        <div class="invalid-feedback"></div>
     </div>
 </div>
 
