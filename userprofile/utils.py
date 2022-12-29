@@ -1,6 +1,7 @@
 from django.urls import reverse
 from accounts.models import User
 from accounts.forms import UserChangeForm
+from seller.utils import validate_seller_data, get_or_create_seller, get_telegram_username_and_phone_number_from_data
 from sauto.utils import get_form_data, validate_form_data, Response
 
 def change_user_data(request, data):
@@ -25,4 +26,27 @@ def change_user_data(request, data):
     else:
         response = validate_form_data(form_data=form_data)
 
+    return response
+
+
+def change_seller_data(request, data):
+    field = list(data['formData'].keys())[0] if len(list(data['formData'].keys())) > 0 else None
+    response = validate_seller_data(data=data['formData'])
+    if (request.GET.get('reload')) and (response.status == 200):
+        telegram_username, phone_number = get_telegram_username_and_phone_number_from_data(data['formData'])
+        seller = get_or_create_seller(request, telegram_username, phone_number)
+        success = ''
+        if field == 'telegram_username':
+            seller.telegram_username = telegram_username
+            seller.save()
+            success = 'Имя пользователя телеграм изменено.'
+        elif field in ['phone_number_0', 'phone_number_1']:
+            seller.phone_number = phone_number
+            seller.save()
+            success = 'Номер телефона изменен.'
+            
+        response = Response(
+            body={'success': success, 'url': request.build_absolute_uri(reverse('user-settings'))},
+            type='redirect', status=200)
+    
     return response

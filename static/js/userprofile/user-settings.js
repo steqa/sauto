@@ -52,7 +52,6 @@ function changeModalInputsListener(changeBtn) {
             } else if (element.value == '') {
                 displayErrorEmptyField()
             } else {
-                removeErrorField()
                 sendJsonFormData(changeModalInputs, reload = false, action = changeModalSubmitBtn.dataset.action)
             }
         })
@@ -65,7 +64,6 @@ function changeModalInputsListener(changeBtn) {
             } else if (element.value == '') {
                 displayErrorEmptyField()
             } else {
-                removeErrorField()
                 sendJsonFormData(changeModalInputs, reload = true, action = changeModalSubmitBtn.dataset.action)
             }
         })
@@ -77,6 +75,8 @@ function renderReturnedData(data) {
         if (data['type'] == 'ValidationError') {
             if (changeModalInputs[0].name in data['body']) {
                 displayErrorField(data['body'][changeModalInputs[0].name])
+            } else if (changeModalInputs[1].name in data['body']) {
+                displayErrorField(data['body'][changeModalInputs[1].name])
             } else {
                 displaySuccessField()
             }

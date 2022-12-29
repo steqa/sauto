@@ -5,9 +5,10 @@ from django.urls import reverse
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from seller.forms import SellerCreationForm
+from seller.utils import is_seller, validate_seller_data, get_or_create_seller, get_telegram_username_and_phone_number_from_data
 from sauto.utils import validate_form_data, Response
 from .forms import AnnouncementCreationForm
-from .utils import is_seller, validate_images, validate_seller_data, get_or_create_seller, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements_and_images, paginate_announcements
+from .utils import validate_images, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements_and_images, paginate_announcements
 from .models import Announcement, Seller, AnnouncementImage
 
 
@@ -64,7 +65,8 @@ def add_announcement(request):
             data = get_all_data_from_announcement_creation_page(request)
             response = validate_all_data_from_announcement_creation_page(data)
             if response.status == 200:
-                seller = get_or_create_seller(request, data)
+                telegram_username, phone_number = get_telegram_username_and_phone_number_from_data(data['seller_data'])
+                seller = get_or_create_seller(request, telegram_username, phone_number)
                 announcement = create_and_get_announcement(seller, data)
                 create_announcement_images(announcement, data)
                 response = Response(

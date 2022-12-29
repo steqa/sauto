@@ -5,10 +5,9 @@ from django.utils.datastructures import MultiValueDict
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, Page
 from django.db.models.query import QuerySet
-from phonenumber_field.phonenumber import PhoneNumber
 from sauto.utils import validate_form_data, Response
 from seller.models import Seller
-from seller.utils import is_seller
+from seller.utils import validate_seller_data
 from .models import Announcement, AnnouncementImage
 from .forms import AnnouncementCreationForm
 
@@ -35,32 +34,6 @@ def validate_images(images: MultiValueDict) -> Response:
         status = 400
     
     return Response(body=error, type='ImageValidationError', status=status)
-
-
-def validate_seller_data(data: dict) -> Response:
-    error = {}
-    status = 200
-    region = data['phone_number_0']
-    number = data['phone_number_1']
-    telegram_username = data['telegram_username']
-    if number != '' and region != None:
-        try:
-            phone_number = PhoneNumber.from_string(phone_number=number, region=region).as_e164
-        except:
-            if region == '':
-                error['phone_number_0'] = ['Выберите регион.']
-            error['phone_number_1'] = ['Введите корректный номер телефона.']
-            status = 400
-    
-    if telegram_username != '':
-        if len(telegram_username) > 32:
-            error['telegram_username'] = [f'Убедитесь, что это значение содержит не более 32 символов (сейчас {len(telegram_username)}).']
-            status = 400
-        elif len(telegram_username) < 5:
-            error['telegram_username'] = [f'Убедитесь, что это значение содержит не менее 5 символов (сейчас {len(telegram_username)}).']
-            status = 400
-    
-    return Response(body=error, type='ValidationError', status=status)
 
 
 def merge_responses(*args: Response) -> Response:
@@ -107,30 +80,6 @@ def validate_all_data_from_announcement_creation_page(data: dict) -> Response:
     images_response = validate_images(data['images'])
     response = merge_responses(announcement_data_response, seller_data_response, images_response)
     return response
-
-
-def get_or_create_seller(request, data: dict) -> Seller:
-    if not is_seller(request.user):
-        communication_method = data['announcement_data']['communication_method']
-        user = request.user
-        telegram_username = None
-        phone_number = None
-        if communication_method == '1':
-            telegram_username = data['seller_data']['telegram_username']
-        elif communication_method == '2':
-            phone_number = PhoneNumber.from_string(
-                phone_number=data['seller_data']['phone_number_1'],
-                region=data['seller_data']['phone_number_0']).as_e164
-        
-        seller = Seller.objects.create(
-            user=user,
-            telegram_username=telegram_username,
-            phone_number=phone_number
-        )
-    else:
-        seller = Seller.objects.get(user=request.user)
-    
-    return seller
 
 
 def create_and_get_announcement(seller: Seller, data: dict) -> Announcement:

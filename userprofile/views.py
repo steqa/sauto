@@ -5,7 +5,7 @@ from django.shortcuts import render
 from accounts.models import User
 from seller.models import Seller
 from seller.forms import SellerCreationForm
-from .utils import change_user_data
+from .utils import change_user_data, change_seller_data
 
 
 @login_required
@@ -21,6 +21,9 @@ def user_settings(request):
         data = json.loads(request.body)
         if data['action'] == 'change-user-data':
             response = change_user_data(request, data)
+            return JsonResponse(response._asdict())
+        elif data['action'] == 'change-seller-data':
+            response = change_seller_data(request, data)
             return JsonResponse(response._asdict())
     
     context = {
