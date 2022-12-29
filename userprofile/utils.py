@@ -1,7 +1,7 @@
 from django.urls import reverse
 from accounts.models import User
 from accounts.forms import UserChangeForm
-from seller.utils import validate_seller_data, get_or_create_seller, get_telegram_username_and_phone_number_from_data
+from seller.utils import get_or_create_seller, get_telegram_username_and_phone_number_from_data, validate_telegram_username, validate_phone_number
 from sauto.utils import get_form_data, validate_form_data, Response
 
 def change_user_data(request, data):
@@ -31,9 +31,17 @@ def change_user_data(request, data):
 
 def change_seller_data(request, data):
     field = list(data['formData'].keys())[0] if len(list(data['formData'].keys())) > 0 else None
-    response = validate_seller_data(data=data['formData'])
+    if field == 'telegram_username':
+        response = validate_telegram_username(data=data['formData'])
+    elif field in ['phone_number_0', 'phone_number_1']:
+        response = validate_phone_number(data=data['formData'])
+    else:
+        response = Response(
+            body={'error': 'Возникла ошибка.'},
+            type='BadRequest', status=400)
+
+    telegram_username, phone_number = get_telegram_username_and_phone_number_from_data(data['formData'])
     if (request.GET.get('reload')) and (response.status == 200):
-        telegram_username, phone_number = get_telegram_username_and_phone_number_from_data(data['formData'])
         seller = get_or_create_seller(request, telegram_username, phone_number)
         success = ''
         if field == 'telegram_username':

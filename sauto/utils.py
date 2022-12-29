@@ -44,3 +44,17 @@ def get_form_data(request, Form, *args):
     data = json.loads(request.body)
     form_data = Form(*args, data['formData'])
     return form_data
+
+
+def merge_responses(*args: Response) -> Response:
+    merged_body = {}
+    merged_status = 200
+    merged_type = 'OK'
+    for a in args:
+        for b in a.body:
+            merged_body[b] = a.body[b]
+        if a.status == 400 and a.type != 'OK':
+            merged_status = 400
+            merged_type = 'ValidationError'
+    
+    return Response(body=merged_body, type=merged_type, status=merged_status)

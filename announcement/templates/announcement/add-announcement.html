@@ -1,5 +1,6 @@
 {% extends 'announcement/base.html' %}
 {% load static %}
+{% load announcement %}
 
 {% block title %}Разместить объявление{% endblock %}
 
@@ -181,7 +182,7 @@
                                     disabled>
                                 {% else %}
                                 <input type="text" name="phone_number_1" class="form-control"
-                                    value="{{ request.user.seller.phone_number }}" disabled>
+                                    value="{{ request.user.seller.phone_number|phone_number_ru_or_international }}" disabled>
                                 {% endif %}
                                 <div class="invalid-feedback"></div>
                             </div>

@@ -14,6 +14,18 @@ changeBtns.forEach((element) => {
         let changeInput = null
         if (element.dataset.modalInputName == 'phone_number') {
             changeInput = document.querySelector('.phone_number')
+            const inputHidden = changeInput.querySelector('input[type="hidden"]')
+            const inputCountryCode = changeInput.querySelector('select')
+            const inputCountryCodeOptions = inputCountryCode.querySelectorAll('option')
+            for (let i = 0; i < inputCountryCodeOptions.length; i++) {
+                if (inputCountryCodeOptions[i].value === inputHidden.dataset.phoneNumberCountryCode) {
+                    inputCountryCodeOptions[i].setAttribute("selected", "true")
+                } else {
+                    inputCountryCodeOptions[i].removeAttribute("selected")
+                }
+            }
+            const inputNumber = changeInput.querySelector('input')
+            inputNumber.value = inputHidden.dataset.phoneNumberWithoutCountrCode
             changeModalSubmitBtn.dataset.action = 'change-seller-data'
         } else if (element.dataset.modalInputName == 'telegram_username') {
             changeInput = document.querySelector('.telegram_username')
@@ -80,6 +92,8 @@ function renderReturnedData(data) {
             } else {
                 displaySuccessField()
             }
+        } else if (data['type'] == 'BadRequest') {
+            return showToast(data['body']['error'], type = 'error')
         }
     } else if (data['status'] == 200) {
         if (inputType == 'input') {

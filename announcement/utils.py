@@ -5,7 +5,7 @@ from django.utils.datastructures import MultiValueDict
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, Page
 from django.db.models.query import QuerySet
-from sauto.utils import validate_form_data, Response
+from sauto.utils import validate_form_data, merge_responses, Response
 from seller.models import Seller
 from seller.utils import validate_seller_data
 from .models import Announcement, AnnouncementImage
@@ -36,20 +36,6 @@ def validate_images(images: MultiValueDict) -> Response:
     return Response(body=error, type='ImageValidationError', status=status)
 
 
-def merge_responses(*args: Response) -> Response:
-    merged_body = {}
-    merged_status = 200
-    merged_type = 'OK'
-    for a in args:
-        for b in a.body:
-            merged_body[b] = a.body[b]
-        if a.status == 400 and a.type != 'OK':
-            merged_status = 400
-            merged_type = 'ValidationError'
-    
-    return Response(body=merged_body, type=merged_type, status=merged_status)
-
-
 def get_all_data_from_announcement_creation_page(request) -> dict:
     data = {}
     announcement_data = {}
@@ -76,7 +62,7 @@ def get_all_data_from_announcement_creation_page(request) -> dict:
 def validate_all_data_from_announcement_creation_page(data: dict) -> Response:
     announcement_form_data = AnnouncementCreationForm(data['announcement_data'])
     announcement_data_response = validate_form_data(form_data=announcement_form_data)
-    seller_data_response = validate_seller_data(data=data['seller_data'])
+    seller_data_response = validate_seller_data(data['seller_data'])
     images_response = validate_images(data['images'])
     response = merge_responses(announcement_data_response, seller_data_response, images_response)
     return response
