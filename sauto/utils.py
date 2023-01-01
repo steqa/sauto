@@ -1,6 +1,6 @@
 import json
 from typing import NamedTuple, Literal
-from accounts.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordResetForm, SetPasswordForm
+from accounts.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from seller.forms import SellerCreationForm
 from announcement.forms import AnnouncementCreationForm
 
@@ -23,6 +23,7 @@ def validate_form_data(form_data:
                        UserChangeForm |
                        AuthenticationForm |
                        PasswordResetForm |
+                       PasswordChangeForm |
                        SetPasswordForm |
                        AnnouncementCreationForm |
                        SellerCreationForm) -> Response:

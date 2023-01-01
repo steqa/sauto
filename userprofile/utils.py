@@ -1,6 +1,6 @@
 from django.urls import reverse
 from accounts.models import User
-from accounts.forms import UserChangeForm
+from accounts.forms import UserChangeForm, PasswordChangeForm
 from seller.utils import get_or_create_seller, get_telegram_username_and_phone_number_from_data, validate_telegram_username, validate_phone_number
 from sauto.utils import get_form_data, validate_form_data, Response
 
@@ -57,4 +57,17 @@ def change_seller_data(request, data):
             body={'success': success, 'url': request.build_absolute_uri(reverse('user-settings'))},
             type='redirect', status=200)
     
+    return response
+
+
+def change_password(request):
+    form_data = get_form_data(request, PasswordChangeForm, request.user)
+    if request.GET.get('reload') and form_data.is_valid():
+        form_data.save()
+        response = Response(
+            body={'success': f'Вы успешно сменили пароль. ', 'url': request.build_absolute_uri(reverse('login-user'))},
+            type='redirect', status=200)
+    else:
+        response = validate_form_data(form_data)
+        
     return response
