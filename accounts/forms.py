@@ -2,7 +2,7 @@ from django.contrib.auth import password_validation
 from django.utils.functional import lazy
 from django.utils.html import format_html, format_html_join
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm, SetPasswordForm
 from .models import User
 
 
@@ -135,33 +135,5 @@ class SetPasswordForm(SetPasswordForm):
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'placeholder': 'Подтверждение нового пароля',
-            "autocomplete": "new-password"
-        }))
-
-
-class PasswordChangeForm(PasswordChangeForm):
-    new_password1 = forms.CharField(
-        label='Новый пароль',
-        strip=False,
-        help_text=password_validators_help_text_html(),
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Новый пароль',
-            "autocomplete": "new-password"
-        }))
-    new_password2 = forms.CharField(
-        label='Подтверждение нового пароля',
-        strip=False,
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Подтверждение нового пароля',
-            "autocomplete": "new-password"
-        }))
-    old_password = forms.CharField(
-        label='Старый пароль',
-        strip=False,
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Старый пароль',
             "autocomplete": "new-password"
         }))

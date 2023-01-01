@@ -22,7 +22,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(verbose_name="статус администратора", default=False)
     is_superuser = models.BooleanField(verbose_name="статус суперпользователя", default=False)
     is_email_verified = models.BooleanField(verbose_name="статус проверенной электронной почты", default=False)
-    last_password_updated = models.DateTimeField(verbose_name="последнее обновление пароля", auto_now=True)
+    last_password_updated = models.DateTimeField(verbose_name="последнее обновление пароля", auto_now_add=True)
         
     objects = UserManager()
         

@@ -4,10 +4,9 @@ const changeModalSubmitBtn = changeModal.querySelector('button[type="submit"]')
 const form = changeModal.querySelector('form')
 const changeBtns = document.querySelectorAll('.change-btn')
 const changeInputDiv = document.querySelector('.change-input-div')
-
 let changeModalInputs = null
+
 let inputType = null
-let inputField = null
 
 changeBtns.forEach((element) => {
     element.addEventListener('click', (e) => {
@@ -34,7 +33,11 @@ changeBtns.forEach((element) => {
             input.value = element.dataset.modalInputValue
             changeModalSubmitBtn.dataset.action = 'change-seller-data'
         } else if (element.dataset.modalInputName == 'password') {
-            changeInput = document.querySelector('.new_password')
+            changeInput = document.querySelector('.change_input')
+            const input = changeInput.querySelector('input')
+            input.type = element.dataset.modalInputType
+            input.name = element.dataset.modalInputName
+            input.autocomplete = 'new-password'
             changeModalSubmitBtn.dataset.action = 'change-user-password'
         } else {
             changeInput = document.querySelector('.change_input')
@@ -47,10 +50,7 @@ changeBtns.forEach((element) => {
         changeInputDiv.innerHTML = ''
         changeInputDiv.append(changeInput.cloneNode(true))
         changeModalInputs = changeInputDiv.querySelectorAll('select, input')
-        changeModalInputs.forEach((input) => {
-            input.value = ''
-            removeErrorField(input)
-        })
+        removeErrorField()
         changeModalInputsListener(element)
     })
 })
@@ -59,11 +59,10 @@ function changeModalInputsListener(changeBtn) {
     changeModalInputs.forEach((element) => {
         element.addEventListener('input', (e) => {
             inputType = 'input'
-            inputField = element
             if (changeBtn.dataset.modalInputValue == element.value) {
-                displayErrorUnchangedField(inputField)
+                displayErrorUnchangedField()
             } else if (element.value == '') {
-                displayErrorEmptyField(inputField)
+                displayErrorEmptyField()
             } else {
                 sendJsonFormData(changeModalInputs, reload = false, action = changeModalSubmitBtn.dataset.action)
             }
@@ -72,11 +71,10 @@ function changeModalInputsListener(changeBtn) {
         form.addEventListener('submit', (e) => {
             e.preventDefault()
             inputType = 'submit'
-            inputField = element
             if (changeBtn.dataset.modalInputValue == element.value) {
-                displayErrorUnchangedField(inputField)
+                displayErrorUnchangedField()
             } else if (element.value == '') {
-                displayErrorEmptyField(inputField)
+                displayErrorEmptyField()
             } else {
                 sendJsonFormData(changeModalInputs, reload = true, action = changeModalSubmitBtn.dataset.action)
             }
@@ -87,26 +85,21 @@ function changeModalInputsListener(changeBtn) {
 function renderReturnedData(data) {
     if (data['status'] == 400) {
         if (data['type'] == 'ValidationError') {
-            if (inputField.name in data['body']) {
-                if (('phone_number_0', 'phone_number_1').includes(inputField.name)) {
-                    changeModalInputs.forEach((input) => {
-                        displayErrorField(data['body'][input.name], input)
-                    })
-                }
-                displayErrorField(data['body'][inputField.name], inputField)
+            if (changeModalInputs[0].name in data['body']) {
+                displayErrorField(data['body'][changeModalInputs[0].name])
+            } else if (changeModalInputs[1].name in data['body']) {
+                displayErrorField(data['body'][changeModalInputs[1].name])
             } else {
-                displaySuccessField(inputField)
+                displaySuccessField()
             }
         } else if (data['type'] == 'BadRequest') {
             return showToast(data['body']['error'], type = 'error')
         }
     } else if (data['status'] == 200) {
         if (inputType == 'input') {
-            changeModalInputs.forEach((input) => {
-                displaySuccessField(input)
-            })
+            displaySuccessField()
         } else if (inputType == 'submit') {
-            removeErrorField(inputField)
+            removeErrorField()
             changeModalJs.hide()
             localStorage.setItem('status', data['status'])
             localStorage.setItem('message', data['body']['success'])
@@ -115,42 +108,52 @@ function renderReturnedData(data) {
     }
 }
 
-function displayErrorUnchangedField(field) {
-    field.classList.remove('is-valid')
-    field.classList.add('is-invalid')
-    fieldBlock = field.closest('.field-block')
-    fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
-    fieldErrorBlock.innerHTML = 'Вы ничего не изменили.'
+function displayErrorUnchangedField() {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.add('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = 'Вы ничего не изменили.'
+    })
 }
 
-function displayErrorEmptyField(field) {
-    field.classList.remove('is-valid')
-    field.classList.add('is-invalid')
-    fieldBlock = field.closest('.field-block')
-    fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
-    fieldErrorBlock.innerHTML = 'Обязательное поле.'
+function displayErrorEmptyField() {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.add('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = 'Обязательное поле.'
+    })
 }
 
-function removeErrorField(field) {
-    field.classList.remove('is-invalid')
-    field.classList.remove('is-valid')
-    fieldBlock = field.closest('.field-block')
-    fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
-    fieldErrorBlock.innerHTML = ''
+function removeErrorField() {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.remove('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = ''
+    })
 }
 
-function displaySuccessField(field) {
-    field.classList.remove('is-invalid')
-    field.classList.add('is-valid')
-    fieldBlock = field.closest('.field-block')
-    fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
-    fieldErrorBlock.innerHTML = ''
+function displaySuccessField() {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-invalid')
+        input.classList.add('is-valid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = ''
+    })
 }
 
-function displayErrorField(error, field) {
-    field.classList.remove('is-valid')
-    field.classList.add('is-invalid')
-    fieldBlock = field.closest('.field-block')
-    fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
-    fieldErrorBlock.innerHTML = error
+function displayErrorField(error) {
+    changeModalInputs.forEach((input) => {
+        input.classList.remove('is-valid')
+        input.classList.add('is-invalid')
+        inputFieldBlock = input.closest('.field-block')
+        inputErrorBlock = inputFieldBlock.querySelector('.invalid-feedback')
+        inputErrorBlock.innerHTML = error
+    })
 }

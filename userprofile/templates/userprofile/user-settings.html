@@ -106,7 +106,7 @@
                 </div>
                 <div class="col-12 col-md-7 col-lg-7 mb-3 order-2 order-md-1">
                     {% if seller.phone_number %}
-                    {{ seller.phone_number|phone_number_international }}
+                    {{ seller.phone_number|phone_number_ru_or_international }}
                     {% else %}
                     Не указано
                     {% endif %}
@@ -161,7 +161,7 @@
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
 
                     <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
-                        data-bs-target="#exampleModal" data-modal-title="Изменение пароля"
+                        data-bs-target="#exampleModal" data-modal-title="Введите пароль"
                         data-modal-input-type="password" data-modal-input-name="password">Изменить</a>
 
                 </div>
@@ -243,14 +243,6 @@
         <span class="input-group-text">@</span>
         {{ seller_form.telegram_username }}
         <div class="invalid-feedback"></div>
-    </div>
-    <div class="row gy-2 new_password">
-        {% for field in password_change_form %}
-        <div class="field-block">
-            {{ field }}
-            <div class="invalid-feedback"></div>
-        </div>
-        {% endfor %}
     </div>
 </div>
 
