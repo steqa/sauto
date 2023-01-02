@@ -37,3 +37,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.announcement-edit-btn-container {
+    position: relative;
+}
+
+.announcement-edit-btn {
+    position: absolute;
+    right: 0;
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+    z-index: 2;
+}

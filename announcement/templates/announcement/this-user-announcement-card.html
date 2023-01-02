@@ -1,0 +1,40 @@
+<div class="col">
+    <div class="announcement-edit-btn-container">
+        <a href="#" class="d-block link-dark text-decoration-none announcement-edit-btn" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#212528" stroke="#fff"
+                class="bi bi-three-dots" viewBox="0 0 16 16">
+                <path
+                    d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+            </svg>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end text-small">
+            <li><a class="dropdown-item" href="#">Редактировать</a></li>
+            <li><a class="dropdown-item" href="#">Удалить объявление</a></li>
+            <li><a class="dropdown-item" href="#">Отметить проданным</a></li>
+        </ul>
+    </div>
+    <a href="{% url 'show-announcement' announcement.pk %}" class="text-decoration-none text-dark">
+        <div class="card" style="overflow: hidden;">
+            <div class="ratio">
+                <div class="ratio-inner ratio-1-1">
+                    <div class="ratio-content">
+                        {% for image in images %}
+                        {% if image.announcement == announcement %}
+                        <img src="{{ image.image.url }}" class="img-100" alt="...">
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ announcement.price|floatformat:"-2g" }} ₽</h5>
+                <div class="card-truncate-text-container">
+                    <div class="card-truncate-text">
+                        {{ announcement.name }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+</div>
