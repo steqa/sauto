@@ -1,0 +1,42 @@
+{% extends 'announcement/base.html' %}
+{% load static %}
+
+{% block title %}{{ user.first_name }} {{ user.last_name }} - объявления{% endblock %}
+
+{% block search %}
+<input type="search" name="q" class="form-control" placeholder="Поиск...">
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/announcement/announcements.css' %}">
+
+<div class="container my-5">
+    <div class="row gx-5">
+        <div class="col-12 col-sm-5 col-md-4 col-lg-3 mb-4">
+            {% if request.user.id == user.id %}
+            {% include 'userprofile/this-user-sidebar.html' with active='announcements' %}
+            {% else %}
+            {% include 'userprofile/user-sidebar.html' with active='announcements' %}
+            {% endif %}
+        </div>
+        <div class="col-12 col-sm-7 col-md-8 col-lg-9">
+            <div style="height: 35.28px;"></div>
+            <div class="mb-3 text-center">
+                <span class="link-primary pointer mx-2 sold-btn" data-value="all" data-user="{{ user.id }}">Все</span>
+                <span class="dark-link pointer mx-2 sold-btn" data-value="false"
+                    data-user="{{ user.id }}">Активные</span>
+                <span class="dark-link pointer mx-2 sold-btn" data-value="true"
+                    data-user="{{ user.id }}">Проданные</span>
+            </div>
+            <div class="announcement-cards">
+                {% include 'announcement/announcement-cards.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/userprofile/user-announcements.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/search.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/form-url.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/send-announcements-filter-request.js' %}"></script>
+{% endblock %}

@@ -4,6 +4,6 @@ let time
 searchField.addEventListener('input', (e) => {
     clearTimeout(time)
     time = setTimeout((e) => {
-        sendFilteringRequest()
+        sendAnnouncementsFilterRequest()
     }, 800)
 })

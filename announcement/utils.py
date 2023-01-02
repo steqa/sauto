@@ -119,6 +119,8 @@ def form_announcements_and_images(request) -> Response:
             filtered_announcements = filter_announcements(request, filtered_announcements)
         if request.GET.get('search'):
             filtered_announcements = search_announcements(request, filtered_announcements)
+        if request.GET.get('filter_by_seller_and_sold'):
+            filtered_announcements = filter_announcements_by_seller_and_sold(request, filtered_announcements)
         
         page_announcements, paginator = paginate_announcements(request, filtered_announcements)
         
@@ -197,6 +199,18 @@ def filter_announcements(request, filtered_announcements: QuerySet) -> QuerySet:
 def search_announcements(request, filtered_announcements: QuerySet) -> QuerySet:
     q = request.GET.get('search')
     filtered_announcements = filtered_announcements.filter(name__iregex=q)
+    return filtered_announcements
+
+
+def filter_announcements_by_seller_and_sold(request, filtered_announcements: QuerySet) -> QuerySet:
+    sold = request.GET.get('sold')
+    user_pk = request.GET.get('user_pk')
+    seller = Seller.objects.get(user_id=user_pk)
+    filtered_announcements = filtered_announcements.filter(seller=seller)
+    if sold == 'true':
+        filtered_announcements = filtered_announcements.filter(sold=True)
+    elif sold == 'false':
+        filtered_announcements = filtered_announcements.filter(sold=False)
     return filtered_announcements
 
 

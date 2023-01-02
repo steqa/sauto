@@ -15,7 +15,7 @@ filterFieldsNumber.forEach((field) => {
             } else {
                 filterValues.delete(fieldType)
             }
-            sendFilteringRequest()
+            sendAnnouncementsFilterRequest()
         }, 300)
     })
 })
@@ -37,7 +37,7 @@ filterFieldsCheckbox.forEach((field) => {
                 filterValues.delete(fieldType)
             }
         }
-        sendFilteringRequest()
+        sendAnnouncementsFilterRequest()
     })
 })
 
@@ -46,23 +46,6 @@ filterFieldsRadio.forEach((field) => {
         const fieldType = field.dataset.filterFieldType
         const fieldValue = field.value
         filterValues.set(fieldType, fieldValue)
-        sendFilteringRequest()
+        sendAnnouncementsFilterRequest()
     })
 })
-
-function sendFilteringRequest() {
-    const url = formUrl()
-    fetch(url)
-
-        .then((response) => {
-            return response.json()
-        })
-
-        .then((data) => {
-            if (data['status'] == 400) {
-                return showToast(data['body']['error'], type = 'error')
-            } else if (data['status'] == 200) {
-                document.querySelector('.announcement-cards').innerHTML = data['body']['template']
-            }
-        })
-}
