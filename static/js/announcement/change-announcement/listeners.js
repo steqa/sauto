@@ -69,7 +69,7 @@ sellerFields.forEach((element) => {
 
 function formFormData() {
     const formData = new FormData()
-    formData.append('action', 'add-announcement')
+    formData.append('action', listenerAction)
     announcementFields.forEach((element) => {
         formData.append(element.name, element.value)
     })

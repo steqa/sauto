@@ -41,8 +41,8 @@ def announcements(request):
     return render(request, 'announcement/announcements.html', context)
 
 
-def show_announcement(request, pk: int):
-    announcement = Announcement.objects.get(pk=pk)
+def show_announcement(request, announcement_pk: int):
+    announcement = Announcement.objects.get(pk=announcement_pk)
     seller = Seller.objects.get(pk=announcement.seller.pk)
     images = AnnouncementImage.objects.filter(announcement=announcement)
     if request.method == 'GET':
@@ -98,3 +98,34 @@ def add_announcement(request):
         context['seller_form'] = seller_form
         
     return render(request, 'announcement/add-announcement.html', context)
+
+
+@login_required
+def edit_announcement(request, announcement_pk):
+    seller = Seller.objects.get(user=request.user)
+    announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
+    form = AnnouncementCreationForm(instance=announcement)
+    if request.method == 'POST':
+        if request.POST.get('action') == 'edit-announcement':
+            data = get_all_data_from_announcement_creation_page(request)
+            response = validate_all_data_from_announcement_creation_page(data)
+            if response.status == 200:
+                pass
+            return JsonResponse(response._asdict())
+        elif request.POST.get('action') == 'validate-image':
+            images = request.FILES
+            response = validate_images(images)
+            return JsonResponse(response._asdict())
+        else:
+            data = json.loads(request.body)
+            if data['action'] == 'validate-announcement-data':
+                form_data = AnnouncementCreationForm(data['formData'])
+                response = validate_form_data(form_data=form_data)
+                return JsonResponse(response._asdict())
+        
+    context = {
+        'form': form,
+        'announcement': announcement,
+        'yandex_map_api_key': settings.YANDEX_MAP_API_KEY,
+    }
+    return render(request, 'announcement/edit-announcement.html', context)

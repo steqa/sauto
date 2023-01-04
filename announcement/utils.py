@@ -7,7 +7,7 @@ from django.core.paginator import Paginator, Page
 from django.db.models.query import QuerySet
 from sauto.utils import validate_form_data, merge_responses, Response
 from seller.models import Seller
-from seller.utils import validate_seller_data
+from seller.utils import validate_seller_data, is_seller
 from .models import Announcement, AnnouncementImage
 from .forms import AnnouncementCreationForm
 
@@ -62,7 +62,11 @@ def get_all_data_from_announcement_creation_page(request) -> dict:
 def validate_all_data_from_announcement_creation_page(data: dict) -> Response:
     announcement_form_data = AnnouncementCreationForm(data['announcement_data'])
     announcement_data_response = validate_form_data(form_data=announcement_form_data)
-    seller_data_response = validate_seller_data(data['seller_data'])
+    if not is_seller:
+        seller_data_response = validate_seller_data(data['seller_data'])
+    else:
+        seller_data_response = Response(body={}, type='OK', status=200)
+        
     images_response = validate_images(data['images'])
     response = merge_responses(announcement_data_response, seller_data_response, images_response)
     return response

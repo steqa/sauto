@@ -2,7 +2,7 @@
 {% load static %}
 {% load announcement %}
 
-{% block title %}Разместить объявление{% endblock %}
+{% block title %}Редактировать объявление{% endblock %}
 
 {% block content %}
 <script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU"
@@ -11,10 +11,12 @@
 <link rel="stylesheet" href="{% static 'css/announcement/image-validation.css' %}">
 
 <div class="container col-9 my-5">
-    <h4 class="mb-4">Создание объявления</h4>
-    <form action="{% url 'add-announcement' %}" method="post" id="add_announcement_form">
+    <h4 class="mb-4">Редактирование объявления</h4>
+    <form action="" method="post" id="edit_announcement_form">
         {% csrf_token %}
-        <div class="announcementFields">
+
+        <div class="announcementFields communivation-method-value"
+            data-communication-method-value="{{ announcement.communication_method }}">
             {% for field in form %}
             {% if field.is_hidden %}
             {% if field.id_for_label != 'id_latitude' and field.id_for_label != 'id_longitude' %}
@@ -49,6 +51,7 @@
             {% endif %}
             {% endfor %}
         </div>
+
         <div class="row mb-2 imageFields">
             <div class="col-12 col-md-3 col-lg-3 mb-2">
                 Изображения
@@ -74,7 +77,9 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row mb-2 locationFields">
+
+        <div class="row mb-2 locationFields location-data" data-latitude="{{ announcement.latitude }}"
+            data-longitude="{{ announcement.longitude }}">
             <div class="col-12 col-md-3 col-lg-3 mb-2">
                 Местоположение
                 <span class="not-selectable text-danger">*</span>
@@ -86,6 +91,7 @@
                 <div id="map" action="{% url 'add-announcement' %}" class="mb-3" style="height: 440px;"></div>
             </div>
         </div>
+
         <div class="row mb-2 sellerFields">
             <div class="col-12 col-md-3 col-lg-3 mb-2">
                 Способ связи
@@ -93,17 +99,18 @@
             </div>
             <div class="col-12 col-md-9 col-lg-9">
                 <p class="mb-3 text-secondary">
-                    {% if not seller_form %}
                     Эта информация будет видна всем пользователям в объявлении.<br>Её можно изменить в настройках.
-                    {% else %}
-                    Эта информация будет видна всем пользователям в объявлении.<br>Её можно будет изменить в настройках.
-                    {% endif %}
                 </p>
                 <div class="row mb-2">
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
+                            {% if announcement.communication_method == 0 %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="0"
                                 id="communicationMethodEmail" checked="true">
+                            {% else %}
+                            <input class="form-check-input communicationMethodRadio" type="radio" value="0"
+                                id="communicationMethodEmail">
+                            {% endif %}
                             <label class="form-check-label" for="communicationMethodEmail">
                                 Адрес электронной почты
                             </label>
@@ -117,17 +124,17 @@
                 <div class="row mb-2">
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
-                            {% if not seller_form %}
                             {% if request.user.seller.telegram_username is None %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="1"
                                 id="communicationMethodTelegramUsernameRadio" disabled>
                             {% else %}
+                            {% if announcement.communication_method == 1 %}
+                            <input class="form-check-input communicationMethodRadio" type="radio" value="1"
+                                id="communicationMethodTelegramUsernameRadio" checked="true">
+                            {% else %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="1"
                                 id="communicationMethodTelegramUsernameRadio">
                             {% endif %}
-                            {% else %}
-                            <input class="form-check-input communicationMethodRadio" type="radio" value="1"
-                                id="communicationMethodTelegramUsernameRadio" disabled>
                             {% endif %}
                             <label class="form-check-label" for="communicationMethodTelegramUsernameRadio">
                                 Имя пользователя телеграм
@@ -138,16 +145,12 @@
                         <div class="input-group field-block"
                             data-communication-method-input-id="communicationMethodTelegramUsernameRadio">
                             <span class="input-group-text">@</span>
-                            {% if not seller_form %}
                             {% if request.user.seller.telegram_username is None %}
                             <input type="text" name="telegram_username" class="form-control" value="Не установлено"
                                 disabled>
                             {% else %}
                             <input type="text" name="telegram_username" class="form-control"
                                 value="{{ request.user.seller.telegram_username }}" disabled>
-                            {% endif %}
-                            {% else %}
-                            {{ seller_form.telegram_username }}
                             {% endif %}
                             <div class="invalid-feedback"></div>
                         </div>
@@ -156,17 +159,17 @@
                 <div class="row mb-2">
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
-                            {% if not seller_form %}
                             {% if request.user.seller.phone_number is None %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="2"
                                 id="communicationMethodPhoneNumberRadio" disabled>
                             {% else %}
+                            {% if announcement.communication_method == 2 %}
+                            <input class="form-check-input communicationMethodRadio" type="radio" value="2"
+                                id="communicationMethodPhoneNumberRadio" checked="true">
+                            {% else %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="2"
                                 id="communicationMethodPhoneNumberRadio">
                             {% endif %}
-                            {% else %}
-                            <input class="form-check-input communicationMethodRadio" type="radio" value="2"
-                                id="communicationMethodPhoneNumberRadio" disabled>
                             {% endif %}
                             <label class="form-check-label" for="communicationMethodPhoneNumberRadio">
                                 Номер телефона
@@ -175,33 +178,23 @@
                     </div>
                     <div class="col-12 col-sm-6">
                         <div class="row g-0 sellerFields">
-                            {% if not seller_form %}
                             <div class="field-block">
                                 {% if request.user.seller.phone_number is None %}
                                 <input type="text" name="phone_number_1" class="form-control" value="Не установлено"
                                     disabled>
                                 {% else %}
                                 <input type="text" name="phone_number_1" class="form-control"
-                                    value="{{ request.user.seller.phone_number|phone_number_international }}" disabled>
+                                    value="{{ request.user.seller.phone_number|phone_number_ru_or_international }}"
+                                    disabled>
                                 {% endif %}
                                 <div class="invalid-feedback"></div>
                             </div>
-                            {% else %}
-                            <div class="col-12 col-lg-6 field-block mb-lg-0 mb-1">
-                                {{ seller_form.phone_number.subwidgets.0 }}
-                                <div class="invalid-feedback my-lg-2 my-0"></div>
-                            </div>
-                            <div class="col-12 col-lg-6 field-block"
-                                data-communication-method-input-id="communicationMethodPhoneNumberRadio">
-                                {{ seller_form.phone_number.subwidgets.1 }}
-                                <div class="invalid-feedback my-lg-2 my-0"></div>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="d-grid">
             <button class="btn btn-primary" type="submit">Разместить объявление</button>
         </div>
@@ -209,12 +202,12 @@
 </div>
 
 <script src="{% static 'js/announcement/change-announcement/change-announcement-render-returned-data.js' %}"></script>
-<script src="{% static 'js/announcement/add-announcement/add-announcement.js' %}"></script>
+<script src="{% static 'js/announcement/change-announcement/communication-method.js' %}"></script>
+<script src="{% static 'js/announcement/edit-announcement/edit-announcement.js' %}"></script>
 <script src="{% static 'js/send-json-form-data.js' %}"></script>
 <script src="{% static 'js/change-validation-status-field.js' %}"></script>
 <script src="{% static 'js/get-cookie.js' %}"></script>
 <script src="{% static 'js/announcement/add-announcement/image-upload.js' %}"></script>
-<script src="{% static 'js/announcement/change-announcement/communication-method.js' %}"></script>
 <script src="{% static 'js/announcement/change-announcement/listeners.js' %}"></script>
 <script src="{% static 'js/announcement/change-announcement/map.js' %}"></script>
 {% endblock %}

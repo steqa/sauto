@@ -35,7 +35,17 @@ function init() {
             })
         }
         getAddress(coords)
+        mapListener()
     })
+
+    // Если координаты имеются сразу после загрузки страницы - создаём метку.
+    if ((latitude.value != '') & (longitude.value != '')) {
+        coords = [Number(latitude.value), Number(longitude.value)]
+        placemark = createPlacemark(coords)
+        map.geoObjects.add(placemark)
+        getAddress(coords)
+    }
+
 
     // Создание метки.
     function createPlacemark(coords) {
@@ -69,7 +79,6 @@ function init() {
 
         latitude.value = coords[0]
         longitude.value = coords[1]
-        mapListener()
     }
 
     // Убираем элементы управления с карты
