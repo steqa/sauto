@@ -12,6 +12,7 @@ dropArea.forEach((elem) => {
         const inputName = elem.querySelector('[data-image-upload-input]').getAttribute('name')
         form.querySelector(`[name="${inputName}"]`).files = e.dataTransfer.files
         file = e.dataTransfer.files[0]
+        inputField.dataset.fileName = file.name
         previewFile(file, elem)
         appendFile(file)
         sendImage(form, elem = inputField)
@@ -23,6 +24,7 @@ fileInputs.forEach((elem) => {
         inputType = 'input'
         inputField = elem
         file = elem.files[0]
+        inputField.dataset.fileName = file.name
         previewFile(file, elem.parentNode.parentNode)
         appendFile(file)
         sendImage(form, elem = inputField)
@@ -75,8 +77,8 @@ function formFormData() {
     })
     let number = 0
     fileInputs.forEach((element) => {
-        if ([...innerFormData.keys()].includes(element.value.split('\\').pop())) {
-            formData.append(number, innerFormData.get(element.value.split('\\').pop()))
+        if ([...innerFormData.keys()].includes(element.dataset.fileName)) {
+            formData.append(number, innerFormData.get(element.dataset.fileName))
             number += 1
         }
     })

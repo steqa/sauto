@@ -22,8 +22,8 @@ def validate_images(images: MultiValueDict) -> Response:
             error[image] = ['Максимальный размер изображения 1МБ.']
             status = 400
                      
-        if (image_format != 'jpg') and (image_format != 'png'):
-            error[image] = ['Допустимые форматы изображения JPG или PNG.']
+        if (image_format != 'jpg') and (image_format != 'jpeg'):
+            error[image] = ['Допустимые форматы изображения JPG или JPEG.']
             status = 400
     
     if len(images) < 1:

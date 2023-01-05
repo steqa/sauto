@@ -104,6 +104,7 @@ def add_announcement(request):
 def edit_announcement(request, announcement_pk):
     seller = Seller.objects.get(user=request.user)
     announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
+    images = AnnouncementImage.objects.filter(announcement=announcement)
     form = AnnouncementCreationForm(instance=announcement)
     if request.method == 'POST':
         if request.POST.get('action') == 'edit-announcement':
@@ -126,6 +127,7 @@ def edit_announcement(request, announcement_pk):
     context = {
         'form': form,
         'announcement': announcement,
+        'images': images,
         'yandex_map_api_key': settings.YANDEX_MAP_API_KEY,
     }
     return render(request, 'announcement/edit-announcement.html', context)

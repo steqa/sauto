@@ -60,14 +60,31 @@
             </div>
             <div class="col-12 col-md-9 col-lg-9 row pe-0">
                 <p class="mb-2 text-secondary">Перетащите изображения сюда или выберите их на своем компьютере.</p>
-                {% for r in '01234567' %}
+                {% for image in images %}
+                <div class="col-12 col-sm-6 col-md-3 col-xxl-3 mb-3 pe-0 field-block">
+                    <div id="upload-container">
+                        <div class="upload-container-content">
+                            <button type="button" style="display: none; position: absolute;" class="fw-bolder">Удалить</button>
+                            <input class="initial-image" id="file-input{{ image }}" type="file" name="{{ image }}"
+                                data-file-name="" data-path="{{ image.image.url }}" accept=".jpg, .jpeg" data-image-upload-input>
+                            <img class="img-preview" src="" alt="">
+                            <label for="file-input{{ image }}" class="visually-hidden=md" style="position: absolute;">
+                                <a class="fw-bolder pointer text-decoration-none text-center">Добавить</a>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="p-invalid-feedback"></div>
+                </div>
+                {% endfor %}
+                {% for image in images|get_number_missing_image_fields_as_list:'8' %}
                 <div class="col-12 col-sm-6 col-md-3 col-xxl-3 mb-3 pe-0 field-block">
                     <div id="upload-container">
                         <div class="upload-container-content">
                             <button type="button" style="display: none;" class="fw-bolder">Удалить</button>
-                            <input id="file-input{{ r }}" type="file" name="file{{ r }}" accept=".jpg, .png"
-                                data-image-upload-input>
-                            <label for="file-input{{ r }}" class="visually-hidden=md">
+                            <input id="file-input{{ image }}" type="file" name="file{{ image }}" accept=".jpg, .jpeg"
+                                data-file-name="" data-image-upload-input>
+                            </script>
+                            <label for="file-input{{ image }}" class="visually-hidden=md">
                                 <a class="fw-bolder pointer text-decoration-none text-center">Добавить</a>
                             </label>
                         </div>
@@ -184,8 +201,7 @@
                                     disabled>
                                 {% else %}
                                 <input type="text" name="phone_number_1" class="form-control"
-                                    value="{{ request.user.seller.phone_number|phone_number_ru_or_international }}"
-                                    disabled>
+                                    value="{{ request.user.seller.phone_number|phone_number_international }}" disabled>
                                 {% endif %}
                                 <div class="invalid-feedback"></div>
                             </div>
@@ -203,11 +219,11 @@
 
 <script src="{% static 'js/announcement/change-announcement/change-announcement-render-returned-data.js' %}"></script>
 <script src="{% static 'js/announcement/change-announcement/communication-method.js' %}"></script>
+<script src="{% static 'js/announcement/change-announcement/listeners.js' %}"></script>
 <script src="{% static 'js/announcement/edit-announcement/edit-announcement.js' %}"></script>
 <script src="{% static 'js/send-json-form-data.js' %}"></script>
 <script src="{% static 'js/change-validation-status-field.js' %}"></script>
 <script src="{% static 'js/get-cookie.js' %}"></script>
 <script src="{% static 'js/announcement/add-announcement/image-upload.js' %}"></script>
-<script src="{% static 'js/announcement/change-announcement/listeners.js' %}"></script>
 <script src="{% static 'js/announcement/change-announcement/map.js' %}"></script>
 {% endblock %}

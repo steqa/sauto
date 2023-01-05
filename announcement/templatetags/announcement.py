@@ -20,3 +20,8 @@ def phone_number_without_country_code(number):
 def phone_number_international(number):
     phone_number = phonenumbers.parse(str(number))
     return phonenumbers.format_number(phone_number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
+
+
+@register.filter(name='get_number_missing_image_fields_as_list')
+def get_number_missing_image_fields_as_list(images, required_fields_quantity):
+    return range(int(required_fields_quantity) - len(images))

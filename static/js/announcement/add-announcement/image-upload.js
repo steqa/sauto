@@ -26,16 +26,16 @@ function deleteFile(file) {
 function formFiles() {
     formData = new FormData()
     fileInputs.forEach((elem) => {
-        if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
-            formData.append(elem.id, innerFormData.get(elem.value.split('\\').pop()))
+        if ([...innerFormData.keys()].includes(elem.dataset.fileName)) {
+            formData.append(elem.id, innerFormData.get(elem.dataset.fileName))
         }
     })
 }
 
 function formFile(elem) {
     formData = new FormData()
-    if ([...innerFormData.keys()].includes(elem.value.split('\\').pop())) {
-        formData.append(elem.id, innerFormData.get(elem.value.split('\\').pop()))
+    if ([...innerFormData.keys()].includes(elem.dataset.fileName)) {
+        formData.append(elem.id, innerFormData.get(elem.dataset.fileName))
     }
 }
 
@@ -65,16 +65,16 @@ function sendImage(form, elem = null) {
 }
 
 function previewFile(file, elem) {
-    const reader = new FileReader()
     const uploadContent = elem.querySelector('div')
     const uploadContentLabel = uploadContent.querySelector('label')
     const uploadContentDeleteButton = uploadContent.querySelector('button')
-    reader.readAsDataURL(file)
-    reader.onloadend = function () {
+    const reader = new FileReader()
+    reader.addEventListener("load", () => {
         uploadContent.style.backgroundImage = `url(${reader.result})`
         uploadContentLabel.style.display = 'none'
         uploadContentDeleteButton.style.display = 'block'
-    }
+    })
+    reader.readAsDataURL(file)
 }
 
 const uploadContainers = document.querySelectorAll('#upload-container')
@@ -90,6 +90,10 @@ uploadContainers.forEach((element) => {
         uploadContent.style.backgroundImage = ''
         uploadContentLabel.style.display = 'block'
         uploadContentDeleteButton.style.display = 'none'
+        const imgPreview = element.querySelector('.img-preview')
+        if (imgPreview){
+            imgPreview.remove()
+        }
     })
 })
 
