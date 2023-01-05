@@ -11,6 +11,10 @@ function renderReturnedData(data) {
                     locationChangeValidationStatusField(data)
                 } else if (inputField == 'communicationMethod') {
 
+                } else if (inputField.type == 'file') {
+                    imageFields.forEach((field) => {
+                        imageChangeValidationStatusField(data, field = field)
+                    })
                 } else {
                     changeValidationStatusField(data, field = inputField)
                 }

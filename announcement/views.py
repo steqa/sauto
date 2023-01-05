@@ -8,7 +8,7 @@ from seller.forms import SellerCreationForm
 from seller.utils import is_seller, validate_seller_data, get_or_create_seller, get_telegram_username_and_phone_number_from_data
 from sauto.utils import validate_form_data, Response
 from .forms import AnnouncementCreationForm
-from .utils import validate_images, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements_and_images, paginate_announcements
+from .utils import validate_images, create_and_get_announcement, create_announcement_images, get_all_data_from_announcement_creation_page, validate_all_data_from_announcement_creation_page, get_contact_info, form_announcements_and_images, paginate_announcements, update_announcement_images, update_announcement
 from .models import Announcement, Seller, AnnouncementImage
 
 
@@ -111,7 +111,12 @@ def edit_announcement(request, announcement_pk):
             data = get_all_data_from_announcement_creation_page(request)
             response = validate_all_data_from_announcement_creation_page(data)
             if response.status == 200:
-                pass
+                update_announcement(announcement, data)
+                update_announcement_images(announcement, data)
+                response = Response(
+                    body={'success': 'Объявление изменено.',
+                          'url': request.build_absolute_uri(reverse('announcements'))},
+                    type='redirect', status=200)
             return JsonResponse(response._asdict())
         elif request.POST.get('action') == 'validate-image':
             images = request.FILES

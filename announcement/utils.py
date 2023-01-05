@@ -92,6 +92,37 @@ def create_announcement_images(announcement: Announcement, data: dict):
         )
 
 
+def update_announcement(announcement: Announcement, data: dict):
+    announcement.category = data['announcement_data']['category']
+    announcement.condition = data['announcement_data']['condition']
+    announcement.type_announcement = data['announcement_data']['type_announcement']
+    announcement.name = data['announcement_data']['name']
+    announcement.price = data['announcement_data']['price']
+    announcement.description = data['announcement_data']['description']
+    announcement.communication_method = data['announcement_data']['communication_method']
+    announcement.latitude = data['announcement_data']['latitude']
+    announcement.longitude = data['announcement_data']['longitude']
+    announcement.save()
+
+
+def update_announcement_images(announcement: Announcement, data: dict):
+    images = data['images']
+    images_names_list = [file.name for file in images.values()]
+    current_images = AnnouncementImage.objects.filter(announcement=announcement)
+    current_images_names_list = [str(file) for file in current_images]
+    
+    for image in current_images:
+        if str(image) not in images_names_list:
+            image.delete()
+
+    for image in images.values():
+        if image.name not in current_images_names_list:
+            AnnouncementImage.objects.create(
+                announcement=announcement,
+                image=image
+            )
+
+
 def get_contact_info(request, announcement: Announcement) -> Response:
     if request.user.is_authenticated:
         contact_info = None

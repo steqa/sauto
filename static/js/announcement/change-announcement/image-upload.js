@@ -100,6 +100,7 @@ uploadContainers.forEach((element) => {
 function imageChangeValidationStatusField(data, field) {
     const invalidFeedbackBlock = field.closest('.field-block').querySelector('.p-invalid-feedback')
     const uploadContainerContent = field.closest('.upload-container-content')
+    const imagesInvalid = document.querySelector('.imagesInvalid')
     if (field.id in data['body']) {
         invalidFeedbackBlock.style.display = 'block'
         invalidFeedbackBlock.innerHTML = data['body'][field.id].join("<br>")
@@ -110,6 +111,8 @@ function imageChangeValidationStatusField(data, field) {
         invalidFeedbackBlock.innerHTML = ''
         uploadContainerContent.classList.remove('image-is-invalid')
         uploadContainerContent.classList.add('image-is-valid')
+        imagesInvalid.style.display = 'none'
+        imagesInvalid.innerHTML = ''
     } else {
         invalidFeedbackBlock.style.display = 'none'
         invalidFeedbackBlock.innerHTML = ''
@@ -119,11 +122,11 @@ function imageChangeValidationStatusField(data, field) {
 
     if (inputType == 'submit') {
         if ('images' in data['body']) {
-            document.querySelector('.imagesInvalid').style.display = 'block'
-            document.querySelector('.imagesInvalid').innerHTML = data['body']['images']
+            imagesInvalid.style.display = 'block'
+            imagesInvalid.innerHTML = data['body']['images']
         } else {
-            document.querySelector('.imagesInvalid').style.display = 'none'
-            document.querySelector('.imagesInvalid').innerHTML = ''
+            imagesInvalid.style.display = 'none'
+            imagesInvalid.innerHTML = ''
         }
     }
 }

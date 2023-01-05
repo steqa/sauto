@@ -49,6 +49,7 @@ InitialimageFields.forEach((element) => {
         })
 })
 
-announcementFields.forEach((element) => {
+const initialFields = document.querySelectorAll('.announcementFields .form-control')
+initialFields.forEach((element) => {
     element.classList.add('is-valid')
 })
