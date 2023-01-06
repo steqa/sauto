@@ -13,8 +13,19 @@
             <li><span class="dropdown-item pointer delete-announcement-btn"
                     data-href="{% url 'delete-announcement' announcement.pk %}" data-bs-toggle="modal"
                     data-bs-target="#exampleModal" data-announcement-delete="{{ announcement.pk }}">Удалить объявление</span></li>
-            <li><a class="dropdown-item" href="#">Отметить проданным</a></li>
+            {% if announcement.sold %}
+            <li style="display: none;" data-sold-status="sold"><span class="dropdown-item pointer change-sold-status-btn" data-href="{% url 'change-sold-status-announcement' announcement.pk 'true' %}" data-status="sold">Отметить проданным</span></li>
+            <li style="display: flex;" data-sold-status="not-sold"><span class="dropdown-item pointer change-sold-status-btn" data-href="{% url 'change-sold-status-announcement' announcement.pk 'false' %}" data-status="not-sold">Отметить не проданным</span></li>
+            {% else %}
+            <li style="display: flex;" data-sold-status="sold"><span class="dropdown-item pointer change-sold-status-btn" data-href="{% url 'change-sold-status-announcement' announcement.pk 'true' %}" data-status="sold">Отметить проданным</span></li>
+            <li style="display: none;" data-sold-status="not-sold"><span class="dropdown-item pointer change-sold-status-btn" data-href="{% url 'change-sold-status-announcement' announcement.pk 'false' %}" data-status="not-sold">Отметить не проданным</span></li>
+            {% endif %}
         </ul>
+        {% if announcement.sold %}
+        <span class="sold-status sold-status-true fw-semibold">Продано</span>
+        {% else %}
+        <span class="sold-status sold-status-false fw-semibold">Не продано</span>
+        {% endif %}
     </div>
     <a href="{% url 'show-announcement' announcement.pk %}" class="text-decoration-none text-dark">
         <div class="card" style="overflow: hidden;">

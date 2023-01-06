@@ -51,7 +51,7 @@ def user_announcements(request, user_pk):
         if (request.GET.get('search')
                 or request.GET.get('all')
                     or request.GET.get('filter_by_seller_and_sold')):
-            response = form_announcements_and_images(request)
+            response = form_announcements_and_images(request, announcements)
             return JsonResponse(response._asdict())
             
         

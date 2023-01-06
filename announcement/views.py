@@ -13,7 +13,7 @@ from .models import Announcement, Seller, AnnouncementImage
 
 
 def announcements(request):
-    announcements = Announcement.objects.all()
+    announcements = Announcement.objects.filter(sold=False)
     categories = Announcement.CATEGORIES[1:]
     conditions = Announcement.CONDITION[1:]
     types_announcement = Announcement.TYPE_ANNOUNCEMENT[1:]
@@ -22,7 +22,7 @@ def announcements(request):
         if (request.GET.get('filter')
             or request.GET.get('search')
                 or request.GET.get('all')):
-            response = form_announcements_and_images(request)
+            response = form_announcements_and_images(request, announcements)
             return JsonResponse(response._asdict())
     
     page_announcements, paginator = paginate_announcements(request, announcements)
@@ -150,6 +150,34 @@ def delete_announcement(request, announcement_pk):
     except:
         response = Response(
             body={'error': 'Не удалось удалить объявление.'},
+            type='BadRequest', status=400)
+
+    return JsonResponse(response._asdict())
+
+
+@login_required
+def change_sold_status_announcement(request, announcement_pk, status):
+    seller = Seller.objects.get(user=request.user)
+    particle_not = ''
+    if status == 'true':
+        status = True
+        particle_not = ''
+    elif status == 'false':
+        status = False
+        particle_not = 'не '
+    else:
+        seller = 'Raise exception'
+        
+    try:
+        announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
+        announcement.sold = status
+        announcement.save()
+        response = Response(
+            body={'success': f'Объявление отмечено как {particle_not}проданное.'},
+            type='OK', status=200)
+    except:
+        response = Response(
+            body={'error': f'Не удалось отметить объявление как {particle_not}проданное.'},
             type='BadRequest', status=400)
 
     return JsonResponse(response._asdict())

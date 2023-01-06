@@ -1,6 +1,6 @@
-const deleteAnnouncementBtns = document.querySelectorAll('.delete-announcement-btn')
-const deleteModal = document.querySelector('.modal')
-const modalDeleteBtn = deleteModal.querySelector('button[type="submit"]')
+deleteAnnouncementBtns = document.querySelectorAll('.delete-announcement-btn')
+deleteModal = document.querySelector('.modal')
+modalDeleteBtn = deleteModal.querySelector('button[type="submit"]')
 
 deleteAnnouncementBtns.forEach((element) => {
     element.addEventListener('click', (e) => {

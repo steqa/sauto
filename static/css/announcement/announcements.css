@@ -49,3 +49,23 @@
     padding-right: 0.7rem;
     z-index: 2;
 }
+
+.sold-status {
+    position: absolute;
+    top: 6.5px;
+    left: 1px;
+    z-index: 2;
+    font-size: 12px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    color: #fff;
+}
+
+.sold-status-true {
+    background: #dc3545;
+}
+
+.sold-status-false {
+    background: #198754;
+}

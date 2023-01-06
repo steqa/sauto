@@ -146,9 +146,9 @@ def get_contact_info(request, announcement: Announcement) -> Response:
     return response
 
 
-def form_announcements_and_images(request) -> Response:
+def form_announcements_and_images(request, announcements: QuerySet) -> Response:
     try:
-        filtered_announcements = Announcement.objects.all()
+        filtered_announcements = announcements
         
         if request.GET.get('filter'):
             filtered_announcements = filter_announcements(request, filtered_announcements)

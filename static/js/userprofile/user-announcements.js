@@ -1,4 +1,5 @@
 const soldBtns = document.querySelectorAll('.sold-btn')
+document.querySelector('[data-active-sold-status]').dataset.activeSoldStatus = 'all'
 
 let soldValue = null
 let userId = null
