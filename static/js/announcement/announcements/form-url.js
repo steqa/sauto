@@ -24,8 +24,10 @@ function formUrl() {
         }
     }
     if (typeof soldValue !== 'undefined') {
-        all = false
-        url += `filter_by_seller_and_sold=true&sold=${soldValue}&user_pk=${userId}&`
+        if (soldValue != null){
+            all = false
+            url += `filter_by_seller_and_sold=true&sold=${soldValue}&user_pk=${userId}&`
+        }
     }
     if (all) {
         url += 'all=true'

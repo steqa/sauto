@@ -19,7 +19,8 @@
             </svg>
             Мои объявления
         </a></li>
-    <li><a class="dropdown-item d-flex align-items-center gap-2 py-2 dark-link" href="#">
+    <li><a class="dropdown-item d-flex align-items-center gap-2 py-2 dark-link {% if active == 'favorites' %}link-primary{% else %}dark-link{% endif %}"
+            href="{% url 'user-favorites' %}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart me-1"
                 viewBox="0 0 16 16">
                 <path

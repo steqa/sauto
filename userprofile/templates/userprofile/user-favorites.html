@@ -1,0 +1,31 @@
+{% extends 'announcement/base.html' %}
+{% load static %}
+
+{% block title %}{{ user.first_name }} {{ user.last_name }} - объявления{% endblock %}
+
+{% block search %}
+<input type="search" name="q" class="form-control" placeholder="Поиск...">
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/announcement/announcements.css' %}">
+
+<div class="container my-5">
+    <div class="row gx-5">
+        <div class="col-12 col-xl-4 col-xxl-3 mb-4">
+            {% include 'userprofile/this-user-sidebar.html' with active='favorites' %}
+        </div>
+        <div class="col-12 col-xl-8 col-xxl-9">
+            <div style="height: 75.28px;"></div>
+            <div class="announcement-cards">
+                {% include 'announcement/announcement-cards.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/userprofile/user-announcements.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/search.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/form-url.js' %}"></script>
+<script src="{% static 'js/announcement/announcements/send-announcements-filter-request.js' %}"></script>
+{% endblock %}

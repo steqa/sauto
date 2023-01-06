@@ -158,7 +158,6 @@ def form_announcements_and_images(request, announcements: QuerySet) -> Response:
             filtered_announcements = filter_announcements_by_seller_and_sold(request, filtered_announcements)
         
         page_announcements, paginator = paginate_announcements(request, filtered_announcements)
-        
         filtered_images = AnnouncementImage.objects.filter(
             announcement__in=page_announcements)
         

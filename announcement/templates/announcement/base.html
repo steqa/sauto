@@ -49,7 +49,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end mt-2 text-small">
                         <li><a class="dropdown-item" href="{% url 'user-announcements' request.user.id %}">Мои объявления</a></li>
-                        <li><a class="dropdown-item" href="#">Избранное</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user-favorites' %}">Избранное</a></li>
                         <li><a class="dropdown-item" href="{% url 'user-settings' %}">Настройки</a></li>
                         <li>
                             <hr class="dropdown-divider">

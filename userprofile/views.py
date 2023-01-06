@@ -8,6 +8,7 @@ from seller.models import Seller
 from seller.forms import SellerCreationForm
 from announcement.models import Announcement, AnnouncementImage
 from announcement.utils import paginate_announcements, form_announcements_and_images
+from favorite.models import Favorite
 from .utils import change_user_data, change_seller_data, change_password
 
 
@@ -65,3 +66,27 @@ def user_announcements(request, user_pk):
         'images': images,
     }
     return render(request, 'userprofile/user-announcements.html', context)
+
+
+@login_required
+def user_favorites(request):
+    favorites = Favorite.objects.filter(user=request.user)
+    announcements_pk = [favorite.announcement.pk for favorite in favorites]
+    announcements = Announcement.objects.filter(pk__in=announcements_pk)
+    
+    if request.method == 'GET':
+        if (request.GET.get('search')
+                or request.GET.get('all')):
+            response = form_announcements_and_images(request, announcements)
+            return JsonResponse(response._asdict())
+    
+    page_announcements, paginator = paginate_announcements(request, announcements)
+    images = AnnouncementImage.objects.filter(
+        announcement__in=page_announcements)
+    context = {
+        'announcements': page_announcements,
+        'images': images,
+        'paginator': paginator,
+    }
+    return render(request, 'userprofile/user-favorites.html', context)
+    
