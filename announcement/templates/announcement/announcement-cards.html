@@ -1,3 +1,4 @@
+{% load static %}
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xxl-4 g-4 mb-3">
     {% for announcement in announcements %}
     {% if request.user.id == announcement.seller.user.id %}
@@ -41,34 +42,55 @@
         <li class="page-item active"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
         {% elif p >= announcements.number|add:-2 and p <= announcements.number|add:2 %} <li class="page-item">
             <a class="page-link" href="?page={{ p }}">{{ p }}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
+            </li>
+            {% endif %}
+            {% endfor %}
 
-        {% if announcements.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ announcements.next_page_number }}" aria-label="Next">
-                <span aria-hidden="true">&#8250;</span>
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?page={{ announcements.paginator.num_pages }}" aria-label="Last">
-                <span aria-hidden="true">&#187;</span>
-            </a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&#8250;</span>
-            </a>
-        </li>
-        <li class="page-item disabled">
-            <a class="page-link" href="#" aria-label="Last">
-                <span aria-hidden="true">&#187;</span>
-            </a>
-        </li>
-        {% endif %}
+            {% if announcements.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ announcements.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&#8250;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ announcements.paginator.num_pages }}" aria-label="Last">
+                    <span aria-hidden="true">&#187;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&#8250;</span>
+                </a>
+            </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#" aria-label="Last">
+                    <span aria-hidden="true">&#187;</span>
+                </a>
+            </li>
+            {% endif %}
 
     </ul>
 </nav>
 {% endif %}
+
+<div class="modal fade change-modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Удалить объявление?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body change-input-div">
+                Это действие невозможно отменить.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Отменить</button>
+                <button type="submit" class="btn btn-outline-danger" data-href="" data-delete-announcement="" data-bs-dismiss="modal">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/announcement/delete-announcement/delete-announcement.js' %}"></script>

@@ -47,7 +47,7 @@
                         aria-expanded="false">
                         <img src="{{ user.profile_image.url }}" alt="..." width="38" height="38" class="rounded-circle">
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end mt-2 text-small">
+                    <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end mt-2 text-small">
                         <li><a class="dropdown-item" href="{% url 'user-announcements' request.user.id %}">Мои объявления</a></li>
                         <li><a class="dropdown-item" href="#">Избранное</a></li>
                         <li><a class="dropdown-item" href="{% url 'user-settings' %}">Настройки</a></li>

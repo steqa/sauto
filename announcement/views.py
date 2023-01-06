@@ -136,3 +136,20 @@ def edit_announcement(request, announcement_pk):
         'yandex_map_api_key': settings.YANDEX_MAP_API_KEY,
     }
     return render(request, 'announcement/edit-announcement.html', context)
+
+
+@login_required
+def delete_announcement(request, announcement_pk):
+    seller = Seller.objects.get(user=request.user)
+    try:
+        announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
+        announcement.delete()
+        response = Response(
+            body={'success': 'Объявление удалено.'},
+            type='OK', status=200)
+    except:
+        response = Response(
+            body={'error': 'Не удалось удалить объявление.'},
+            type='BadRequest', status=400)
+
+    return JsonResponse(response._asdict())

@@ -1,4 +1,4 @@
-<div class="col">
+<div class="col" data-announcement="{{ announcement.pk }}">
     <div class="announcement-edit-btn-container">
         <a href="#" class="d-block link-dark text-decoration-none announcement-edit-btn" data-bs-toggle="dropdown"
             aria-expanded="false">
@@ -10,7 +10,9 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-end text-small">
             <li><a class="dropdown-item" href="{% url 'edit-announcement' announcement.pk %}">Редактировать</a></li>
-            <li><a class="dropdown-item" href="#">Удалить объявление</a></li>
+            <li><span class="dropdown-item pointer delete-announcement-btn"
+                    data-href="{% url 'delete-announcement' announcement.pk %}" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" data-announcement-delete="{{ announcement.pk }}">Удалить объявление</span></li>
             <li><a class="dropdown-item" href="#">Отметить проданным</a></li>
         </ul>
     </div>
