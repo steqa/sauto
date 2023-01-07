@@ -1,8 +1,17 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/userprofile/profile-img.css' %}">
+<link rel="stylesheet" href="{% static 'css/dnd-area.css' %}">
+<link rel="stylesheet" href="{% static 'css/announcement/image-validation.css' %}">
+
 <h4 class="mb-2">{{ user.first_name }} {{ user.last_name }}</h4>
 <p class="mb-3">на Sauto с {{ user.date_joined|date:"d b Y" }}</p>
 <div class="ratio mb-4">
     <div class="ratio-inner ratio-1-1">
-        <div class="ratio-content">
+        <div class="ratio-content profile-img-container">
+            <button class="btn btn-light change-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                data-modal-title="Изменение изображения профиля" data-modal-input-type="image"
+                data-modal-input-name="image" data-src="{% static 'js/announcement/change-announcement/image-upload.js' %}">Изменить</button>
+            <div class="profile-img-filter"></div>
             <img src="{{ user.profile_image.url }}" alt="..." class="rounded-3 img-100">
         </div>
     </div>

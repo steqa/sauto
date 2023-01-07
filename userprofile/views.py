@@ -23,16 +23,19 @@ def user_settings(request):
         seller = None
     
     if request.method == 'POST':
-        data = json.loads(request.body)
-        if data['action'] == 'change-user-data':
-            response = change_user_data(request, data)
-            return JsonResponse(response._asdict())
-        elif data['action'] == 'change-seller-data':
-            response = change_seller_data(request, data)
-            return JsonResponse(response._asdict())
-        elif data['action'] == 'change-user-password':
-            response = change_password(request)
-            return JsonResponse(response._asdict())
+        if request.FILES:
+            pass
+        else:
+            data = json.loads(request.body)
+            if data['action'] == 'change-user-data':
+                response = change_user_data(request, data)
+                return JsonResponse(response._asdict())
+            elif data['action'] == 'change-seller-data':
+                response = change_seller_data(request, data)
+                return JsonResponse(response._asdict())
+            elif data['action'] == 'change-user-password':
+                response = change_password(request)
+                return JsonResponse(response._asdict())
     
     context = {
         'seller_form': seller_form,

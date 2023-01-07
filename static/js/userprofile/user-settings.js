@@ -36,6 +36,10 @@ changeBtns.forEach((element) => {
         } else if (element.dataset.modalInputName == 'password') {
             changeInput = document.querySelector('.new_password')
             changeModalSubmitBtn.dataset.action = 'change-user-password'
+        } else if (element.dataset.modalInputName == 'image') {
+            changeInput = document.querySelector('.new_image')
+            changeModalSubmitBtn.dataset.action = 'change-user-image'
+            document.querySelector(`[src="${element.dataset.src}"]`).remove()
         } else {
             changeInput = document.querySelector('.change_input')
             const input = changeInput.querySelector('input')
@@ -51,6 +55,9 @@ changeBtns.forEach((element) => {
             input.value = ''
             removeErrorField(input)
         })
+        const script = document.createElement('script')
+        script.src = element.dataset.src
+        document.documentElement.appendChild(script)
         changeModalInputsListener(element)
     })
 })

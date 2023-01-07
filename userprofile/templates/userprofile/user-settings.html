@@ -183,6 +183,7 @@
         <input class="form-control">
         <div class="invalid-feedback"></div>
     </div>
+    
     <div class="row g-0 field-block phone_number">
         <div class="col-6">
             {{ seller_form.phone_number.subwidgets.0 }}
@@ -200,11 +201,13 @@
         {% endif %}
         <div class="invalid-feedback"></div>
     </div>
+
     <div class="input-group field-block telegram_username">
         <span class="input-group-text">@</span>
         {{ seller_form.telegram_username }}
         <div class="invalid-feedback"></div>
     </div>
+
     <div class="row gy-2 new_password">
         {% for field in password_change_form %}
         <div class="field-block">
@@ -212,6 +215,20 @@
             <div class="invalid-feedback"></div>
         </div>
         {% endfor %}
+    </div>
+
+    <div class="field-block new_image">
+        <div id="upload-container">
+            <div class="upload-container-content">
+                <button type="button" style="display: none;" class="fw-bolder">Удалить</button>
+                <input id="file-input{{ r }}" type="file" name="file{{ r }}" accept=".jpg, .png"
+                    data-image-upload-input>
+                <label for="file-input{{ r }}" class="visually-hidden=md">
+                    <a class="fw-bolder pointer text-decoration-none text-center">Добавить</a>
+                </label>
+            </div>
+        </div>
+        <div class="invalid-feedback"></div>
     </div>
 </div>
 
@@ -224,4 +241,5 @@
 <script src="{% static 'js/userprofile/user-settings.js' %}"></script>
 <script src="{% static 'js/get-cookie.js' %}"></script>
 <script src="{% static 'js/send-json-form-data.js' %}"></script>
+<script src="{% static 'js/announcement/change-announcement/image-upload.js' %}"></script>
 {% endblock %}
