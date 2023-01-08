@@ -32,7 +32,7 @@ fileInputs.forEach((elem) => {
 })
 
 
- innerFormData = new FormData()
+innerFormData = new FormData()
 formData = new FormData()
 
 function appendFile(file) {
@@ -73,7 +73,7 @@ function formFile(elem) {
     }
 }
 
-function sendImage(form, elem = null) {
+function sendImage(form, reload = false, elem = null) {
     if (elem == null) {
         formFiles()
     } else {
@@ -81,6 +81,9 @@ function sendImage(form, elem = null) {
     }
     formData.append('action', 'validate-image')
     let url = form.action
+    if (reload == true) {
+        url += '?reload=true'
+    }
     fetch(url, {
         method: 'POST',
         headers: {
@@ -125,7 +128,7 @@ uploadContainers.forEach((element) => {
         uploadContentLabel.style.display = 'block'
         uploadContentDeleteButton.style.display = 'none'
         const imgPreview = element.querySelector('.img-preview')
-        if (imgPreview){
+        if (imgPreview) {
             imgPreview.remove()
         }
     })

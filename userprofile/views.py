@@ -23,7 +23,7 @@ def user_settings(request):
         seller = None
     
     if request.method == 'POST':
-        if request.FILES:
+        if request.POST.get('action') == 'validate-image':
             pass
         else:
             data = json.loads(request.body)

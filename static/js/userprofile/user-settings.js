@@ -38,8 +38,11 @@ changeBtns.forEach((element) => {
             changeModalSubmitBtn.dataset.action = 'change-user-password'
         } else if (element.dataset.modalInputName == 'image') {
             changeInput = document.querySelector('.new_image')
-            changeModalSubmitBtn.dataset.action = 'change-user-image'
+            changeModalSubmitBtn.dataset.action = 'validate-image'
             document.querySelector(`[src="${element.dataset.src}"]`).remove()
+            const script = document.createElement('script')
+            script.src = element.dataset.src
+            document.documentElement.appendChild(script)
         } else {
             changeInput = document.querySelector('.change_input')
             const input = changeInput.querySelector('input')
@@ -52,12 +55,8 @@ changeBtns.forEach((element) => {
         changeInputDiv.append(changeInput.cloneNode(true))
         changeModalInputs = changeInputDiv.querySelectorAll('select, input')
         changeModalInputs.forEach((input) => {
-            input.value = ''
             removeErrorField(input)
         })
-        const script = document.createElement('script')
-        script.src = element.dataset.src
-        document.documentElement.appendChild(script)
         changeModalInputsListener(element)
     })
 })
@@ -72,7 +71,11 @@ function changeModalInputsListener(changeBtn) {
             } else if (element.value == '') {
                 displayErrorEmptyField(inputField)
             } else {
-                sendJsonFormData(changeModalInputs, reload = false, action = changeModalSubmitBtn.dataset.action)
+                if (inputField.type == 'file') {
+                    sendImage(form, reload = false, inputField)
+                } else {
+                    sendJsonFormData(changeModalInputs, reload = false, action = changeModalSubmitBtn.dataset.action)
+                }
             }
         })
 
@@ -83,41 +86,55 @@ function changeModalInputsListener(changeBtn) {
             if (changeBtn.dataset.modalInputValue == element.value) {
                 displayErrorUnchangedField(inputField)
             } else if (element.value == '') {
-                displayErrorEmptyField(inputField)
+                if (inputField.type == 'file') {
+                    displayErrorEmptyFileField(inputField)
+                } else {
+                    displayErrorEmptyField(inputField)
+                }
             } else {
-                sendJsonFormData(changeModalInputs, reload = true, action = changeModalSubmitBtn.dataset.action)
+                if (inputField.type == 'file') {
+                    sendImage(form, reload = true, inputField)
+                } else {
+                    sendJsonFormData(changeModalInputs, reload = true, action = changeModalSubmitBtn.dataset.action)
+                }
             }
         })
     })
 }
 
 function renderReturnedData(data) {
-    if (data['status'] == 400) {
-        if (data['type'] == 'ValidationError') {
-            if (inputField.name in data['body']) {
-                if (('phone_number_0', 'phone_number_1').includes(inputField.name)) {
-                    changeModalInputs.forEach((input) => {
-                        displayErrorField(data['body'][input.name], input)
-                    })
+    if (data['type'] == 'ImageValidationError') {
+        fileInputs.forEach((field) => {
+            imageChangeValidationStatusField(data, field = field)
+        })
+    } else {
+        if (data['status'] == 400) {
+            if (data['type'] == 'ValidationError') {
+                if (inputField.name in data['body']) {
+                    if (('phone_number_0', 'phone_number_1').includes(inputField.name)) {
+                        changeModalInputs.forEach((input) => {
+                            displayErrorField(data['body'][input.name], input)
+                        })
+                    }
+                    displayErrorField(data['body'][inputField.name], inputField)
+                } else {
+                    displaySuccessField(inputField)
                 }
-                displayErrorField(data['body'][inputField.name], inputField)
-            } else {
-                displaySuccessField(inputField)
+            } else if (data['type'] == 'BadRequest') {
+                return showToast(data['body']['error'], type = 'error')
             }
-        } else if (data['type'] == 'BadRequest') {
-            return showToast(data['body']['error'], type = 'error')
-        }
-    } else if (data['status'] == 200) {
-        if (inputType == 'input') {
-            changeModalInputs.forEach((input) => {
-                displaySuccessField(input)
-            })
-        } else if (inputType == 'submit') {
-            removeErrorField(inputField)
-            changeModalJs.hide()
-            localStorage.setItem('status', data['status'])
-            localStorage.setItem('message', data['body']['success'])
-            window.location.replace(data['body']['url'])
+        } else if (data['status'] == 200) {
+            if (inputType == 'input') {
+                changeModalInputs.forEach((input) => {
+                    displaySuccessField(input)
+                })
+            } else if (inputType == 'submit') {
+                removeErrorField(inputField)
+                changeModalJs.hide()
+                localStorage.setItem('status', data['status'])
+                localStorage.setItem('message', data['body']['success'])
+                window.location.replace(data['body']['url'])
+            }
         }
     }
 }
@@ -136,6 +153,15 @@ function displayErrorEmptyField(field) {
     fieldBlock = field.closest('.field-block')
     fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
     fieldErrorBlock.innerHTML = 'Обязательное поле.'
+}
+
+function displayErrorEmptyFileField(field) {
+    const invalidFeedbackBlock = field.closest('.field-block').querySelector('.p-invalid-feedback')
+    const uploadContainerContent = field.closest('.upload-container-content')
+    invalidFeedbackBlock.style.display = 'block'
+    invalidFeedbackBlock.innerHTML = 'Обязательное поле.'
+    uploadContainerContent.classList.remove('image-is-valid')
+    uploadContainerContent.classList.add('image-is-invalid')
 }
 
 function removeErrorField(field) {
