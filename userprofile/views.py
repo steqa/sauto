@@ -4,10 +4,11 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from accounts.models import User
 from accounts.forms import PasswordChangeForm
+from accounts.utils import update_user_profile_image
 from seller.models import Seller
 from seller.forms import SellerCreationForm
 from announcement.models import Announcement, AnnouncementImage
-from announcement.utils import paginate_announcements, form_announcements_and_images
+from announcement.utils import paginate_announcements, form_announcements_and_images, validate_images
 from favorite.models import Favorite
 from .utils import change_user_data, change_seller_data, change_password
 
@@ -24,7 +25,12 @@ def user_settings(request):
     
     if request.method == 'POST':
         if request.POST.get('action') == 'validate-image':
-            pass
+            images = request.FILES
+            response = validate_images(images)
+            if ((response.status == 200) and (request.GET.get('reload'))):
+                response = update_user_profile_image(request)
+            
+            return JsonResponse(response._asdict())
         else:
             data = json.loads(request.body)
             if data['action'] == 'change-user-data':

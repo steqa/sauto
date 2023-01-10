@@ -1,9 +1,11 @@
 from django.conf import settings
+from django.urls import reverse
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
+from sauto.utils import Response
 from .tokens import email_token
 from .models import User
 from .threads import SendEmailThread
@@ -38,3 +40,21 @@ def get_user_by_uidb64(uidb64: str) -> User | None:
 def get_user_uidb64(user: User) -> str:
     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
     return uidb64
+
+
+def update_user_profile_image(request) -> Response:
+    try:
+        first_image = list(request.FILES.values())[0]
+        user = request.user
+        user.profile_image = first_image
+        user.save()
+        response = Response(
+            body={'success': 'Изображение профиля изменено.',
+                  'url': request.build_absolute_uri(reverse('user-settings'))},
+            type='redirect', status=200)
+    except:
+        response = Response(
+            body={'error': 'Не удалось изменить изображение профиля.'},
+            type='BadRequest', status=400)
+    
+    return response
