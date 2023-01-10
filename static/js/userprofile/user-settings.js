@@ -55,7 +55,11 @@ changeBtns.forEach((element) => {
         changeInputDiv.append(changeInput.cloneNode(true))
         changeModalInputs = changeInputDiv.querySelectorAll('select, input')
         changeModalInputs.forEach((input) => {
-            removeErrorField(input)
+            if (element.dataset.modalInputName == 'image') {
+                removeErrorFileField(input)
+            } else {
+                removeErrorField(input)
+            }
         })
         changeModalInputsListener(element)
     })
@@ -103,6 +107,7 @@ function changeModalInputsListener(changeBtn) {
 }
 
 function renderReturnedData(data) {
+    console.log(data)
     if (data['type'] == 'ImageValidationError') {
         fileInputs.forEach((field) => {
             imageChangeValidationStatusField(data, field = field)
@@ -170,6 +175,23 @@ function removeErrorField(field) {
     fieldBlock = field.closest('.field-block')
     fieldErrorBlock = fieldBlock.querySelector('.invalid-feedback')
     fieldErrorBlock.innerHTML = ''
+}
+
+function removeErrorFileField(field) {
+    field.value = ''
+    const uploadContainer = field.closest('.field-block')
+    const invalidFeedbackBlock = uploadContainer.querySelector('.p-invalid-feedback')
+    invalidFeedbackBlock.style.display = 'none'
+    invalidFeedbackBlock.innerHTML = ''
+    const uploadContainerContent = uploadContainer.querySelector('.upload-container-content')
+    uploadContainerContent.classList.remove('image-is-invalid')
+    uploadContainerContent.classList.remove('image-is-valid')
+    const uploadContentDeleteButton = uploadContainer.querySelector('.upload-container-content button')
+    uploadContentDeleteButton.style.display = 'none'
+    const uploadContentLabel = uploadContainer.querySelector('label')
+    uploadContentLabel.style.display = 'block'
+    const uploadContent = uploadContainer.querySelector('.upload-container-content')
+    uploadContent.style.backgroundImage = ''
 }
 
 function displaySuccessField(field) {

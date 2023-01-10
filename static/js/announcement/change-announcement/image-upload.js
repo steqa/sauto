@@ -138,6 +138,7 @@ function imageChangeValidationStatusField(data, field) {
     const invalidFeedbackBlock = field.closest('.field-block').querySelector('.p-invalid-feedback')
     const uploadContainerContent = field.closest('.upload-container-content')
     const imagesInvalid = document.querySelector('.imagesInvalid')
+    console.log(field.id)
     if (field.id in data['body']) {
         invalidFeedbackBlock.style.display = 'block'
         invalidFeedbackBlock.innerHTML = data['body'][field.id].join("<br>")
@@ -148,8 +149,10 @@ function imageChangeValidationStatusField(data, field) {
         invalidFeedbackBlock.innerHTML = ''
         uploadContainerContent.classList.remove('image-is-invalid')
         uploadContainerContent.classList.add('image-is-valid')
-        imagesInvalid.style.display = 'none'
-        imagesInvalid.innerHTML = ''
+        if (typeof imagesInvalid !== "undefined" && imagesInvalid !== null) {
+            imagesInvalid.style.display = 'none'
+            imagesInvalid.innerHTML = ''
+        }
     } else {
         invalidFeedbackBlock.style.display = 'none'
         invalidFeedbackBlock.innerHTML = ''
@@ -157,7 +160,7 @@ function imageChangeValidationStatusField(data, field) {
         uploadContainerContent.classList.remove('image-is-valid')
     }
 
-    if (inputType == 'submit') {
+    if ((inputType == 'submit') & (typeof imagesInvalid !== "undefined" && imagesInvalid !== null)) {
         if ('images' in data['body']) {
             imagesInvalid.style.display = 'block'
             imagesInvalid.innerHTML = data['body']['images']
