@@ -76,7 +76,6 @@ function changeModalInputsListener(changeBtn) {
                 displayErrorEmptyField(inputField)
             } else {
                 if (inputField.type == 'file') {
-                    sendImage(form, reload = false, inputField)
                 } else {
                     sendJsonFormData(changeModalInputs, reload = false, action = changeModalSubmitBtn.dataset.action)
                 }
@@ -107,7 +106,6 @@ function changeModalInputsListener(changeBtn) {
 }
 
 function renderReturnedData(data) {
-    console.log(data)
     if (data['type'] == 'ImageValidationError') {
         fileInputs.forEach((field) => {
             imageChangeValidationStatusField(data, field = field)

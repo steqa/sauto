@@ -6,6 +6,11 @@ dropArea.forEach((elem) => {
         e.preventDefault();
     })
     elem.addEventListener('drop', (e) => {
+        if (elem.tagName == 'INPUT') {
+            elem = elem.closest('#upload-container')
+        } else {
+            elem = elem
+        }
         e.preventDefault();
         inputType = 'input'
         inputField = elem.querySelector('input')
@@ -138,7 +143,6 @@ function imageChangeValidationStatusField(data, field) {
     const invalidFeedbackBlock = field.closest('.field-block').querySelector('.p-invalid-feedback')
     const uploadContainerContent = field.closest('.upload-container-content')
     const imagesInvalid = document.querySelector('.imagesInvalid')
-    console.log(field.id)
     if (field.id in data['body']) {
         invalidFeedbackBlock.style.display = 'block'
         invalidFeedbackBlock.innerHTML = data['body'][field.id].join("<br>")
