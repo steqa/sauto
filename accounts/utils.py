@@ -46,6 +46,7 @@ def update_user_profile_image(request) -> Response:
     try:
         first_image = list(request.FILES.values())[0]
         user = request.user
+        user.profile_image.delete()
         user.profile_image = first_image
         user.save()
         response = Response(

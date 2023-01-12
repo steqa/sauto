@@ -1,5 +1,6 @@
-from sauto import settings
+import os
 import json
+from sauto import settings
 from django.http.response import JsonResponse
 from django.urls import reverse
 from django.shortcuts import render
@@ -143,6 +144,12 @@ def delete_announcement(request, announcement_pk):
     seller = Seller.objects.get(user=request.user)
     try:
         announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
+        announcement_images = AnnouncementImage.objects.filter(announcement=announcement)
+        dirname = os.path.dirname(announcement_images[0].image.path)
+        for image in announcement_images:
+            image.delete()
+
+        os.rmdir(dirname)
         announcement.delete()
         response = Response(
             body={'success': 'Объявление удалено.'},

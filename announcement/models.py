@@ -81,3 +81,7 @@ class AnnouncementImage(models.Model):
     
     def __str__(self):
         return self.image.name.split('/')[-1]
+    
+    def delete(self):
+        self.image.storage.delete(self.image.name)
+        super().delete()
