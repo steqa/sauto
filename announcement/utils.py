@@ -5,7 +5,7 @@ from django.utils.datastructures import MultiValueDict
 from django.template.loader import render_to_string
 from django.core.paginator import Paginator, Page
 from django.db.models.query import QuerySet
-from sauto.utils import validate_form_data, merge_responses, Response
+from sauto.utils import validate_form_data, merge_responses, Response, get_timestamp_filename
 from seller.models import Seller
 from seller.utils import validate_seller_data, is_seller
 from .models import Announcement, AnnouncementImage
@@ -84,12 +84,16 @@ def create_and_get_announcement(seller: Seller, data: dict) -> Announcement:
 
 def create_announcement_images(announcement: Announcement, data: dict):
     images = data['images']
+    counter = 1
+    timestamp = get_timestamp_filename()
     for image in images:
         image = images[image]
+        image.name = f'{str(counter)}-{timestamp}.jpg'
         AnnouncementImage.objects.create(
             announcement=announcement,
             image=image
         )
+        counter += 1
 
 
 def update_announcement(announcement: Announcement, data: dict):
@@ -107,20 +111,20 @@ def update_announcement(announcement: Announcement, data: dict):
 
 def update_announcement_images(announcement: Announcement, data: dict):
     images = data['images']
-    images_names_list = [file.name for file in images.values()]
     current_images = AnnouncementImage.objects.filter(announcement=announcement)
-    current_images_names_list = [str(file) for file in current_images]
     
     for image in current_images:
-        if str(image) not in images_names_list:
-            image.delete()
+        image.delete()
 
+    counter = 1
+    timestamp = get_timestamp_filename()
     for image in images.values():
-        if image.name not in current_images_names_list:
-            AnnouncementImage.objects.create(
-                announcement=announcement,
-                image=image
-            )
+        image.name = f'{str(counter)}-{timestamp}.jpg'
+        AnnouncementImage.objects.create(
+            announcement=announcement,
+            image=image
+        )
+        counter += 1
 
 
 def get_contact_info(request, announcement: Announcement) -> Response:

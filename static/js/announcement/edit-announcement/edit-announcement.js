@@ -21,10 +21,9 @@ InitialimageFields.forEach((element) => {
             }
             return new File([data], name, metadata)
         } catch (error) {
-            console.log(error)
         }
     }
-    getFileFromUrl(element.src, element.name)
+    getFileFromUrl(element.dataset.path, element.name)
         .then((file) => {
             inputType = 'input'
             inputField = element

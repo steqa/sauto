@@ -1,8 +1,11 @@
 import json
+import pytz
+from datetime import datetime
 from typing import NamedTuple, Literal
 from accounts.forms import UserCreationForm, UserChangeForm, AuthenticationForm, PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from seller.forms import SellerCreationForm
 from announcement.forms import AnnouncementCreationForm
+from . import settings
 
 
 class Response(NamedTuple):
@@ -59,3 +62,9 @@ def merge_responses(*args: Response) -> Response:
             merged_type = 'ValidationError'
     
     return Response(body=merged_body, type=merged_type, status=merged_status)
+
+
+def get_timestamp_filename():
+    tz = pytz.timezone(settings.TIME_ZONE)
+    timestamp = datetime.now(tz)
+    return timestamp.strftime('%Y-%m-%d-%H-%M-%S')
