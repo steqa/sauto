@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'announcement.apps.AnnouncementConfig',
     'favorite.apps.FavoriteConfig',
     'userprofile.apps.UserprofileConfig',
+    'telegrambot.apps.TelegrambotConfig',
 ]
 
 MIDDLEWARE = [
@@ -166,3 +167,10 @@ EMAIL_PORT = env.str('EMAIL_PORT')
 # API keys
 
 YANDEX_MAP_API_KEY = '8fac5112-28f5-4cec-af49-7b021132d83c'
+
+
+# Telegram bot settings
+
+TELEGRAM_BOT_TOKEN = env.str('TELEGRAM_BOT_TOKEN')
+
+TELEGRAM_BOT_LINK = env.str('TELEGRAM_BOT_LINK')

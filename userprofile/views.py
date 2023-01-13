@@ -10,6 +10,7 @@ from seller.forms import SellerCreationForm
 from announcement.models import Announcement, AnnouncementImage
 from announcement.utils import paginate_announcements, form_announcements_and_images, validate_images
 from favorite.models import Favorite
+from telegrambot.models import UserTelegram
 from .utils import change_user_data, change_seller_data, change_password
 
 
@@ -20,8 +21,13 @@ def user_settings(request):
     user = User.objects.get(pk=request.user.id)
     try:
         seller = Seller.objects.get(user=user)
-    except:
+    except Seller.DoesNotExist:
         seller = None
+    
+    try:
+        user_telegram =  UserTelegram.objects.get(seller=seller)
+    except UserTelegram.DoesNotExist:
+        user_telegram = None
     
     if request.method == 'POST':
         if request.POST.get('action') == 'validate-image':
@@ -48,6 +54,7 @@ def user_settings(request):
         'password_change_form': password_change_form,
         'user': user,
         'seller': seller,
+        'user_telegram': user_telegram,
     }
     return render(request, 'userprofile/user-settings.html', context)
 

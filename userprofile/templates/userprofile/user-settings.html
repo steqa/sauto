@@ -131,12 +131,18 @@
             <h4 class="mb-4 mt-4">Общие настройки</h4>
             <div class="row mb-2">
                 <div class="col-8 col-md-3 col-lg-3 mb-2 order-0">
-                    <span class="text-secondary">Телеграм рассылка</span>
+                    <span class="text-secondary">Телеграм уведомления</span>
                 </div>
                 <div class="col-12 col-md-7 col-lg-7 mb-3 order-2 order-md-1">
                     <div class="form-check form-switch">
                         {% if seller %}
-                        <input class="form-check-input" type="checkbox" role="switch">
+                        {% if user_telegram.notifications_enabled %}
+                        <input class="form-check-input disable-telegram-notifications-btn" type="checkbox" role="switch"
+                            checked data-action="{% url 'disable-telegram-notifications' %}" onclick="this.checked=true">
+                        {% else %}
+                        <input class="form-check-input" type="checkbox" role="switch" data-bs-toggle="modal"
+                            data-bs-target="#telegramNotificationsModal" onclick="this.checked=false">
+                        {% endif %}
                         {% else %}
                         <input class="form-check-input" type="checkbox" role="switch" disabled>
                         {% endif %}
@@ -183,7 +189,7 @@
         <input class="form-control">
         <div class="invalid-feedback"></div>
     </div>
-    
+
     <div class="row g-0 field-block phone_number">
         <div class="col-6">
             {{ seller_form.phone_number.subwidgets.0 }}
@@ -234,6 +240,33 @@
     </div>
 </div>
 
+<div class="modal fade change-modal" id="telegramNotificationsModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Включение телеграм уведомлений</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body change-input-div">
+                <p class="fw-bolder mb-3">Для включения телеграм уведомлений активируйте бота</p>
+                <p class="m-0 mb-1">1. Войдите в телеграм под своим именем <span class="text-primary">
+                        @{{ seller.telegram_username }}</span></p>
+                <p class="m-0 mb-1">2. Откройте бота по ссылке</p>
+                <a class="text-decoration-none" href="https://t.me/sautosite_bot" target="_blank"
+                    rel="noopener noreferrer">&nbsp;&nbsp;&nbsp;&nbsp;https://t.me/sautosite_bot</a>
+                <p class="m-0 mb-2 mt-2">3. Активируйте его, нажав кнопку "<span class="text-primary">START</span>"</p>
+                <p class="m-0 mb-2">4. Нажмите кнопку продолжить</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Отменить</button>
+                <button type="submit" class="btn btn-primary enable-telegram-notifications-btn"
+                    data-action="{% url 'enable-telegram-notifications' %}">Продолжить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     const changeModalJs = new bootstrap.Modal(document.getElementById('exampleModal'))
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
@@ -244,4 +277,7 @@
 <script src="{% static 'js/get-cookie.js' %}"></script>
 <script src="{% static 'js/send-json-form-data.js' %}"></script>
 <script src="{% static 'js/announcement/change-announcement/image-upload.js' %}"></script>
+{% if seller %}
+<script src="{% static 'js/userprofile/enable_disable_telegram_notifications.js' %}"></script>
+{% endif %}
 {% endblock %}
