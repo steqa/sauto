@@ -1,20 +1,26 @@
 from django.http.response import JsonResponse
 from sauto.utils import Response
+from telegrambot.utils import send_favorite_notification
 from .models import Favorite
 
 
 def add_favorite(request, announcement_pk: int):
     if request.user.is_authenticated:
+        created = None
         try:
             favorite, created = Favorite.objects.get_or_create(
                 user=request.user, announcement_id=announcement_pk)
             if created:
+                send_favorite_notification(request, favorite, action='add')
                 response = Response(
                     body={'OK': 'OK'},
                     type='OK', status=200)
             else:
                 raise Exception
         except:
+            if created:
+                favorite.delete()
+            
             response = Response(
                 body={'error': 'Произошла ошибка.'},
                 type='BadRequest', status=400)
@@ -32,6 +38,7 @@ def remove_favorite(request, announcement_pk: int):
             user=request.user, announcement_id=announcement_pk).first()
         if favorite:
             favorite.delete()
+            send_favorite_notification(request, favorite, action='remove')
             response = Response(
                 body={'OK': 'OK'},
                 type='OK', status=200)
