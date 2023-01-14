@@ -3,6 +3,7 @@ from accounts.models import User
 from accounts.forms import UserChangeForm, PasswordChangeForm
 from seller.utils import get_or_create_seller, get_telegram_username_and_phone_number_from_data, validate_telegram_username, validate_phone_number
 from sauto.utils import get_form_data, validate_form_data, Response
+from telegrambot.models import UserTelegram
 
 def change_user_data(request, data):
     field = list(data['formData'].keys())[0] if len(list(data['formData'].keys())) > 0 else None
@@ -47,6 +48,12 @@ def change_seller_data(request, data):
         if field == 'telegram_username':
             seller.telegram_username = telegram_username
             seller.save()
+            try:
+                user_telegram = UserTelegram.objects.get(seller=seller)
+                user_telegram.delete()
+            except:
+                pass
+                
             success = 'Имя пользователя телеграм изменено.'
         elif field in ['phone_number_0', 'phone_number_1']:
             seller.phone_number = phone_number
