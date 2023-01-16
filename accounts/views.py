@@ -43,6 +43,7 @@ def registration_user(request):
     return render(request, 'accounts/registration/registration.html', context)
 
 
+@unauthenticated_user
 def activate_user(request, uidb64: str, token: str):
     user = get_user_by_uidb64(uidb64)
     if (user is not None
@@ -55,6 +56,7 @@ def activate_user(request, uidb64: str, token: str):
         return render(request, 'accounts/registration/user-verification-failed.html', {'user': user})
 
 
+@unauthenticated_user
 def resend_verification_email(request, uidb64: str):
     user = get_user_by_uidb64(uidb64)
     if user is not None and not user.is_email_verified:
@@ -101,6 +103,7 @@ def login_user(request):
     return render(request, 'accounts/login/login.html', context)
 
 
+@unauthenticated_user
 def reset_password(request):
     form = PasswordResetForm
     if request.method == 'POST':
@@ -134,6 +137,7 @@ def reset_password(request):
     return render(request, 'accounts/reset-password/reset-password.html', context)
 
 
+@unauthenticated_user
 def reset_password_confirm(request, uidb64: str, token: str):
     user = get_user_by_uidb64(uidb64)
     if (user is not None and

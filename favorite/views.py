@@ -1,9 +1,11 @@
 from django.http.response import JsonResponse
+from django.contrib.auth.decorators import login_required
 from sauto.utils import Response
 from telegrambot.utils import send_favorite_notification
 from .models import Favorite
 
 
+@login_required
 def add_favorite(request, announcement_pk: int):
     if request.user.is_authenticated:
         created = None
@@ -32,6 +34,7 @@ def add_favorite(request, announcement_pk: int):
     return JsonResponse(response._asdict())
 
 
+@login_required
 def remove_favorite(request, announcement_pk: int):
     try:
         favorite = Favorite.objects.filter(

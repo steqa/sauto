@@ -3,7 +3,7 @@ import json
 from sauto import settings
 from django.http.response import JsonResponse
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from seller.forms import SellerCreationForm
 from seller.utils import is_seller, validate_seller_data, get_or_create_seller, get_telegram_username_and_phone_number_from_data
@@ -43,7 +43,7 @@ def announcements(request):
 
 
 def show_announcement(request, announcement_pk: int):
-    announcement = Announcement.objects.get(pk=announcement_pk)
+    announcement = get_object_or_404(Announcement, pk=announcement_pk)
     seller = Seller.objects.get(pk=announcement.seller.pk)
     images = AnnouncementImage.objects.filter(announcement=announcement)
     if request.method == 'GET':
@@ -104,7 +104,7 @@ def add_announcement(request):
 @login_required
 def edit_announcement(request, announcement_pk):
     seller = Seller.objects.get(user=request.user)
-    announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
+    announcement = get_object_or_404(Announcement, pk=announcement_pk, seller=seller)
     images = AnnouncementImage.objects.filter(announcement=announcement)
     form = AnnouncementCreationForm(instance=announcement)
     if request.method == 'POST':
@@ -142,22 +142,17 @@ def edit_announcement(request, announcement_pk):
 @login_required
 def delete_announcement(request, announcement_pk):
     seller = Seller.objects.get(user=request.user)
-    try:
-        announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
-        announcement_images = AnnouncementImage.objects.filter(announcement=announcement)
-        dirname = os.path.dirname(announcement_images[0].image.path)
-        for image in announcement_images:
-            image.delete()
-
-        os.rmdir(dirname)
-        announcement.delete()
-        response = Response(
-            body={'success': 'Объявление удалено.'},
-            type='OK', status=200)
-    except:
-        response = Response(
-            body={'error': 'Не удалось удалить объявление.'},
-            type='BadRequest', status=400)
+    announcement = get_object_or_404(Announcement, pk=announcement_pk, seller=seller)
+    announcement_images = AnnouncementImage.objects.filter(announcement=announcement)
+    dirname = os.path.dirname(announcement_images[0].image.path)
+    for image in announcement_images:
+        image.delete()
+        
+    os.rmdir(dirname)
+    announcement.delete()
+    response = Response(
+        body={'success': 'Объявление удалено.'},
+        type='OK', status=200)
 
     return JsonResponse(response._asdict())
 
@@ -172,19 +167,12 @@ def change_sold_status_announcement(request, announcement_pk, status):
     elif status == 'false':
         status = False
         particle_not = 'не '
-    else:
-        seller = 'Raise exception'
         
-    try:
-        announcement = Announcement.objects.get(pk=announcement_pk, seller=seller)
-        announcement.sold = status
-        announcement.save()
-        response = Response(
-            body={'success': f'Объявление отмечено как {particle_not}проданное.'},
-            type='OK', status=200)
-    except:
-        response = Response(
-            body={'error': f'Не удалось отметить объявление как {particle_not}проданное.'},
-            type='BadRequest', status=400)
+    announcement = get_object_or_404(Announcement, pk=announcement_pk, seller=seller)
+    announcement.sold = status
+    announcement.save()
+    response = Response(
+        body={'success': f'Объявление отмечено как {particle_not}проданное.'},
+        type='OK', status=200)
 
     return JsonResponse(response._asdict())

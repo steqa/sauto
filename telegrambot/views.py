@@ -1,4 +1,5 @@
 from django.http.response import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from sauto.utils import Response
 from seller.models import Seller
@@ -6,6 +7,7 @@ from .models import UserTelegram
 from .utils import get_users_list
 
 
+@login_required
 def enable_telegram_notifications(request):
     user = request.user
     
@@ -47,6 +49,7 @@ def enable_telegram_notifications(request):
     return JsonResponse(response._asdict())
 
 
+@login_required
 def disable_telegram_notifications(request):
     user = request.user
     try:

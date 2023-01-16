@@ -28,3 +28,7 @@
 .profile-img-container:hover .profile-img-filter {
     opacity: 0.4;
 }
+
+.tooltip-inner {
+    text-align: justify;
+}
