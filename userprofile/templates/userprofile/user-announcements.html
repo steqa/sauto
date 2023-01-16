@@ -19,6 +19,7 @@
             {% include 'userprofile/user-sidebar.html' with active='announcements' %}
             {% endif %}
         </div>
+        {% if announcements %}
         <div class="col-12 col-xl-8 col-xxl-9">
             <div style="height: 35.28px;"></div>
             <div class="mb-3 text-center">
@@ -32,6 +33,14 @@
                 {% include 'announcement/announcement-cards.html' %}
             </div>
         </div>
+        {% else %}
+        <div class="col-12 col-xl-8 col-xxl-9">
+            <div style="height: 35.28px;"></div>
+            <div class="mb-3 text-center text-secondary">
+                Объявлений нет.
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 

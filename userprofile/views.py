@@ -18,9 +18,8 @@ from .utils import change_user_data, change_seller_data, change_password
 def user_settings(request):
     seller_form = SellerCreationForm
     password_change_form = PasswordChangeForm(request.user)
-    user = User.objects.get(pk=request.user.id)
     try:
-        seller = Seller.objects.get(user=user)
+        seller = Seller.objects.get(user=request.user)
     except Seller.DoesNotExist:
         seller = None
     
@@ -52,7 +51,7 @@ def user_settings(request):
     context = {
         'seller_form': seller_form,
         'password_change_form': password_change_form,
-        'user': user,
+        'user': request.user,
         'seller': seller,
         'user_telegram': user_telegram,
     }
@@ -60,27 +59,39 @@ def user_settings(request):
 
 
 def user_announcements(request, user_pk):
-    user = User.objects.get(id=user_pk)
-    seller = Seller.objects.get(user=user)
-    announcements = Announcement.objects.filter(seller=seller)
+    user = User.objects.get(pk=user_pk)
+    try:
+        seller = Seller.objects.get(user=user)
+    except:
+        seller = None
     
-    if request.method == 'GET':
-        if (request.GET.get('search')
-                or request.GET.get('all')
-                    or request.GET.get('filter_by_seller_and_sold')):
-            response = form_announcements_and_images(request, announcements)
-            return JsonResponse(response._asdict())
-            
+    if seller:
+        announcements = Announcement.objects.filter(seller=seller)
+        if request.method == 'GET':
+            if (request.GET.get('search')
+                    or request.GET.get('all')
+                        or request.GET.get('filter_by_seller_and_sold')):
+                response = form_announcements_and_images(request, announcements)
+                return JsonResponse(response._asdict())
+
+
+        page_announcements, paginator = paginate_announcements(request, announcements)
+        images = AnnouncementImage.objects.filter(
+            announcement__in=page_announcements)
+        context = {
+            'user': user,
+            'announcements': page_announcements,
+            'paginator': paginator,
+            'images': images,
+        }
+    else:
+        context = {
+            'user': user,
+            'announcements': None,
+            'paginator': None,
+            'images': None,
+        }
         
-    page_announcements, paginator = paginate_announcements(request, announcements)
-    images = AnnouncementImage.objects.filter(
-        announcement__in=page_announcements)
-    context = {
-        'user': user,
-        'announcements': page_announcements,
-        'paginator': paginator,
-        'images': images,
-    }
     return render(request, 'userprofile/user-announcements.html', context)
 
 
