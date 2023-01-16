@@ -80,7 +80,11 @@
         </div>
         <div class="col-12 col-lg-4 order-0 order-lg-1 mb-3 mb-lg-0">
             <div class="d-flex align-items-center justify-content-between mb-4">
+                {% if announcement.price == 0 %}
+                <h4 class="m-0">Бесплатно</h4>
+                {% else %}
                 <h4 class="m-0">{{ announcement.price|floatformat:"-2g" }} ₽</h4>
+                {% endif %}
                 <div class="d-flex ms-2" style="white-space: nowrap">
                     {% if not announcement|is_favorite:request.user %}
                     <button data-action="{% url 'add-favorite' announcement.pk %}" data-favorite-btn="1"

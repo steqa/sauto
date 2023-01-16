@@ -49,7 +49,7 @@ class Announcement(models.Model):
     condition = models.IntegerField(verbose_name="состояние", choices=CONDITION)
     type_announcement = models.IntegerField(verbose_name="тип объявления", choices=TYPE_ANNOUNCEMENT)
     name = models.CharField(verbose_name="название", max_length=50)
-    price = models.DecimalField(verbose_name="цена", max_digits=13, decimal_places=2, validators=[MinValueValidator(0.01)])
+    price = models.DecimalField(verbose_name="цена", max_digits=13, decimal_places=2, validators=[MinValueValidator(0)])
     description = models.CharField(verbose_name="описание", max_length=3000, blank=True, null=True)
     sold = models.BooleanField(verbose_name="продано", default=False)
     latitude = models.FloatField(verbose_name="широта")
