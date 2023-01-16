@@ -58,6 +58,7 @@ function formFormData() {
 }
 
 form.addEventListener('submit', (e) => {
+    document.querySelector('.page-blackout').style.display = 'flex'
     e.preventDefault()
     inputType = 'submit'
     formData = formFormData()

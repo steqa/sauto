@@ -75,9 +75,15 @@
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
 
                     {% if seller %}
+                    {% if seller.phone_number is not none %}
                     <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите номер телефона"
                         data-modal-input-name="phone_number">Изменить</a>
+                    {% else %}
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите номер телефона"
+                        data-modal-input-name="phone_number">Добавить</a>
+                    {% endif %}
                     {% else %}
                     <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите номер телефона"
@@ -100,10 +106,16 @@
                 <div class="col-4 col-md-2 col-lg-2 order-1 order-md-2 mb-2 text-end">
 
                     {% if seller %}
+                    {% if seller.telegram_username != '' %}
                     <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите имя пользователя телеграм"
                         data-modal-input-value="{{ seller.telegram_username }}"
                         data-modal-input-name="telegram_username">Изменить</a>
+                    {% else %}
+                    <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" data-modal-title="Введите имя пользователя телеграм"
+                        data-modal-input-value="" data-modal-input-name="telegram_username">Добавить</a>
+                    {% endif %}
                     {% else %}
                     <a class="text-decoration-none pointer change-btn" data-bs-toggle="modal"
                         data-bs-target="#exampleModal" data-modal-title="Введите имя пользователя телеграм"

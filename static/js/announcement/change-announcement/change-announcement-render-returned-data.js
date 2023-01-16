@@ -10,7 +10,6 @@ function renderReturnedData(data) {
                 } else if (inputField == 'location') {
                     locationChangeValidationStatusField(data)
                 } else if (inputField == 'communicationMethod') {
-
                 } else if (inputField.type == 'file') {
                     imageFields.forEach((field) => {
                         imageChangeValidationStatusField(data, field = field)
@@ -19,6 +18,7 @@ function renderReturnedData(data) {
                     changeValidationStatusField(data, field = inputField)
                 }
             } else if (inputType == 'submit') {
+                document.querySelector('.page-blackout').style.display = 'none'
                 changeValidationStatusAllFields(data)
             }
         }
