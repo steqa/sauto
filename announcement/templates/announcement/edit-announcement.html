@@ -69,9 +69,11 @@
                 <div class="col-12 col-sm-6 col-md-3 col-xxl-3 mb-3 pe-0 field-block">
                     <div id="upload-container">
                         <div class="upload-container-content">
-                            <button type="button" style="display: none; position: absolute;" class="fw-bolder">Удалить</button>
+                            <button type="button" style="display: none; position: absolute;"
+                                class="fw-bolder">Удалить</button>
                             <input class="initial-image" id="file-input{{ image }}" type="file" name="{{ image }}"
-                                data-file-name="" data-path="{{ image.image.url }}" accept=".jpg, .jpeg" data-image-upload-input>
+                                data-file-name="" data-path="{{ image.image.url }}" accept=".jpg, .jpeg"
+                                data-image-upload-input>
                             <img class="img-preview" src="" alt="">
                             <label for="file-input{{ image }}" class="visually-hidden=md" style="position: absolute;">
                                 <a class="fw-bolder pointer text-decoration-none text-center">Добавить</a>
@@ -146,9 +148,8 @@
                 <div class="row mb-2">
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
-                            {% if request.user.seller.telegram_username is None %}
-                            <input class="form-check-input communicationMethodRadio" type="radio" value="1"
-                                id="communicationMethodTelegramUsernameRadio" disabled>
+                            {% if request.user.seller.telegram_username == '' %}
+                            <input class="form-check-input" type="radio" disabled>
                             {% else %}
                             {% if announcement.communication_method == 1 %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="1"
@@ -167,9 +168,8 @@
                         <div class="input-group field-block"
                             data-communication-method-input-id="communicationMethodTelegramUsernameRadio">
                             <span class="input-group-text">@</span>
-                            {% if request.user.seller.telegram_username is None %}
-                            <input type="text" name="telegram_username" class="form-control" value="Не установлено"
-                                disabled>
+                            {% if request.user.seller.telegram_username == '' %}
+                            <input type="text" class="form-control" value="Не установлено" disabled>
                             {% else %}
                             <input type="text" name="telegram_username" class="form-control"
                                 value="{{ request.user.seller.telegram_username }}" disabled>
@@ -182,8 +182,7 @@
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
                             {% if request.user.seller.phone_number is None %}
-                            <input class="form-check-input communicationMethodRadio" type="radio" value="2"
-                                id="communicationMethodPhoneNumberRadio" disabled>
+                            <input class="form-check-input" type="radio" disabled>
                             {% else %}
                             {% if announcement.communication_method == 2 %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="2"
@@ -202,7 +201,7 @@
                         <div class="row g-0 sellerFields">
                             <div class="field-block">
                                 {% if request.user.seller.phone_number is None %}
-                                <input type="text" name="phone_number_1" class="form-control" value="Не установлено"
+                                <input type="text" class="form-control" value="Не установлено"
                                     disabled>
                                 {% else %}
                                 <input type="text" name="phone_number_1" class="form-control"
