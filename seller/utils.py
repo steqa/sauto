@@ -57,6 +57,9 @@ def validate_telegram_username(data: dict) -> Response:
 
 def get_or_create_seller(request, telegram_username: None | str, phone_number: None | str) -> Seller:
     if not is_seller(request.user):
+        if telegram_username == '':
+            telegram_username = None
+            
         user = request.user
         seller = Seller.objects.create(
             user=user,
