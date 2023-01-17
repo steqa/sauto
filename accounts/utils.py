@@ -1,3 +1,4 @@
+import os
 from django.conf import settings
 from django.urls import reverse
 from django.template.loader import render_to_string
@@ -46,7 +47,9 @@ def update_user_profile_image(request) -> Response:
     try:
         first_image = list(request.FILES.values())[0]
         user = request.user
-        user.profile_image.delete()
+        if os.path.basename(user.profile_image.file.name) != 'default_profile_image.jpg':
+            user.profile_image.delete()
+        
         user.profile_image = first_image
         user.save()
         response = Response(

@@ -4,7 +4,7 @@ from .managers import UserManager
 
 
 def _get_profile_image_filepath(self, *args):
-    return f'user_images/{self.pk}/profile_image.png'
+    return f'user_images/{self.pk}/profile_image.jpg'
 
 def _get_default_profile_image():
     return 'default_profile_image.jpg'
