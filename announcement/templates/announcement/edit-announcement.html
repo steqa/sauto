@@ -148,8 +148,9 @@
                 <div class="row mb-2">
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
-                            {% if request.user.seller.telegram_username == '' %}
-                            <input class="form-check-input" type="radio" disabled>
+                            {% if request.user.seller.telegram_username is None or request.user.seller.telegram_username == '' %}
+                            <input class="form-check-input communicationMethodRadio" type="radio" value="1"
+                                id="communicationMethodTelegramUsernameRadio" disabled>
                             {% else %}
                             {% if announcement.communication_method == 1 %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="1"
@@ -168,8 +169,9 @@
                         <div class="input-group field-block"
                             data-communication-method-input-id="communicationMethodTelegramUsernameRadio">
                             <span class="input-group-text">@</span>
-                            {% if request.user.seller.telegram_username == '' or request.user.seller.telegram_username is None %}
-                            <input type="text" class="form-control" value="Не установлено" disabled>
+                            {% if request.user.seller.telegram_username is None or request.user.seller.telegram_username == '' %}
+                            <input type="text" name="telegram_username" class="form-control" value="Не установлено"
+                                disabled>
                             {% else %}
                             <input type="text" name="telegram_username" class="form-control"
                                 value="{{ request.user.seller.telegram_username }}" disabled>
@@ -182,7 +184,8 @@
                     <div class="col-12 col-sm-6">
                         <div class="form-check">
                             {% if request.user.seller.phone_number is None %}
-                            <input class="form-check-input" type="radio" disabled>
+                            <input class="form-check-input communicationMethodRadio" type="radio" value="2"
+                                id="communicationMethodPhoneNumberRadio" disabled>
                             {% else %}
                             {% if announcement.communication_method == 2 %}
                             <input class="form-check-input communicationMethodRadio" type="radio" value="2"
@@ -201,7 +204,7 @@
                         <div class="row g-0 sellerFields">
                             <div class="field-block">
                                 {% if request.user.seller.phone_number is None %}
-                                <input type="text" class="form-control" value="Не установлено"
+                                <input type="text" name="phone_number_1" class="form-control" value="Не установлено"
                                     disabled>
                                 {% else %}
                                 <input type="text" name="phone_number_1" class="form-control"
