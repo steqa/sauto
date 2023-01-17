@@ -52,3 +52,12 @@ const initialFields = document.querySelectorAll('.announcementFields .form-contr
 initialFields.forEach((element) => {
     element.classList.add('is-valid')
 })
+
+const uploadContainersContent = document.querySelectorAll('.upload-container-content')
+
+let count = 0
+uploadContainersContent.forEach((element) => {
+    element.querySelector('input').id = count
+    element.querySelector('label').setAttribute('for', count)
+    count += 1
+})

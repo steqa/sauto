@@ -45,8 +45,8 @@ function formFormData() {
     fileInputs.forEach((element) => {
         if ([...innerFormData.keys()].includes(element.dataset.fileName)) {
             formData.append(number, innerFormData.get(element.dataset.fileName))
-            number += 1
         }
+        number += 1
     })
     sellerFields.forEach((element) => {
         formData.append(element.name, element.value)

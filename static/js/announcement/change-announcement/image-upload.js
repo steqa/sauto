@@ -126,6 +126,7 @@ uploadContainers.forEach((element) => {
         const uploadContent = element.querySelector('div')
         const uploadContentInput = element.querySelector('input')
         const uploadContentLabel = element.querySelector('label')
+        element.querySelector('input').dataset.fileName = ''
         deleteFile(element.querySelector('input').files[0])
         sendImage(form, elem = element.querySelector('input'))
         uploadContentInput.value = ''
