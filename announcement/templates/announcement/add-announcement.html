@@ -143,7 +143,7 @@
                             data-communication-method-input-id="communicationMethodTelegramUsernameRadio">
                             <span class="input-group-text">@</span>
                             {% if not seller_form %}
-                            {% if request.user.seller.telegram_username == '' %}
+                            {% if request.user.seller.telegram_username == '' or request.user.seller.telegram_username is None  %}
                             <input type="text" name="telegram_username" class="form-control" value="Не установлено"
                                 disabled>
                             {% else %}

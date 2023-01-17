@@ -103,7 +103,7 @@ def add_announcement(request):
 
 @login_required
 def edit_announcement(request, announcement_pk):
-    seller = Seller.objects.get(user=request.user)
+    seller = get_object_or_404(Seller, user=request.user)
     announcement = get_object_or_404(Announcement, pk=announcement_pk, seller=seller)
     images = AnnouncementImage.objects.filter(announcement=announcement)
     form = AnnouncementCreationForm(instance=announcement)
@@ -141,7 +141,7 @@ def edit_announcement(request, announcement_pk):
 
 @login_required
 def delete_announcement(request, announcement_pk):
-    seller = Seller.objects.get(user=request.user)
+    seller = get_object_or_404(Seller, user=request.user)
     announcement = get_object_or_404(Announcement, pk=announcement_pk, seller=seller)
     announcement_images = AnnouncementImage.objects.filter(announcement=announcement)
     dirname = os.path.dirname(announcement_images[0].image.path)
@@ -159,7 +159,7 @@ def delete_announcement(request, announcement_pk):
 
 @login_required
 def change_sold_status_announcement(request, announcement_pk, status):
-    seller = Seller.objects.get(user=request.user)
+    seller = get_object_or_404(Seller, user=request.user)
     particle_not = ''
     if status == 'true':
         status = True
