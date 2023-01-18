@@ -31,7 +31,11 @@ changeBtns.forEach((element) => {
         } else if (element.dataset.modalInputName == 'telegram_username') {
             changeInput = document.querySelector('.telegram_username')
             const input = changeInput.querySelector('input')
-            input.value = element.dataset.modalInputValue
+            if (element.dataset.modalInputValue != 'None') {
+                input.value = element.dataset.modalInputValue
+            } else {
+                input.value = ''
+            }
             changeModalSubmitBtn.dataset.action = 'change-seller-data'
         } else if (element.dataset.modalInputName == 'password') {
             changeInput = document.querySelector('.new_password')

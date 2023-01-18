@@ -112,7 +112,7 @@
             <div class="col-12 col-md-9 col-lg-9">
                 {{ form.latitude }}
                 {{ form.longitude }}
-                <div id="map" action="{% url 'add-announcement' %}" class="mb-3" style="height: 440px;"></div>
+                <div id="map" action="{% url 'add-announcement' %}" class="mb-3" data-latitude="{{ announcement.latitude }}" data-longitude="{{ announcement.longitude }}" style="height: 440px;"></div>
             </div>
         </div>
 

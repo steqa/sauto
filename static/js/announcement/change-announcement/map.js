@@ -2,8 +2,20 @@ const latitude = document.getElementById('id_latitude')
 const longitude = document.getElementById('id_longitude')
 ymaps.ready(init)
 function init() {
-    let placemark,
-        map = new ymaps.Map('map', {
+    let placemark, map = null
+    if (listenerAction == 'edit-announcement') {
+        const latitude = document.getElementById('map').dataset.latitude.replace(',', '.')
+        const longitude = document.getElementById('map').dataset.longitude.replace(',', '.')
+        placemark, map = new ymaps.Map('map', {
+            center: [latitude, longitude],
+            zoom: 12
+        }), mySearchControl = new ymaps.control.SearchControl({
+            options: {
+                noPlacemark: true
+            }
+        })
+    } else if (listenerAction == 'add-announcement') {
+        placemark, map = new ymaps.Map('map', {
             center: [55.357159779610356, 86.0883104783902],
             zoom: 12
         }), mySearchControl = new ymaps.control.SearchControl({
@@ -11,6 +23,7 @@ function init() {
                 noPlacemark: true
             }
         })
+    }
 
     // Убираем добавление метки при поиске
     map.controls.add(mySearchControl)
