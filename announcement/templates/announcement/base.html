@@ -43,9 +43,9 @@
                     style="white-space: nowrap;">Разместить объявление</a>
                 {% if request.user.is_authenticated %}
                 <div class="dropdown ms-3 me-5 mt-3 mt-lg-0" bis_skin_checked="1">
-                    <a href="#" class="d-block link-dark text-decoration-none" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <img src="{{ user.profile_image.url }}" alt="..." width="38" height="38" class="rounded-circle">
+                    <a href="#" class="d-block link-dark text-decoration-none circle-image" data-bs-toggle="dropdown"
+                        aria-expanded="false" style="width: 38px; height: 38px">
+                        <img src="{{ user.profile_image.url }}" alt="...">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end mt-2 text-small">
                         <li><a class="dropdown-item" href="{% url 'user-announcements' request.user.id %}">Мои объявления</a></li>

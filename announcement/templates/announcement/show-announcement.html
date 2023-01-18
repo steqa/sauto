@@ -134,7 +134,9 @@
             </div>
             <a href="{% url 'user-announcements' seller.user.id %}" class="text-decoration-none">
                 <div class="d-flex align-items-center px-2">
-                    <img src="{{ seller.user.profile_image.url }}" alt="..." width="44" height="44" class="rounded-circle">
+                    <div class="circle-image" style="width: 44px; height: 44px">
+                        <img src="{{ seller.user.profile_image.url }}" alt="...">
+                    </div>
                     <div class="flex-grow-1 ms-3">
                         <p class="m-0 mb-1 text-primary">{{ seller.user.first_name }} {{ seller.user.last_name }}</p>
                         <p class="m-0 text-dark">на Sauto с {{ seller.user.date_joined|date:"d b Y" }}</p>
