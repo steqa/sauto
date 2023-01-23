@@ -5,8 +5,8 @@
 {% block title %}{{ announcement.name }}{% endblock %}
 
 {% block content %}
-<script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU"
-    type="text/javascript"></script>
+<script src="https://api-maps.yandex.ru/2.1/?apikey={{ yandex_map_api_key }}&lang=ru_RU" type="text/javascript"
+    id="map-script"></script>
 <link rel="stylesheet" href="{% static 'css/announcement/show-announcement.css' %}">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
 
@@ -73,8 +73,20 @@
                     <span class="text-secondary">Местоположение</span>
                 </div>
                 <div class="col-12 col-md-9 col-lg-9">
-                    <div id="map" class="show-map-container" data-latitude="{{ announcement.latitude }}"
-                        data-longitude="{{ announcement.longitude }}"></div>
+                    <div class="spinner-border text-secondary map-loader-spiner" role="status" style="display: flex;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <div class="mb-3" id="addressContainer"></div>
+                    <div class="page-blackout fullscreen-map-container" style="display: none;">
+                        <div id="loadedMap" class="fullscreen-map" data-latitude="{{ announcement.latitude }}"
+                            data-longitude="{{ announcement.longitude }}"></div>
+                        <button type="button" class="btn-close fullscreen-map-btn-close"></button>
+                    </div>
+                    <div class="show-map-container">
+                        <div id="map" class="show-map-container-inner" data-latitude="{{ announcement.latitude }}"
+                            data-longitude="{{ announcement.longitude }}">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,9 +108,8 @@
                         </svg>
                         <span class="ms-2">В избранное</span>
                     </button>
-                    <button data-action="{% url 'remove-favorite' announcement.pk %}"
-                        data-favorite-btn="1" data-favorite-btn-type="remove" class="btn-as-text text-primary"
-                        style="display: none;">
+                    <button data-action="{% url 'remove-favorite' announcement.pk %}" data-favorite-btn="1"
+                        data-favorite-btn-type="remove" class="btn-as-text text-primary" style="display: none;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                             class="bi bi-heart-fill" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -116,8 +127,8 @@
                         </svg>
                         <span class="ms-2">В избранное</span>
                     </button>
-                    <button data-action="{% url 'remove-favorite' announcement.pk %}"
-                        data-favorite-btn="1" data-favorite-btn-type="remove" class="btn-as-text text-primary">
+                    <button data-action="{% url 'remove-favorite' announcement.pk %}" data-favorite-btn="1"
+                        data-favorite-btn-type="remove" class="btn-as-text text-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
                             class="bi bi-heart-fill" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -152,4 +163,5 @@
 <script src="{% static 'js/announcement/show-announcement/map.js' %}"></script>
 <script src="{% static 'js/favorite/favorite.js' %}"></script>
 <script src="{% static 'js/announcement/show-announcement/show-contact-info.js' %}"></script>
+<script src="{% static 'js/announcement/show-announcement/fullscreen-map.js' %}"></script>
 {% endblock %}

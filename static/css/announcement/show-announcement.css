@@ -42,9 +42,28 @@
 .show-map-container {
     width: 100%;
     height: 300px;
+    position: relative;
+}
+
+.show-map-container-inner {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
 }
 
 .add-map-container {
     width: 100%;
     height: 440px;
+}
+
+.fullscreen-map {
+    width: calc(100% - 5rem);
+    height: calc(100% - 5rem);
+}
+
+.fullscreen-map-btn-close {
+    top: 3rem;
+    right: 3rem;
+    position: absolute;
 }

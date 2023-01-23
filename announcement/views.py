@@ -54,6 +54,7 @@ def show_announcement(request, announcement_pk: int):
         'announcement': announcement,
         'seller': seller,
         'images': images,
+        'yandex_map_api_key': settings.YANDEX_MAP_API_KEY,
     }
     return render(request, 'announcement/show-announcement.html', context)
 

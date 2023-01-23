@@ -12,6 +12,19 @@ function init() {
         preset: 'islands#blueDotIcon',
     })
 
+    function getAddress(coords) {
+        ymaps.geocode(coords).then(function (res) {
+            const firstGeoObject = res.geoObjects.get(0)
+            const address = firstGeoObject.getAddressLine()
+            const addressContainer = document.getElementById('addressContainer')
+            addressContainer.innerHTML = address
+        })
+    }
+    getAddress([latitude, longitude])
+
+    const mapLoaderSpiner = document.querySelector('.map-loader-spiner')
+    mapLoaderSpiner.style.display = 'none'
+
     map.geoObjects.add(placemark)
     map.controls.remove('geolocationControl')
     map.controls.remove('searchControl')
