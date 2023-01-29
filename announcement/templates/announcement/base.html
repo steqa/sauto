@@ -45,7 +45,7 @@
                 <div class="dropdown ms-3 me-5 mt-3 mt-lg-0" bis_skin_checked="1">
                     <a href="#" class="d-block link-dark text-decoration-none circle-image" data-bs-toggle="dropdown"
                         aria-expanded="false" style="width: 38px; height: 38px">
-                        <img src="{{ user.profile_image.url }}" alt="...">
+                        <img src="{{ request.user.profile_image.url }}" alt="...">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-start dropdown-menu-lg-end mt-2 text-small">
                         <li><a class="dropdown-item" href="{% url 'user-announcements' request.user.id %}">Мои объявления</a></li>
