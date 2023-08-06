@@ -24,7 +24,7 @@ def user_settings(request):
         seller = None
     
     try:
-        user_telegram =  UserTelegram.objects.get(seller=seller)
+        user_telegram = UserTelegram.objects.get(seller=seller)
     except UserTelegram.DoesNotExist:
         user_telegram = None
     

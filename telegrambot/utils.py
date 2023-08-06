@@ -19,8 +19,7 @@ def get_users_list() -> dict:
                 users_list[username] = chat_id
     except:
         pass
-            
-    
+
     return users_list
 
 
