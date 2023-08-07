@@ -1,6 +1,6 @@
 # Sauto - сайт-площадка для размещения объявлений.
 
-### [Перейти на сайт](https://sauto.herokuapp.com/ "https://sauto.herokuapp.com/")
+### [Перейти на сайт](https://sauto.steqa.ru/ "https://sauto.steqa.ru/")
 
 ## Основной функционал
 
